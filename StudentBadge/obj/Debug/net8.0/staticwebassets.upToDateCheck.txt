@@ -1,5 +1,9 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\fonts\Hagrid-Regular-trial.ttf
+wwwroot\fonts\Hagrid-Text-Extrabold-trial.ttf
+wwwroot\images\signupbg.jpg
+wwwroot\images\student.png
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css.map

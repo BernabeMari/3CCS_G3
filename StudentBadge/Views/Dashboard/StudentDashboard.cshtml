@@ -1,0 +1,467 @@
+﻿@{
+    var fullName = ViewBag.FullName;
+    var idNumber = ViewBag.IdNumber;
+    var course = ViewBag.Course;
+    var sectionn = ViewBag.Section;
+    var score = ViewBag.Score;
+    var allStudents = ViewBag.AllStudents as List<Student>;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: white;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #c3e8b6, #badbd2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+            .logo img {
+                width: 60px;
+            }
+
+            .logo h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin: 10px 0 5px;
+                color: #333;
+            }
+
+            .logo p {
+                font-size: 14px;
+                color: #555;
+                font-weight: 500;
+            }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-link i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .sidebar-link.active {
+                background: #fff6f1;
+                font-weight: bold;
+                color: #222;
+                box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-link:hover {
+                background: rgba(255, 255, 255, 0.5);
+                transform: scale(1.02);
+            }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: calc(100% - 300px); /* Adjusted width */
+            margin-left: 260px; /* Ensures it doesn’t overlap the sidebar */
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+            .content h1 {
+                font-size: 28px;
+                font-weight: 700;
+                color: #333;
+            }
+
+       .student-info {
+    background: #fff6f1;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Adjust width to prevent squeezing */
+    max-width: 600px;
+    height:50%;
+    max-height:200px;
+    margin: 20px auto; /* Center the div */
+    text-align: left; /* Align text to the left for better readability */
+    font-size: 16px;
+    line-height: 1.6; /* Improve spacing between lines */
+}
+
+.student-info h2 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+            .student-info p {
+                display: block; /* Ensures each paragraph is treated as a block element */
+                margin: 12px 0; /* Adds spacing between each field */
+                font-size: 16px;
+                line-height: 1.6; /* Increases readability */
+            }
+
+                .student-info p strong {
+                    display: block; /* Forces the label (strong) to appear on a new line */
+                    margin-bottom: 4px; /* Adds spacing between the label and the value */
+                }
+
+
+
+        .student-item {
+            background-color: #bfe4b2; /* Light green background */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+        }
+
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        .student-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .all-students {
+            background: #bfe4b2;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .all-students h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+                color: #444;
+            }
+
+        /* Student List */
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            gap: 20px; /* Add spacing */
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: 40%;
+            height: 150vh;
+            overflow-y: auto;
+        }
+
+        .updates-section {
+            width: 25%;
+            background: #bfe4b2;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+            .updates-section h2 {
+                font-size: 22px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 15px;
+            }
+
+        /* Buttons */
+        .update-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+            .update-buttons button {
+                flex: 1;
+                background: white;
+                border: 2px solid #ddd;
+                padding: 8px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+                .update-buttons button:hover {
+                    background: rgba(255, 255, 255, 0.5);
+                }
+
+            .update-buttons .active {
+                background: #fff6f1;
+                border-color: #8fc78a;
+            }
+
+        /* Hide inactive content */
+        .hidden {
+            display: none;
+        }
+
+        .update-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff6f1;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 50%;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 25px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Dashboard</p>
+            </div>
+            <nav>
+                <a href="#" class="sidebar-link active">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/Dashboard/StudentProfile" class="sidebar-link">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+        <main class="content">
+            <h1>Welcome, @fullName!</h1>
+            <div class="student-info">
+                <h2>Your Information</h2>
+                <p><strong>Full Name:</strong> @fullName</p>
+                <p><strong>ID Number:</strong> @idNumber</p>
+                <p><strong>Course:</strong> @course</p>
+                <p><strong>Section:</strong> @sectionn</p>
+            </div>
+
+            <div class="all-students">
+                <h2>All Students (Sorted by Score)</h2>
+                <div class="student-list">
+                    @if (allStudents != null && allStudents.Any())
+                    {
+                        foreach (var student in allStudents)
+                        {
+                            <div class="student-item"
+                                 style="background-color: @(student.IsProfileVisible ? "#bfe4b2" : "#e4b2b2"); padding: 10px; margin: 5px; border-radius: 5px; cursor: pointer;"
+                                 onclick="handleStudentClick('@student.IsProfileVisible', '@student.FullName', '@student.IdNumber', '@student.Course', '@student.Section', '@student.Score', '@student.Achievements', '@student.Comments', '@student.BadgeColor')"
+                                 title="@(student.IsProfileVisible ? "" : "This profile is locked")">
+
+                                <p><strong>Name:</strong> @student.FullName</p>
+                                <p><strong>Score:</strong> @student.Score</p>
+
+                                @if (student.IsProfileVisible)
+                                {
+                                    <p style="color: green;"><strong>Status:</strong> Unlocked 🔓</p>
+                                }
+                                else
+                                {
+                                    <p style="color: red;"><strong>Status:</strong> Locked 🔒</p>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No students found in the database.</p>
+                    }
+                </div>
+
+
+
+            <!-- Student Details Modal -->
+            <div id="studentModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Student Details</h2>
+                    <p><strong>Name:</strong> <span id="detailName"></span></p>
+                    <p><strong>ID Number:</strong> <span id="detailId"></span></p>
+                    <p><strong>Course:</strong> <span id="detailCourse"></span></p>
+                    <p><strong>Section:</strong> <span id="detailSection"></span></p>
+                    <p><strong>Score:</strong> <span id="detailScore"></span></p>
+                    <p><strong>Achievements:</strong> <span id="detailAchievements"></span></p>
+                    <p><strong>Comments:</strong> <span id="detailComments"></span></p>
+                    <p><strong>Current Badge:</strong> <span id="detailBadge"></span></p>
+                </div>
+            </div>
+        </main>
+
+        <!-- New Updates Section -->
+        <aside class="updates-section">
+            <!-- Toggle Buttons -->
+            <div class="update-buttons">
+                <button onclick="showUpdate('events')" class="active">📅 Events</button>
+                <button onclick="showUpdate('news')">📰 News</button>
+                <button onclick="showUpdate('announcements')">📢 Announcements</button>
+            </div>
+
+            <!-- Update Content -->
+            <div class="update-content">
+                <div id="events" class="update-item">
+                    <h3>📅 Events</h3>
+                    <p>- Seminar on AI & Tech (March 15)</p>
+                    <p>- Career Fair (March 22)</p>
+                    <p>- Web Development Workshop (March 25)</p>
+                    <p>- Data Science Bootcamp (April 2)</p>
+                    <p>- Cloud Computing Conference (April 10)</p>
+                </div>
+
+
+                <div id="news" class="update-item hidden">
+                    <h3>📰 News</h3>
+                    <p>- University ranked #1 in Research</p>
+                    <p>- New course on Cybersecurity introduced</p>
+                </div>
+
+                <div id="announcements" class="update-item hidden">
+                    <h3>📢 Announcements</h3>
+                    <p>- Graduation applications open until April 5</p>
+                    <p>- Summer enrollment starts next week</p>
+                </div>
+            </div>
+        </aside>
+
+
+        
+ 
+    </div>
+</body>
+<script>
+    function showUpdate(type) {
+        // Hide all update items
+        document.getElementById('events').classList.add('hidden');
+        document.getElementById('news').classList.add('hidden');
+        document.getElementById('announcements').classList.add('hidden');
+
+        // Show selected update item
+        document.getElementById(type).classList.remove('hidden');
+
+        // Highlight active button
+        let buttons = document.querySelectorAll(".update-buttons button");
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        // Add active class to clicked button
+        event.target.classList.add("active");
+    }
+
+     function handleStudentClick(isVisible, fullName, idNumber, course, section, score, achievements, comments, badgeColor) {
+        if (isVisible === 'True') {
+            showStudentDetails(fullName, idNumber, course, section, score, achievements, comments, badgeColor);
+        } else {
+            alert("This profile is locked. You cannot view the details.");
+        }
+    }
+
+    function showStudentDetails(name, id, course, section, score, achievements, comments, badge) {
+        document.getElementById("detailName").innerText = name;
+        document.getElementById("detailId").innerText = id;
+        document.getElementById("detailCourse").innerText = course;
+        document.getElementById("detailSection").innerText = section;
+        document.getElementById("detailScore").innerText = score;
+        document.getElementById("detailAchievements").innerText = achievements;
+        document.getElementById("detailComments").innerText = comments;
+        document.getElementById("detailBadge").innerText = badge;
+
+        document.getElementById("studentModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("studentModal").style.display = "none";
+    }
+</script>
+
+</html>

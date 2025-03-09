@@ -13,10 +13,6 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
 
     public IActionResult Privacy()
     {
@@ -28,6 +24,16 @@ public class HomeController : Controller
     }
 
     public IActionResult Signup()
+    {
+        return View();
+    }
+
+    public IActionResult StudentDashboard()
+    {
+        return View();
+    }
+
+    public IActionResult AdminDashboard()
     {
         return View();
     }

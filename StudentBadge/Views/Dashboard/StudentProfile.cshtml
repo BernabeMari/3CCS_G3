@@ -1,0 +1,222 @@
+﻿@{
+    var fullName = ViewBag.FullName;
+    var idNumber = ViewBag.IdNumber;
+    var course = ViewBag.Course;
+    var sectionn = ViewBag.Section;
+    var score = ViewBag.Score;
+    var allStudents = ViewBag.AllStudents as List<Student>;
+    var isProfileVisible = ViewBag.IsProfileVisible != null ? (bool)ViewBag.IsProfileVisible : false;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: white;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #c3e8b6, #badbd2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+            .logo img {
+                width: 60px;
+            }
+
+            .logo h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin: 10px 0 5px;
+                color: #333;
+            }
+
+            .logo p {
+                font-size: 14px;
+                color: #555;
+                font-weight: 500;
+            }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-link i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .sidebar-link.active {
+                background: #fff6f1;
+                font-weight: bold;
+                color: #222;
+                box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-link:hover {
+                background: rgba(255, 255, 255, 0.5);
+                transform: scale(1.02);
+            }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: 40%;
+            height: 150vh;
+            overflow-y: auto;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            text-align: center;
+            width: 100%;
+            height: 100vh; /* Full height */
+            padding-left: 220px; /* Offset for the sidebar */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Dashboard</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link active">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <div class="student-info">
+            <h2>Profile Visibility</h2>
+            <label class="switch">
+                <input type="checkbox" id="togglePrivacy" onchange="togglePrivacySetting()" @(isProfileVisible ? "checked" : "")>
+                <span class="slider round"></span>
+            </label>
+            <p id="privacyStatus">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+        </div>
+    </div>
+</body>
+
+<script>
+    function togglePrivacySetting() {
+        var isChecked = document.getElementById("togglePrivacy").checked;
+        var statusText = isChecked ? "Your profile is visible to employers." : "Your profile is hidden.";
+        document.getElementById("privacyStatus").innerText = statusText;
+
+        fetch('/Dashboard/UpdatePrivacySetting', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isVisible: isChecked })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Privacy setting updated:", data);
+        })
+        .catch(error => console.error("Error updating privacy setting:", error));
+    }
+</script>
+
+</html>

@@ -20,8 +20,26 @@ public class Startup
         services.AddControllersWithViews();  // Adds controllers with views support
         services.AddRazorPages();            // Adds Razor Pages support
 
+        // Add session services (already done)
+        services.AddDistributedMemoryCache();  // Use in-memory cache for session storage
+        services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30);  // Set session timeout duration
+            options.Cookie.HttpOnly = true;  // Prevents JavaScript access to session cookies
+            options.Cookie.IsEssential = true;  // Ensures cookie is always sent, even if privacy settings prevent it
+        });
+
+        // Add authentication services and configure the default scheme
+        services.AddAuthentication("Identity.Application")
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";  // Specify login path
+                options.LogoutPath = "/Account/Logout"; // Specify logout path
+                options.AccessDeniedPath = "/Account/AccessDenied"; // Specify access denied path
+            });
+
         // Add the connection string configuration (from appsettings.json)
-        services.AddSingleton<IConfiguration>(Configuration);
+        services.AddSingleton<IConfiguration>(Configuration);  // Your existing config
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +58,12 @@ public class Startup
         app.UseHttpsRedirection();
         app.UseStaticFiles();   // Enables serving of static files like CSS, JS
 
+        // Add session middleware (must be called before UseAuthentication)
+        app.UseSession();
+
+        // Add authentication middleware before authorization
+        app.UseAuthentication();  // Ensure this is before UseAuthorization
+
         app.UseRouting();
 
         app.UseAuthorization();
@@ -49,6 +73,9 @@ public class Startup
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Signup}/{id?}");
+            endpoints.MapControllerRoute(
+              name: "studentdashboard",
+              pattern: "{controller=Dashboard}/{action=StudentDashboard}/{id?}");
             endpoints.MapRazorPages();
         });
     }
