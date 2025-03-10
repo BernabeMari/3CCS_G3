@@ -331,6 +331,88 @@
       ]
     },
     {
+      "Route": "images/blank.bns7ydtnc0.jpg",
+      "AssetFile": "images/blank.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 14 Nov 2021 16:31:23 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bns7ydtnc0"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="
+        },
+        {
+          "Name": "label",
+          "Value": "images/blank.jpg"
+        }
+      ]
+    },
+    {
+      "Route": "images/blank.jpg",
+      "AssetFile": "images/blank.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 14 Nov 2021 16:31:23 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="
+        }
+      ]
+    },
+    {
       "Route": "images/signupbg.jpg",
       "AssetFile": "images/signupbg.jpg",
       "Selectors": [],

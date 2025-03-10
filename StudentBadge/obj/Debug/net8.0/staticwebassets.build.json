@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "oeHYyE43JUgn1XMrH0XggMAUi6DLyt+9UvYZP0ZpAKs=",
+  "Hash": "bqRSJQWY7OOfRCFa2H505gwaToxytQ04h66+Tetucdc=",
   "Source": "StudentBadge",
   "BasePath": "_content/StudentBadge",
   "Mode": "Default",
@@ -99,6 +99,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\fonts\\Hagrid-Text-Extrabold-trial.ttf"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\blank.jpg",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "images/blank#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "bns7ydtnc0",
+      "Integrity": "x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\blank.jpg"
     },
     {
       "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\signupbg.jpg",
@@ -1687,6 +1708,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-tS20ThlIaeJuJWAVdtM+LmHPh2XUSFNtI569YuE9Jo0="
+        }
+      ]
+    },
+    {
+      "Route": "images/blank.bns7ydtnc0.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\blank.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 14 Nov 2021 16:31:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bns7ydtnc0"
+        },
+        {
+          "Name": "label",
+          "Value": "images/blank.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/blank.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\blank.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2901"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 14 Nov 2021 16:31:23 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="
         }
       ]
     },

@@ -48,6 +48,18 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-tS20ThlIaeJuJWAVdtM\u002BLmHPh2XUSFNtI569YuE9Jo0="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"529864"},{"Name":"Content-Type","Value":"application/x-font-ttf"},{"Name":"ETag","Value":"\u0022tS20ThlIaeJuJWAVdtM\u002BLmHPh2XUSFNtI569YuE9Jo0=\u0022"},{"Name":"Last-Modified","Value":"Wed, 20 Nov 2019 09:05:10 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/StudentBadge/images/blank.bns7ydtnc0.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\blank.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"bns7ydtnc0"},{"Name":"integrity","Value":"sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="},{"Name":"label","Value":"_content/StudentBadge/images/blank.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2901"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\u0022"},{"Name":"Last-Modified","Value":"Sun, 14 Nov 2021 16:31:23 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/StudentBadge/images/blank.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\blank.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2901"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ=\u0022"},{"Name":"Last-Modified","Value":"Sun, 14 Nov 2021 16:31:23 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/StudentBadge/images/signupbg.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\signupbg.jpg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

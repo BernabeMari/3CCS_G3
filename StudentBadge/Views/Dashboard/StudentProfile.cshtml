@@ -21,7 +21,7 @@
             margin: 0;
             font-family: 'Inter', sans-serif;
             height: 100vh;
-            background: white;
+            background: #fff6f1;
             display: flex;
         }
 
@@ -163,6 +163,66 @@
             padding-left: 220px; /* Offset for the sidebar */
         }
 
+        /* Profile Picture Area */
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            display: none; /* Initially hidden */
+        }
+
+            .profile-pic-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+
+            .profile-pic-container p {
+                font-size: 14px;
+                color: #666;
+            }
+
+        /* Edit Button */
+        .edit-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+            .edit-button:hover {
+                background-color: #45a049;
+            }
+
+        /* Save Button */
+        .save-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+
+            .save-button:hover {
+                background-color: #0056b3;
+            }
+
     </style>
 </head>
 <body>
@@ -194,11 +254,134 @@
                 <span class="slider round"></span>
             </label>
             <p id="privacyStatus">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+
+            <!-- Edit Profile Picture Button -->
+            <button class="edit-button" onclick="showDragDropArea()">Edit Profile Picture</button>
+
+
+            <!-- Profile Picture Drag and Drop Area -->
+            <div class="profile-pic-container" id="profilePicContainer" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <p>Drag and drop your profile picture here</p>
+                <img id="profilePicPreview" src="" alt="Profile Picture" style="display: none;" />
+            </div>
+
+            <!-- Save Button -->
+            <button class="save-button" id="saveProfilePic" onclick="saveProfilePic()">Save Profile Picture</button>
         </div>
     </div>
+    <!-- Hidden input to store base64 image -->
+    <input type="hidden" id="base64Image" />
+
 </body>
 
 <script>
+    // Show drag-and-drop area when the edit button is clicked
+    function showDragDropArea() {
+        document.querySelector('.edit-button').style.display = 'none';  // Hide the edit button
+        document.getElementById('profilePicContainer').style.display = 'flex';  // Show the drag-and-drop area
+        document.getElementById('saveProfilePic').style.display = 'inline-block';  // Show the save button
+    }
+
+    // Allow dropping of the image file
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    // Handle the drop event
+    function drop(event) {
+        event.preventDefault();
+        var file = event.dataTransfer.files[0];  // Get the first file
+
+        // Check if the file is an image
+        if (file && file.type.startsWith('image/')) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the base64 string to the hidden input
+                var base64Image = e.target.result.split(',')[1];  // Remove 'data:image/*;base64,'
+
+                // Set the hidden input value to the base64 image string
+                document.getElementById('base64Image').value = base64Image;
+
+                // Display the image preview
+                document.getElementById('profilePicPreview').style.display = 'block';
+                document.getElementById('profilePicPreview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Save the profile picture
+    function saveProfilePic() {
+        var base64Image = document.getElementById('base64Image').value;
+
+        if (!base64Image) {
+            alert("No image selected.");
+            return;
+        }
+
+        fetch('/Dashboard/SaveProfilePicture', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Base64Image: base64Image })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Profile picture saved successfully!");
+            } else {
+                alert("Failed to save profile picture.");
+            }
+        })
+        .catch(error => console.error("Error saving profile picture:", error));
+    }
+
+    // Resize the image before sending it
+    function resizeImage(file, maxWidth, maxHeight, callback) {
+        var img = new Image();
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            img.onload = function() {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                // Calculate the new dimensions
+                var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                var width = img.width * ratio;
+                var height = img.height * ratio;
+
+                // Set the canvas size
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw the image on the canvas
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Get the resized image as Base64
+                callback(canvas.toDataURL(file.type));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Handle the file input change event (optional if you have an <input type="file">)
+    function handleFileInput(event) {
+        var file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            resizeImage(file, 300, 300, function(base64Image) {
+                // Display the image preview
+                document.getElementById('profilePicPreview').style.display = 'block';
+                document.getElementById('profilePicPreview').src = base64Image;
+                // Store the base64 image string
+                document.getElementById('base64Image').value = base64Image;
+            });
+        } else {
+            alert('Please select a valid image file.');
+        }
+    }
+
     function togglePrivacySetting() {
         var isChecked = document.getElementById("togglePrivacy").checked;
         var statusText = isChecked ? "Your profile is visible to employers." : "Your profile is hidden.";
@@ -218,5 +401,6 @@
         .catch(error => console.error("Error updating privacy setting:", error));
     }
 </script>
+
 
 </html>

@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\fonts\\Hagrid-Text-Extrabold-trial.ttf"
     },
     {
+      "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\blank.jpg",
+      "PackagePath": "staticwebassets\\images\\blank.jpg"
+    },
+    {
       "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\signupbg.jpg",
       "PackagePath": "staticwebassets\\images\\signupbg.jpg"
     },

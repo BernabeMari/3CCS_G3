@@ -114,27 +114,27 @@
                 color: #333;
             }
 
-       .student-info {
-    background: #fff6f1;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Adjust width to prevent squeezing */
-    max-width: 600px;
-    height:50%;
-    max-height:200px;
-    margin: 20px auto; /* Center the div */
-    text-align: left; /* Align text to the left for better readability */
-    font-size: 16px;
-    line-height: 1.6; /* Improve spacing between lines */
-}
+        .student-info {
+            background: #fff6f1;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Adjust width to prevent squeezing */
+            max-width: 600px;
+            height: 50%;
+            max-height: 200px;
+            margin: 20px auto; /* Center the div */
+            text-align: left; /* Align text to the left for better readability */
+            font-size: 16px;
+            line-height: 1.6; /* Improve spacing between lines */
+        }
 
-.student-info h2 {
-    text-align: center; /* Center the heading */
-    margin-bottom: 15px;
-    font-size: 20px;
-    font-weight: bold;
-}
+            .student-info h2 {
+                text-align: center; /* Center the heading */
+                margin-bottom: 15px;
+                font-size: 20px;
+                font-weight: bold;
+            }
 
             .student-info p {
                 display: block; /* Ensures each paragraph is treated as a block element */
@@ -296,6 +296,45 @@
             font-size: 25px;
             cursor: pointer;
         }
+
+
+        .profile-img {
+            width: 100px; /* Adjust size as necessary */
+            height: 100px; /* Adjust size as necessary */
+            border-radius: 50%; /* Make the image circular */
+            object-fit: cover; /* Ensure the image covers the area without stretching */
+            border: 3px solid #ddd; /* Optional: Add border for better visibility */
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Align items vertically in the center */
+            padding: 20px;
+            background: #fff6f1;
+            border-radius: 15px; /* Adjust this value to control how rounded the edges are */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional: add shadow for a soft lift effect */
+            margin-bottom: 20px; /* Adds space below the container */
+        }
+
+        .profile-info {
+            width: 60%;
+        }
+
+        .profile-picture {
+            width: 35%;
+            display: flex;
+            justify-content: center; /* Centers horizontally */
+            align-items: center; /* Centers vertically */
+        }
+
+        .profile-img {
+            width: 100px; /* Adjust the size of the profile image */
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
     </style>
 </head>
 <body>
@@ -321,13 +360,28 @@
         </aside>
         <main class="content">
             <h1>Welcome, @fullName!</h1>
-            <div class="student-info">
-                <h2>Your Information</h2>
-                <p><strong>Full Name:</strong> @fullName</p>
-                <p><strong>ID Number:</strong> @idNumber</p>
-                <p><strong>Course:</strong> @course</p>
-                <p><strong>Section:</strong> @sectionn</p>
+            <!-- Profile Information Section -->
+            <div class="profile-container">
+                <div class="profile-info">
+                    <p><strong>Full Name:</strong> @ViewBag.FullName</p>
+                    <p><strong>ID Number:</strong> @ViewBag.IdNumber</p>
+                    <p><strong>Course:</strong> @ViewBag.Course</p>
+                    <p><strong>Section:</strong> @ViewBag.Section</p>
+                </div>
+                <div class="profile-picture">
+                    @if (ViewBag.Base64Image != null && !string.IsNullOrEmpty(ViewBag.Base64Image))
+                    {
+                        <img src="data:image/jpeg;base64,@ViewBag.Base64Image" alt="Profile Picture" class="profile-img" />
+                    }
+                    else
+                    {
+                        <img src="~/images/blank.jpg" alt="Profile Picture" class="profile-img" />
+                    }
+                </div>
+
             </div>
+
+
 
             <div class="all-students">
                 <h2>All Students (Sorted by Score)</h2>
@@ -363,21 +417,31 @@
 
 
 
-            <!-- Student Details Modal -->
-            <div id="studentModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <h2>Student Details</h2>
-                    <p><strong>Name:</strong> <span id="detailName"></span></p>
-                    <p><strong>ID Number:</strong> <span id="detailId"></span></p>
-                    <p><strong>Course:</strong> <span id="detailCourse"></span></p>
-                    <p><strong>Section:</strong> <span id="detailSection"></span></p>
-                    <p><strong>Score:</strong> <span id="detailScore"></span></p>
-                    <p><strong>Achievements:</strong> <span id="detailAchievements"></span></p>
-                    <p><strong>Comments:</strong> <span id="detailComments"></span></p>
-                    <p><strong>Current Badge:</strong> <span id="detailBadge"></span></p>
+             
+                <!-- Student Details Modal -->
+                <div id="studentModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <div class="profile-container">
+                            <div class="profile-info">
+                                <h2>Student Details</h2>
+                                <p><strong>Name:</strong> <span id="detailName"></span></p>
+                                <p><strong>ID Number:</strong> <span id="detailId"></span></p>
+                                <p><strong>Course:</strong> <span id="detailCourse"></span></p>
+                                <p><strong>Section:</strong> <span id="detailSection"></span></p>
+                                <p><strong>Score:</strong> <span id="detailScore"></span></p>
+                                <p><strong>Achievements:</strong> <span id="detailAchievements"></span></p>
+                                <p><strong>Comments:</strong> <span id="detailComments"></span></p>
+                                <p><strong>Current Badge:</strong> <span id="detailBadge"></span></p>
+                            </div>
+                            <div class="profile-picture">
+                                <!-- If a Base64 image is available, update the src via JavaScript or render it server-side -->
+                                <img src="~/images/blank.jpg" alt="Profile Picture" class="profile-img" id="detailProfilePicture" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
         </main>
 
         <!-- New Updates Section -->
@@ -415,9 +479,6 @@
             </div>
         </aside>
 
-
-        
- 
     </div>
 </body>
 <script>
@@ -446,7 +507,7 @@
         }
     }
 
-    function showStudentDetails(name, id, course, section, score, achievements, comments, badge) {
+       function showStudentDetails(name, id, course, section, score, achievements, comments, badge, base64Image) {
         document.getElementById("detailName").innerText = name;
         document.getElementById("detailId").innerText = id;
         document.getElementById("detailCourse").innerText = course;
@@ -456,12 +517,22 @@
         document.getElementById("detailComments").innerText = comments;
         document.getElementById("detailBadge").innerText = badge;
 
+        // If a Base64 image is provided, update the profile picture; otherwise, use a default
+        if (base64Image) {
+            document.getElementById("detailProfilePicture").src = "data:image/jpeg;base64," + base64Image;
+        } else {
+            document.getElementById("detailProfilePicture").src = "/images/blank.jpg";
+        }
+
         document.getElementById("studentModal").style.display = "block";
     }
+
 
     function closeModal() {
         document.getElementById("studentModal").style.display = "none";
     }
+
+    console.log("@ViewBag.Base64Image");
 </script>
 
 </html>

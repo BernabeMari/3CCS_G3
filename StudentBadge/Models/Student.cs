@@ -8,10 +8,12 @@
         public string Course { get; set; }
         public string Section { get; set; }
         public int Score { get; set; }
-        public int Achievements { get; set; } // New property for achievements
-        public int Comments { get; set; } // New property for comments
-        public string BadgeColor { get; set; } // New property for badge color
+        public int Achievements { get; set; }
+        public int Comments { get; set; } 
+        public string BadgeColor { get; set; } 
         public bool IsProfileVisible { get; set; }
+
+        public byte[] ProfilePicture { get; set; }
     }
 }
 
