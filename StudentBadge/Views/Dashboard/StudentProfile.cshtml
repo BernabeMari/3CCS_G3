@@ -310,6 +310,47 @@
         }
     }
 
+        // Example function for uploading profile picture
+    function uploadProfilePicture(inputElement) {
+        const file = inputElement.files[0];
+        if (!file) return;
+
+        // Check file size (max 1MB)
+        if (file.size > 1024 * 1024) {
+            alert("Image is too large. Maximum size is 1MB.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Image = e.target.result; // This includes the data URL prefix
+
+            // Send to server
+            fetch('/Dashboard/SaveProfilePicture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ base64Image: base64Image })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Immediately update the image on the page
+                    document.getElementById('profileImage').src = base64Image;
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error uploading image. Please try again.');
+            });
+        };
+        reader.readAsDataURL(file); // Read as data URL which includes the prefix
+    }
+
     // Save the profile picture
     function saveProfilePic() {
         var base64Image = document.getElementById('base64Image').value;
