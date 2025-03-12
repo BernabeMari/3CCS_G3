@@ -335,6 +335,387 @@
             border-radius: 50%;
         }
 
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .notification-area {
+            position: relative;
+        }
+
+        .notification-icon {
+            cursor: pointer;
+            padding: 10px;
+            font-size: 20px;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .notification-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .notification-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: #4CAF50;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .notification-list {
+            padding: 10px;
+        }
+
+        .notification-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .notification-item.unread {
+            background-color: #e8f5e9;
+        }
+
+        .notification-item .employer-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .notification-item .message-preview {
+            color: #666;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        .notification-item .message-time {
+            font-size: 12px;
+            color: #999;
+            text-align: right;
+        }
+
+        .show-dropdown {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 1200px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 15px;
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+
+            .updates-section {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .profile-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-info, .profile-picture {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notification-area {
+                align-self: flex-end;
+                margin-top: 10px;
+            }
+
+            .student-item {
+                padding: 10px;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 5% auto;
+            }
+
+            .update-buttons {
+                flex-direction: column;
+            }
+
+            .update-buttons button {
+                margin: 5px 0;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .profile-img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .notification-dropdown {
+                width: 100%;
+                right: -50%;
+            }
+        }
+
+        /* Updated Notification Icon Styles */
+        .notification-img {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .notification-img:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Chat System Styles */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .chat-header {
+            background: #bfe4b2;
+            padding: 10px 15px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .chat-messages {
+            height: 280px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            clear: both;
+            position: relative;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message.employer {
+            float: left;
+            background: #f0f0f0;
+            border-radius: 15px 15px 15px 0;
+            margin-left: 10px;
+        }
+
+        .message.student {
+            float: right;
+            background: #bfe4b2;
+            border-radius: 15px 15px 0 15px;
+            margin-right: 10px;
+        }
+
+        .message-sender {
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .message-content {
+            margin-bottom: 4px;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .chat-input {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #eee;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chat-input button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .chat-input button:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .close-chat {
+            cursor: pointer;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* Responsive Chat */
+        @@media (max-width: 768px) {
+            .chat-modal {
+                width: 280px;
+                height: 350px;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .chat-messages {
+                height: 230px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .chat-modal {
+                width: 260px;
+                height: 300px;
+            }
+
+            .chat-messages {
+                height: 180px;
+            }
+        }
+
+        /* Improved Scrollbar Styles */
+        .student-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .student-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
     </style>
 </head>
 <body>
@@ -359,7 +740,24 @@
             </nav>
         </aside>
         <main class="content">
-            <h1>Welcome, @fullName!</h1>
+            <div class="dashboard-header">
+                <h1>Welcome, @ViewBag.FullName!</h1>
+                <div class="notification-area">
+                    <div class="notification-icon" onclick="toggleNotifications()">
+                        <img src="~/images/notification.png" alt="Notifications" class="notification-img">
+                        <span class="notification-badge" id="notificationCount">0</span>
+                    </div>
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h3>Messages</h3>
+                            <button onclick="markAllAsRead()" class="mark-all-read">Mark all as read</button>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <!-- Messages will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Profile Information Section -->
             <div class="profile-container">
                 <div class="profile-info">
@@ -492,6 +890,21 @@
 
     </div>
 
+    <!-- Chat Modal -->
+    <div id="chatModal" class="chat-modal">
+        <div class="chat-header">
+            <h3 id="chatEmployerName">Chat</h3>
+            <span class="close-chat" onclick="closeChat()">&times;</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be loaded here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
 </body>
 <script>
      window.onload = function() {
@@ -568,6 +981,238 @@
     }
 
     console.log("@ViewBag.Base64Image");
+
+    let isDropdownOpen = false;
+
+    function toggleNotifications() {
+        const dropdown = document.getElementById('notificationDropdown');
+        isDropdownOpen = !isDropdownOpen;
+        dropdown.classList.toggle('show-dropdown', isDropdownOpen);
+
+        if (isDropdownOpen) {
+            loadNotifications();
+        }
+    }
+
+    function loadNotifications() {
+        const studentId = '@ViewBag.IdNumber';
+        fetch(`/Dashboard/GetStudentMessages?studentId=${studentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const notificationList = document.getElementById('notificationList');
+                    notificationList.innerHTML = '';
+                    let unreadCount = 0;
+
+                    data.messages.forEach(message => {
+                        if (!message.isRead) unreadCount++;
+                        
+                        console.log('Processing message:', {
+                            messageId: message.messageId,
+                            employerName: message.employerName,
+                            employerId: message.employerId
+                        });
+                        
+                        const messageElement = document.createElement('div');
+                        messageElement.className = `notification-item ${message.isRead ? '' : 'unread'}`;
+                        messageElement.onclick = () => openMessageDetails(message.messageId, message.employerName, message.employerId);
+                        
+                        messageElement.innerHTML = `
+                            <div class="employer-name">${message.employerName} - ${message.company}</div>
+                            <div class="message-preview">${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}</div>
+                            <div class="message-time">${new Date(message.sentTime).toLocaleString()}</div>
+                        `;
+                        
+                        notificationList.appendChild(messageElement);
+                    });
+
+                    // Update notification badge
+                    const badge = document.getElementById('notificationCount');
+                    badge.textContent = unreadCount;
+                    badge.style.display = unreadCount > 0 ? 'block' : 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading notifications:', error);
+            });
+    }
+
+    let currentEmployerId = null;
+
+    function openChat(employerName, employerId) {
+        console.log('Opening chat with:', { employerName, employerId });
+        if (!employerId) {
+            console.error('Invalid employer ID:', employerId);
+            return;
+        }
+        
+        const chatModal = document.getElementById('chatModal');
+        document.getElementById('chatEmployerName').textContent = employerName;
+        currentEmployerId = employerId;
+        console.log('Set currentEmployerId to:', currentEmployerId);
+        chatModal.style.display = 'block';
+        loadChatHistory();
+    }
+
+    function closeChat() {
+        document.getElementById('chatModal').style.display = 'none';
+        currentEmployerId = null;
+        console.log('Cleared currentEmployerId');
+    }
+
+    function loadChatHistory() {
+        if (!currentEmployerId) return;
+
+        fetch(`/Dashboard/GetStudentMessageHistory?employerId=${currentEmployerId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = '';
+
+                    data.messages.forEach(message => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = `message ${message.isFromEmployer ? 'employer' : 'student'}`;
+                        
+                        const senderDiv = document.createElement('div');
+                        senderDiv.className = 'message-sender';
+                        senderDiv.style.fontSize = '12px';
+                        senderDiv.style.color = '#666';
+                        senderDiv.textContent = message.isFromEmployer ? message.employerName : 'You';
+                        
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'message-content';
+                        contentDiv.textContent = message.content;
+                        
+                        const timeDiv = document.createElement('div');
+                        timeDiv.className = 'message-time';
+                        timeDiv.textContent = new Date(message.sentTime).toLocaleString();
+                        
+                        messageDiv.appendChild(senderDiv);
+                        messageDiv.appendChild(contentDiv);
+                        messageDiv.appendChild(timeDiv);
+                        chatMessages.appendChild(messageDiv);
+                    });
+
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+    }
+
+    function sendMessage() {
+        if (!currentEmployerId) {
+            console.error('No employer ID set');
+            return;
+        }
+
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        const sendButton = document.querySelector('.chat-input button');
+        
+        if (!message) return;
+
+        console.log('Sending message:', {
+            employerId: currentEmployerId,
+            message: message
+        });
+
+        // Disable input and button while sending
+        input.disabled = true;
+        sendButton.disabled = true;
+        sendButton.textContent = 'Sending...';
+
+        fetch('/Dashboard/SendStudentMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                employerId: currentEmployerId,
+                message: message
+            })
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                input.value = '';
+                loadChatHistory();
+            } else {
+                alert('Failed to send message: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to send message. Please try again.');
+        })
+        .finally(() => {
+            // Re-enable input and button
+            input.disabled = false;
+            sendButton.disabled = false;
+            sendButton.textContent = 'Send';
+            input.focus();
+        });
+    }
+
+    // Add event listener for Enter key in message input
+    document.getElementById('messageInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function openMessageDetails(messageId, employerName, employerId) {
+        console.log('Opening message details:', { messageId, employerName, employerId });
+        
+        if (!employerId) {
+            console.error('Invalid employer ID:', employerId);
+            return;
+        }
+
+        // Set currentEmployerId before making the request
+        currentEmployerId = employerId;
+        console.log('Set currentEmployerId to:', currentEmployerId);
+        
+        fetch(`/Dashboard/MarkMessageAsRead?messageId=${messageId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadNotifications();
+                    // Close the notification dropdown
+                    isDropdownOpen = false;
+                    document.getElementById('notificationDropdown').classList.remove('show-dropdown');
+                    // Open chat with employer
+                    openChat(employerName, employerId);
+                }
+            })
+            .catch(error => {
+                console.error('Error marking message as read:', error);
+            });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationArea = document.querySelector('.notification-area');
+        const chatModal = document.getElementById('chatModal');
+        
+        if (!notificationArea.contains(event.target) && isDropdownOpen) {
+            toggleNotifications();
+        }
+        
+        if (event.target === chatModal) {
+            closeChat();
+        }
+    });
+
+    // Load notifications periodically
+    setInterval(loadNotifications, 30000); // Check every 30 seconds
+
+    // Initial load
+    loadNotifications();
 </script>
 
 </html>

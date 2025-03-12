@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StudentBadge")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+630fb0cc2221d208b63f8c4cce76792f7b4d0225")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f05571fda9446cedd85b5e33cbcd498cc1ab253c")]
 [assembly: System.Reflection.AssemblyProductAttribute("StudentBadge")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StudentBadge")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

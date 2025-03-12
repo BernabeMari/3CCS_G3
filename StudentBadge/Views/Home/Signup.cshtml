@@ -223,6 +223,11 @@
                     <!-- Employer Fields -->
                     <div id="employerFields" class="roleFields" style="display:none;">
                         <div class="form-group">
+                            <label for="employerId"><b>Employer ID</b></label>
+                            <input type="text" id="employerId" name="employerId" class="form-control form-control-lg" readonly 
+                                   placeholder="Will be generated automatically" style="background-color: #f8f9fa;" />
+                        </div>
+                        <div class="form-group">
                             <label for="company"><b>Company</b></label>
                             <input type="text" id="company" name="company" class="form-control form-control-lg" placeholder="Enter company name" />
                         </div>
@@ -243,12 +248,19 @@
         document.getElementById('role').addEventListener('change', function () {
             var selectedRole = this.value;
             document.querySelectorAll('.roleFields').forEach(el => el.style.display = 'none');
-            if (selectedRole === 'student') document.getElementById('studentFields').style.display = 'block';
-            if (selectedRole === 'employer') document.getElementById('employerFields').style.display = 'block';
+            
+            if (selectedRole === 'student') {
+                document.getElementById('studentFields').style.display = 'block';
+            }
+            if (selectedRole === 'employer') {
+                document.getElementById('employerFields').style.display = 'block';
+                // Generate temporary EmployerId preview
+                const timestamp = new Date().getTime();
+                const randomNum = Math.floor(Math.random() * 9000) + 1000;
+                const tempEmployerId = `EMP${timestamp}${randomNum}`;
+                document.getElementById('employerId').value = tempEmployerId;
+            }
         });
-
-        document.getElementById('role').value = 'employer';
-        document.getElementById('role').dispatchEvent(new Event('change'));
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

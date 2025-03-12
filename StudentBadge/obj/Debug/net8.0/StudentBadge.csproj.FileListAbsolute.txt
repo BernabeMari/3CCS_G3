@@ -94,7 +94,6 @@ C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.StudentBadge.props
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.StudentBadge.props
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\StudentB.33518DC2.Up2Date
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\StudentBadge.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Debug\net8.0\refint\StudentBadge.dll
@@ -117,3 +116,4 @@ C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Debug\
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Debug\net8.0\runtimes\win-x64\native\krb5_64.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Debug\net8.0\runtimes\win-x64\native\krbcc64.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Debug\net8.0\Dapper.dll

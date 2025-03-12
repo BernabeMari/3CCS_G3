@@ -73,6 +73,36 @@ public class AccountController : Controller
                 }
             }
 
+            // Generate EmployerId for employer accounts
+            string employerId = null;
+            if (role == "employer")
+            {
+                // Generate a unique EmployerId (EMP + timestamp + random number)
+                employerId = $"EMP{DateTime.Now:yyyyMMddHHmmss}{new Random().Next(1000, 9999)}";
+                
+                // Verify the generated ID is unique
+                string checkEmployerIdQuery = "SELECT COUNT(*) FROM dbo.Employers WHERE EmployerId = @EmployerId";
+                using (var employerIdCheckCommand = new SqlCommand(checkEmployerIdQuery, connection))
+                {
+                    bool isUnique = false;
+                    while (!isUnique)
+                    {
+                        employerIdCheckCommand.Parameters.Clear();
+                        employerIdCheckCommand.Parameters.AddWithValue("@EmployerId", employerId);
+                        int employerIdExists = (int)await employerIdCheckCommand.ExecuteScalarAsync();
+                        
+                        if (employerIdExists == 0)
+                        {
+                            isUnique = true;
+                        }
+                        else
+                        {
+                            employerId = $"EMP{DateTime.Now:yyyyMMddHHmmss}{new Random().Next(1000, 9999)}";
+                        }
+                    }
+                }
+            }
+
             // Build INSERT statement based on role
             string query = role switch
             {
@@ -80,8 +110,8 @@ public class AccountController : Controller
 "VALUES (@Username, @FullName, @Password, @IdNumber, @Course, @Section)",
 
 
-                "employer" => "INSERT INTO dbo.Employers (Username, FullName, Password, Company) " +
-                              "VALUES (@Username, @FullName, @Password, @Company)",
+                "employer" => "INSERT INTO dbo.Employers (EmployerId, Username, FullName, Password, Company) " +
+                              "VALUES (@EmployerId, @Username, @FullName, @Password, @Company)",
 
                 "admin" => "INSERT INTO dbo.Admins (Username, FullName, Password) " +
                            "VALUES (@Username, @FullName, @Password)",
@@ -103,13 +133,13 @@ public class AccountController : Controller
 
                 if (role == "student")
                 {
-                    command.Parameters.AddWithValue("@Role", role);
                     command.Parameters.AddWithValue("@IdNumber", idNumber);
                     command.Parameters.AddWithValue("@Course", course);
                     command.Parameters.AddWithValue("@Section", section);
                 }
                 else if (role == "employer")
                 {
+                    command.Parameters.AddWithValue("@EmployerId", employerId);
                     command.Parameters.AddWithValue("@Company", company);
                 }
 
@@ -180,6 +210,25 @@ public class AccountController : Controller
                             HttpContext.Session.SetString("IdNumber", reader["IdNumber"].ToString());
                             HttpContext.Session.SetString("Course", reader["Course"].ToString());
                             HttpContext.Session.SetString("Section", reader["Section"].ToString());
+                        }
+                    }
+                }
+            }
+            // Add employer information if role is employer
+            else if (role == "employer")
+            {
+                string employerQuery = "SELECT EmployerId, FullName, Company FROM dbo.Employers WHERE Username = @Username";
+                using (var employerCommand = new SqlCommand(employerQuery, connection))
+                {
+                    employerCommand.Parameters.AddWithValue("@Username", username);
+                    using (var reader = await employerCommand.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Store employer info in session
+                            HttpContext.Session.SetString("EmployerId", reader["EmployerId"].ToString());
+                            HttpContext.Session.SetString("EmployerName", reader["FullName"].ToString());
+                            HttpContext.Session.SetString("CompanyName", reader["Company"].ToString());
                         }
                     }
                 }
