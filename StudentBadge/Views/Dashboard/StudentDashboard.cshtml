@@ -102,8 +102,8 @@
         .content {
             flex-grow: 1;
             padding: 30px;
-            width: calc(100% - 300px); /* Adjusted width */
-            margin-left: 260px; /* Ensures it doesn’t overlap the sidebar */
+            width: calc(100% - 300px); 
+            margin-left: 260px; 
             min-height: 100vh;
             overflow-y: auto;
         }
@@ -119,39 +119,39 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Adjust width to prevent squeezing */
+            width: 100%; 
             max-width: 600px;
             height: 50%;
             max-height: 200px;
-            margin: 20px auto; /* Center the div */
-            text-align: left; /* Align text to the left for better readability */
+            margin: 20px auto;
+            text-align: left; 
             font-size: 16px;
-            line-height: 1.6; /* Improve spacing between lines */
+            line-height: 1.6;
         }
 
             .student-info h2 {
-                text-align: center; /* Center the heading */
+                text-align: center;
                 margin-bottom: 15px;
                 font-size: 20px;
                 font-weight: bold;
             }
 
             .student-info p {
-                display: block; /* Ensures each paragraph is treated as a block element */
-                margin: 12px 0; /* Adds spacing between each field */
+                display: block; 
+                margin: 12px 0;
                 font-size: 16px;
-                line-height: 1.6; /* Increases readability */
+                line-height: 1.6;
             }
 
                 .student-info p strong {
-                    display: block; /* Forces the label (strong) to appear on a new line */
-                    margin-bottom: 4px; /* Adds spacing between the label and the value */
+                    display: block; 
+                    margin-bottom: 4px;
                 }
 
 
 
         .student-item {
-            background-color: #bfe4b2; /* Light green background */
+            background-color: #bfe4b2; 
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 8px;
@@ -369,9 +369,9 @@
                     <p><strong>Section:</strong> @ViewBag.Section</p>
                 </div>
                 <div class="profile-picture">
-                    @if (ViewBag.Base64Image != null && !string.IsNullOrEmpty(ViewBag.Base64Image))
+                    @if (!string.IsNullOrEmpty(ViewBag.ProfilePicturePath))
                     {
-                        <img src="data:image/jpeg;base64,@ViewBag.Base64Image" alt="Profile Picture" class="profile-img" />
+                        <img src="@ViewBag.ProfilePicturePath" alt="Profile Picture" class="profile-img" />
                     }
                     else
                     {
@@ -392,9 +392,8 @@
                         {
                             <div class="student-item"
                                  style="background-color: @(student.IsProfileVisible ? "#bfe4b2" : "#e4b2b2"); padding: 10px; margin: 5px; border-radius: 5px; cursor: pointer;"
-                                 onclick="handleStudentClick('@student.IsProfileVisible', '@student.FullName', '@student.IdNumber', '@student.Course', '@student.Section', '@student.Score', '@student.Achievements', '@student.Comments', '@student.BadgeColor')"
+                                 onclick="handleStudentClick('@student.IsProfileVisible', '@student.FullName', '@student.IdNumber', '@student.Course', '@student.Section', '@student.Score', '@student.Achievements', '@student.Comments', '@student.BadgeColor', '@student.ProfilePicturePath', '@student.ResumePath', '@student.IsResumeVisible')"
                                  title="@(student.IsProfileVisible ? "" : "This profile is locked")">
-
                                 <p><strong>Name:</strong> @student.FullName</p>
                                 <p><strong>Score:</strong> @student.Score</p>
 
@@ -435,8 +434,20 @@
                                 <p><strong>Current Badge:</strong> <span id="detailBadge"></span></p>
                             </div>
                             <div class="profile-picture">
-                                <!-- If a Base64 image is available, update the src via JavaScript or render it server-side -->
                                 <img src="~/images/blank.jpg" alt="Profile Picture" class="profile-img" id="detailProfilePicture" />
+                            </div>
+                            <div class="resume-section">
+                                <p>
+                                   
+                                    <span id="detailResume">
+                                        <a href="#" id="resumeLink" target="_blank" style="display: none;">
+                                            <img src="/images/cv.png" alt="Resume" style="width: 32px; height: 32px;">
+                                            <i class="fas fa-file-pdf" style="font-size: 1.5rem; color: #d64545;"></i>
+                                        </a>
+                                        <span id="noResume" style="display: none;">No resume available</span>
+                                        <span id="hiddenResume" style="display: none;">Resume is private</span>
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -480,8 +491,19 @@
         </aside>
 
     </div>
+
 </body>
 <script>
+     window.onload = function() {
+        const img = document.querySelector('.profile-img');
+        console.log('Image src:', img.src);
+        console.log('Image complete:', img.complete);
+        console.log('Image natural dimensions:', img.naturalWidth, 'x', img.naturalHeight);
+
+        img.onerror = function() {
+            console.error('Error loading the image');
+        };
+    }
     function showUpdate(type) {
         // Hide all update items
         document.getElementById('events').classList.add('hidden');
@@ -499,15 +521,15 @@
         event.target.classList.add("active");
     }
 
-     function handleStudentClick(isVisible, fullName, idNumber, course, section, score, achievements, comments, badgeColor) {
+           function handleStudentClick(isVisible, fullName, idNumber, course, section, score, achievements, comments, badgeColor, profilePicturePath, resumePath, isResumeVisible) {
         if (isVisible === 'True') {
-            showStudentDetails(fullName, idNumber, course, section, score, achievements, comments, badgeColor);
+            showStudentDetails(fullName, idNumber, course, section, score, achievements, comments, badgeColor, profilePicturePath, resumePath, isResumeVisible);
         } else {
             alert("This profile is locked. You cannot view the details.");
         }
     }
 
-       function showStudentDetails(name, id, course, section, score, achievements, comments, badge, base64Image) {
+        function showStudentDetails(name, id, course, section, score, achievements, comments, badge, profilePicturePath, resumePath, isResumeVisible) {
         document.getElementById("detailName").innerText = name;
         document.getElementById("detailId").innerText = id;
         document.getElementById("detailCourse").innerText = course;
@@ -517,16 +539,29 @@
         document.getElementById("detailComments").innerText = comments;
         document.getElementById("detailBadge").innerText = badge;
 
-        // If a Base64 image is provided, update the profile picture; otherwise, use a default
-        if (base64Image) {
-            document.getElementById("detailProfilePicture").src = "data:image/jpeg;base64," + base64Image;
+        // If a profile picture path is provided, use it; otherwise, use a default
+        if (profilePicturePath && profilePicturePath !== '') {
+            document.getElementById("detailProfilePicture").src = profilePicturePath;
         } else {
             document.getElementById("detailProfilePicture").src = "/images/blank.jpg";
         }
 
+        // Handle resume display based on visibility
+        document.getElementById("resumeLink").style.display = "none";
+        document.getElementById("noResume").style.display = "none";
+        document.getElementById("hiddenResume").style.display = "none";
+
+        if (isResumeVisible === 'True' && resumePath && resumePath !== '') {
+            document.getElementById("resumeLink").href = resumePath;
+            document.getElementById("resumeLink").style.display = "inline";
+        } else if (resumePath && resumePath !== '') {
+            document.getElementById("hiddenResume").style.display = "inline";
+        } else {
+            document.getElementById("noResume").style.display = "inline";
+        }
+
         document.getElementById("studentModal").style.display = "block";
     }
-
 
     function closeModal() {
         document.getElementById("studentModal").style.display = "none";

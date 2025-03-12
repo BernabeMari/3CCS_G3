@@ -78,5 +78,14 @@ public class Startup
               pattern: "{controller=Dashboard}/{action=StudentDashboard}/{id?}");
             endpoints.MapRazorPages();
         });
+
+        app.UseStaticFiles(); // Make sure this is included
+
+        // Create the directory if it doesn't exist
+        var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "profilepictures");
+        if (!Directory.Exists(uploadDirectory))
+        {
+            Directory.CreateDirectory(uploadDirectory);
+        }
     }
 }

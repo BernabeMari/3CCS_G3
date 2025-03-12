@@ -223,6 +223,36 @@
                 background-color: #0056b3;
             }
 
+        .resume-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .resume-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            width: 300px;
+            height: 150px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .current-resume {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -269,6 +299,38 @@
             <button class="save-button" id="saveProfilePic" onclick="saveProfilePic()">Save Profile Picture</button>
         </div>
     </div>
+    <!-- Add this section after the profile picture section -->
+    <div class="resume-section">
+        <!-- Make sure this is in the resume section -->
+        <h2>Resume</h2>
+        <label class="switch">
+            <input type="checkbox" id="toggleResumeVisibility" onchange="toggleResumeVisibility()" @(ViewBag.IsResumeVisible ? "checked" : "")>
+            <span class="slider round"></span>
+        </label>
+        <p id="resumeVisibilityStatus">@(ViewBag.IsResumeVisible ? "Your resume is visible to others." : "Your resume is private.")</p>
+
+        <!-- Current Resume Status -->
+        <div class="current-resume" id="currentResumeSection" style="@(string.IsNullOrEmpty(ViewBag.ResumePath) ? "display: none;" : "")">
+            <p>Current Resume: <a href="@ViewBag.ResumePath" target="_blank" id="currentResumeName">View Resume</a></p>
+            <button class="edit-button" onclick="showResumeUploadArea()">Replace Resume</button>
+        </div>
+
+        <!-- Add Resume Button (shown when no resume exists) -->
+        <button class="edit-button" id="addResumeButton" style="@(!string.IsNullOrEmpty(ViewBag.ResumePath) ? "display: none;" : "")" onclick="showResumeUploadArea()">Add Resume</button>
+
+        <!-- Resume Upload Area -->
+        <div class="resume-upload-container" id="resumeUploadContainer" style="display: none;">
+            <p>Drag and drop your resume here or click to select a file</p>
+            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleResumeFileSelect(event)">
+        </div>
+
+        <!-- Save Button -->
+        <button class="save-button" id="saveResume" style="display: none;" onclick="saveResume()">Save Resume</button>
+    </div>
+
+    <!-- Hidden input to store base64 resume file -->
+    <input type="hidden" id="base64Resume" />
+    <input type="hidden" id="resumeFileName" />
     <!-- Hidden input to store base64 image -->
     <input type="hidden" id="base64Image" />
 
@@ -440,6 +502,149 @@
             console.log("Privacy setting updated:", data);
         })
         .catch(error => console.error("Error updating privacy setting:", error));
+    }
+
+        // Show resume upload area
+    function showResumeUploadArea() {
+        document.getElementById('addResumeButton').style.display = 'none';
+        document.getElementById('currentResumeSection').style.display = 'none';
+        document.getElementById('resumeUploadContainer').style.display = 'flex';
+        document.getElementById('saveResume').style.display = 'inline-block';
+
+        // Make the container clickable to trigger file input
+        document.getElementById('resumeUploadContainer').addEventListener('click', function() {
+            document.getElementById('resumeFileInput').click();
+        });
+    }
+
+    // Handle file selection through the file input
+    function handleResumeFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            processResumeFile(file);
+        }
+    }
+
+    // Handle drag and drop for resume
+    document.getElementById('resumeUploadContainer').addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.style.borderColor = '#4CAF50';
+    });
+
+    document.getElementById('resumeUploadContainer').addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.style.borderColor = '#ccc';
+    });
+
+    document.getElementById('resumeUploadContainer').addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.style.borderColor = '#ccc';
+
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            processResumeFile(file);
+        }
+    });
+
+    // Process the selected resume file
+    function processResumeFile(file) {
+        // Check file type
+        const acceptedTypes = ['.pdf', '.doc', '.docx'];
+        const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+        if (!acceptedTypes.includes(fileExtension)) {
+            alert('Please upload a PDF, DOC, or DOCX file.');
+            return;
+        }
+
+        // Check file size (max 10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File too large. Maximum size is 10MB.');
+            return;
+        }
+
+        // Read file as base64
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Store base64 file and filename
+            document.getElementById('base64Resume').value = e.target.result;
+            document.getElementById('resumeFileName').value = file.name;
+
+            // Update UI to show file selected
+            document.getElementById('resumeUploadContainer').innerHTML = `
+                <p>Selected file: ${file.name}</p>
+                <p>(${(file.size / 1024).toFixed(2)} KB)</p>
+            `;
+        };
+        reader.readAsDataURL(file);
+    }
+
+        function toggleResumeVisibility() {
+        var isChecked = document.getElementById("toggleResumeVisibility").checked;
+        var statusText = isChecked ? "Your resume is visible to others." : "Your resume is private.";
+        document.getElementById("resumeVisibilityStatus").innerText = statusText;
+
+        fetch('/Dashboard/UpdateResumeVisibility', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isVisible: isChecked })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Resume visibility updated:", data);
+        })
+        .catch(error => console.error("Error updating resume visibility:", error));
+    }
+
+    // Save resume
+    function saveResume() {
+        const base64Resume = document.getElementById('base64Resume').value;
+        const resumeFileName = document.getElementById('resumeFileName').value;
+
+        if (!base64Resume || !resumeFileName) {
+            alert('No file selected.');
+            return;
+        }
+
+        fetch('/Dashboard/SaveResume', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                ResumeFile: base64Resume,
+                ResumeFileName: resumeFileName
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Resume uploaded successfully!');
+
+                // Update UI
+                document.getElementById('resumeUploadContainer').style.display = 'none';
+                document.getElementById('saveResume').style.display = 'none';
+
+                // Update current resume section
+                document.getElementById('currentResumeSection').style.display = 'block';
+                document.getElementById('currentResumeName').href = data.resumeUrl;
+
+                // Hide add button, show current resume
+                document.getElementById('addResumeButton').style.display = 'none';
+                document.getElementById('currentResumeSection').style.display = 'block';
+            } else {
+                alert('Failed to upload resume: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading resume:', error);
+            alert('Error uploading resume. Please try again.');
+        });
     }
 </script>
 

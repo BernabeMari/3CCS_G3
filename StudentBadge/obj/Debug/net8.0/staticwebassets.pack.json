@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\images\\blank.jpg"
     },
     {
+      "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\cv.png",
+      "PackagePath": "staticwebassets\\images\\cv.png"
+    },
+    {
       "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\signupbg.jpg",
       "PackagePath": "staticwebassets\\images\\signupbg.jpg"
     },
@@ -259,6 +263,14 @@
     {
       "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03000_638773949730804506.jpg",
+      "PackagePath": "staticwebassets\\uploads\\profilepictures\\03000_638773949730804506.jpg"
+    },
+    {
+      "Id": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf",
+      "PackagePath": "staticwebassets\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.StudentBadge.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

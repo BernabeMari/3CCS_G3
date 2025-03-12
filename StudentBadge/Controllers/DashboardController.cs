@@ -46,7 +46,7 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string query = "SELECT Score, ProfilePicture FROM Students WHERE IdNumber = @IdNumber";
+            string query = "SELECT Score, ProfilePicturePath, ResumePath FROM Students WHERE IdNumber = @IdNumber";
 
             using (var command = new SqlCommand(query, connection))
             {
@@ -66,16 +66,13 @@ public class DashboardController : Controller
                             ViewBag.Score = 0;
                         }
 
-                        // Get profile picture
-                        byte[] profilePicture = reader["ProfilePicture"] as byte[];
-                        if (profilePicture != null && profilePicture.Length > 0)
-                        {
-                            ViewBag.Base64Image = Convert.ToBase64String(profilePicture);
-                        }
-                        else
-                        {
-                            ViewBag.Base64Image = null;
-                        }
+                        // Get profile picture path
+                        string profilePicturePath = reader["ProfilePicturePath"] as string;
+                        ViewBag.ProfilePicturePath = !string.IsNullOrEmpty(profilePicturePath) ? profilePicturePath : null;
+
+                        // Get resume path
+                        string resumePath = reader["ResumePath"] as string;
+                        ViewBag.ResumePath = !string.IsNullOrEmpty(resumePath) ? resumePath : null;
                     }
                 }
             }
@@ -89,8 +86,7 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            // Including all needed fields including Score, Achievements, Comments, and BadgeColor
-            string query = "SELECT IdNumber, FullName, Course, Section, IsProfileVisible, ProfilePicture, Score, Achievements, Comments, BadgeColor FROM Students ORDER BY Score DESC";
+            string query = "SELECT IdNumber, FullName, Course, Section, IsProfileVisible, ProfilePicturePath, ResumePath, Score, Achievements, Comments, BadgeColor, IsResumeVisible FROM Students ORDER BY Score DESC";
 
             using (var command = new SqlCommand(query, connection))
             using (var reader = await command.ExecuteReaderAsync())
@@ -104,11 +100,13 @@ public class DashboardController : Controller
                         Course = reader["Course"].ToString(),
                         Section = reader["Section"].ToString(),
                         IsProfileVisible = reader["IsProfileVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsProfileVisible"]),
-                        ProfilePicture = reader["ProfilePicture"] as byte[],
+                        ProfilePicturePath = reader["ProfilePicturePath"] as string,
+                        ResumePath = reader["ResumePath"] as string,
                         Score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0,
                         Achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : "",
                         Comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : "",
-                        BadgeColor = reader["BadgeColor"] != DBNull.Value ? reader["BadgeColor"].ToString() : "None"
+                        BadgeColor = reader["BadgeColor"] != DBNull.Value ? reader["BadgeColor"].ToString() : "None",
+                        IsResumeVisible = reader["IsResumeVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsResumeVisible"])
                     });
                 }
             }
@@ -146,22 +144,47 @@ public class DashboardController : Controller
         return Ok(new { message = "Privacy setting updated successfully." });
     }
 
-    public IActionResult StudentProfile()
+    [HttpPost]
+    public IActionResult UpdateResumeVisibility([FromBody] ResumeVisibilityModel model)
     {
-        ViewBag.FullName = HttpContext.Session.GetString("FullName");
-        ViewBag.IdNumber = HttpContext.Session.GetString("IdNumber");
-        ViewBag.Course = HttpContext.Session.GetString("Course");
-        ViewBag.Section = HttpContext.Session.GetString("Section");
+        if (model == null)
+        {
+            return BadRequest(new { message = "Invalid request data" });
+        }
 
         string idNumber = HttpContext.Session.GetString("IdNumber");
-
         if (string.IsNullOrEmpty(idNumber))
         {
-            return RedirectToAction("Login", "Home"); // Changed to match your Login action
+            return Unauthorized(new { message = "User not authenticated" });
+        }
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            string query = "UPDATE Students SET IsResumeVisible = @IsVisible WHERE IdNumber = @IdNumber";
+            using (var command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@IsVisible", model.IsVisible);
+                command.Parameters.AddWithValue("@IdNumber", idNumber);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        return Ok(new { message = "Resume visibility updated successfully." });
+    }
+
+    public IActionResult StudentProfile()
+    {
+        string idNumber = HttpContext.Session.GetString("IdNumber");
+        if (string.IsNullOrEmpty(idNumber))
+        {
+            return RedirectToAction("Login");
         }
 
         bool isProfileVisible = false;
-        byte[] profilePicture = null;
+        bool isResumeVisible = false;
+        string profilePicturePath = null;
+        string resumePath = null;
         int score = 0;
         string achievements = "";
         string comments = "";
@@ -170,7 +193,7 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "SELECT IsProfileVisible, ProfilePicture, Score, Achievements, Comments, BadgeColor FROM Students WHERE IdNumber = @IdNumber";
+            string query = "SELECT IsProfileVisible, IsResumeVisible, ProfilePicturePath, ResumePath, Score, Achievements, Comments, BadgeColor FROM Students WHERE IdNumber = @IdNumber";
 
             using (var command = new SqlCommand(query, connection))
             {
@@ -181,7 +204,9 @@ public class DashboardController : Controller
                     if (reader.Read())
                     {
                         isProfileVisible = reader["IsProfileVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsProfileVisible"]);
-                        profilePicture = reader["ProfilePicture"] as byte[];
+                        isResumeVisible = reader["IsResumeVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsResumeVisible"]);
+                        profilePicturePath = reader["ProfilePicturePath"] as string;
+                        resumePath = reader["ResumePath"] as string;
                         score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0;
                         achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : "";
                         comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : "";
@@ -192,21 +217,13 @@ public class DashboardController : Controller
         }
 
         ViewBag.IsProfileVisible = isProfileVisible;
+        ViewBag.IsResumeVisible = isResumeVisible;
+        ViewBag.ProfilePicturePath = profilePicturePath;
+        ViewBag.ResumePath = resumePath;
         ViewBag.Score = score;
         ViewBag.Achievements = achievements;
         ViewBag.Comments = comments;
         ViewBag.BadgeColor = badgeColor;
-
-        // Ensure profilePicture is not null and has a valid length
-        if (profilePicture != null && profilePicture.Length > 0)
-        {
-            // Convert the byte array to a Base64 string
-            ViewBag.Base64Image = Convert.ToBase64String(profilePicture);
-        }
-        else
-        {
-            ViewBag.Base64Image = null; // In case there is no image
-        }
 
         return View();
     }
@@ -237,27 +254,35 @@ public class DashboardController : Controller
 
             byte[] imageBytes = Convert.FromBase64String(base64Image);
 
-            // Check for reasonable size (prevent too large/small files)
+            // Check for reasonable size
             if (imageBytes.Length > 5 * 1024 * 1024) // 5MB limit
             {
                 return Json(new { success = false, message = "Image too large. Maximum size is 5MB." });
             }
 
-            // Update the profile picture in the database
             string idNumber = HttpContext.Session.GetString("IdNumber");
             if (string.IsNullOrEmpty(idNumber))
             {
                 return Json(new { success = false, message = "User not authenticated." });
             }
 
+            // Generate a unique filename based on ID and timestamp
+            string fileName = $"{idNumber}_{DateTime.Now.Ticks}.jpg";
+            string filePath = Path.Combine("uploads", "profilepictures", fileName);
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filePath);
+
+            // Save the file to disk
+            await System.IO.File.WriteAllBytesAsync(fullPath, imageBytes);
+
+            // Store the relative path in the database
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "UPDATE Students SET ProfilePicture = @ProfilePicture WHERE IdNumber = @IdNumber";
+                string query = "UPDATE Students SET ProfilePicturePath = @ProfilePicturePath WHERE IdNumber = @IdNumber";
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@ProfilePicture", System.Data.SqlDbType.VarBinary, imageBytes.Length).Value = imageBytes;
+                    command.Parameters.AddWithValue("@ProfilePicturePath", "/" + filePath.Replace("\\", "/"));
                     command.Parameters.AddWithValue("@IdNumber", idNumber);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
@@ -268,7 +293,7 @@ public class DashboardController : Controller
                         {
                             success = true,
                             message = "Profile picture saved successfully.",
-                            imageData = "data:image/jpeg;base64," + base64Image // Return with proper format for immediate display
+                            imageUrl = "/" + filePath.Replace("\\", "/") // Return the URL for immediate display
                         });
                     }
                     else
@@ -278,13 +303,92 @@ public class DashboardController : Controller
                 }
             }
         }
-        catch (FormatException ex)
-        {
-            return Json(new { success = false, message = "Invalid image format: " + ex.Message });
-        }
         catch (Exception ex)
         {
             return Json(new { success = false, message = "Error saving profile picture: " + ex.Message });
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SaveResume([FromBody] ResumeModel model)
+    {
+        if (model == null || string.IsNullOrEmpty(model.ResumeFile))
+        {
+            return Json(new { success = false, message = "No resume file received." });
+        }
+
+        try
+        {
+            string base64File = model.ResumeFile;
+            string fileName = model.ResumeFileName;
+
+            // Handle the case when the full data URL is sent
+            if (base64File.Contains(","))
+            {
+                base64File = base64File.Split(',')[1];
+            }
+
+            byte[] fileBytes = Convert.FromBase64String(base64File);
+
+            // Check for reasonable size
+            if (fileBytes.Length > 10 * 1024 * 1024) // 10MB limit
+            {
+                return Json(new { success = false, message = "Resume too large. Maximum size is 10MB." });
+            }
+
+            string idNumber = HttpContext.Session.GetString("IdNumber");
+            if (string.IsNullOrEmpty(idNumber))
+            {
+                return Json(new { success = false, message = "User not authenticated." });
+            }
+
+            // Generate a unique filename based on ID and timestamp
+            string safeFileName = $"{idNumber}_{DateTime.Now.Ticks}_{Path.GetFileNameWithoutExtension(fileName)}{Path.GetExtension(fileName)}";
+            string filePath = Path.Combine("uploads", "resumes", safeFileName);
+            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filePath);
+
+            // Ensure directory exists
+            string directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "resumes");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            // Save the file to disk
+            await System.IO.File.WriteAllBytesAsync(fullPath, fileBytes);
+
+            // Store the relative path in the database
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "UPDATE Students SET ResumePath = @ResumePath WHERE IdNumber = @IdNumber";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ResumePath", "/" + filePath.Replace("\\", "/"));
+                    command.Parameters.AddWithValue("@IdNumber", idNumber);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        return Json(new
+                        {
+                            success = true,
+                            message = "Resume uploaded successfully.",
+                            resumeUrl = "/" + filePath.Replace("\\", "/") // Return the URL for immediate display
+                        });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Failed to update resume. User not found." });
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = "Error saving resume: " + ex.Message });
         }
     }
 
@@ -320,7 +424,18 @@ public class PrivacySettingModel
     public bool IsVisible { get; set; }
 }
 
+public class ResumeVisibilityModel
+{
+    public bool IsVisible { get; set; }
+}
+
 public class ProfilePictureModel
 {
     public string Base64Image { get; set; }
+}
+
+public class ResumeModel
+{
+    public string ResumeFile { get; set; }
+    public string ResumeFileName { get; set; }
 }
