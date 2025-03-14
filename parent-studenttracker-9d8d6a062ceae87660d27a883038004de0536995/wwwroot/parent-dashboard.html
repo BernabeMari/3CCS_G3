@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard - Student Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #5469d4;
+            --secondary-color: #4655a8;
+            --accent-color: #f7fafc;
+            --text-color: #2d3748;
+            --light-text: #718096;
+            --success-color: #38a169;
+            --danger-color: #e53e3e;
+            --warning-color: #f6ad55;
+            --info-color: #63b3ed;
+            --border-radius: 10px;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-color);
+            background-color: #f7fafc;
+            line-height: 1.6;
+        }
+        
+        /* Navbar styling */
+        .navbar {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-dark.bg-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Card styling */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Map styling */
+        #map { 
+            height: 420px; 
+            border-radius: var(--border-radius);
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Student card styling */
+        .student-card {
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+        }
+        
+        .student-card:hover {
+            background-color: #f8f9fa;
+            border-color: var(--border-color);
+        }
+        
+        .student-card.active {
+            background-color: rgba(84, 105, 212, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        /* Badge animation */
+        .badge.bg-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .badge {
+            padding: 6px 10px;
+            font-weight: 500;
+            border-radius: 20px;
+        }
+        
+        .badge.bg-success {
+            background-color: var(--success-color) !important;
+        }
+        
+        .badge.bg-secondary {
+            background-color: var(--light-text) !important;
+        }
+        
+        .badge.bg-info {
+            background-color: var(--info-color) !important;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Button styling */
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(84, 105, 212, 0.3);
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            background-color: #fff;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        /* Typography enhancements */
+        h3 {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 16px;
+        }
+        
+        .text-muted {
+            color: var(--light-text) !important;
+        }
+        
+        /* Dropdown enhancements */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border-radius: var(--border-radius);
+        }
+        
+        .dropdown-item {
+            padding: 10px 16px;
+            transition: all 0.2s;
+        }
+        
+        .dropdown-item:hover {
+            background-color: rgba(84, 105, 212, 0.1);
+        }
+        
+        /* Currently monitoring status */
+        #currently-monitoring {
+            padding: 8px 12px;
+            border-radius: 6px;
+            background-color: rgba(99, 179, 237, 0.1);
+            display: inline-block;
+        }
+        
+        /* Custom map marker styling */
+        .custom-map-marker {
+            background: transparent;
+        }
+        
+        /* Moving away marker */
+        .moving-away-marker {
+            background: transparent;
+        }
+        
+        .moving-away-marker .marker-icon {
+            animation: bounce-warning 1s ease infinite alternate;
+        }
+        
+        @keyframes bounce-warning {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+        
+        .marker-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: bottom center;
+            animation: bounce 1s ease infinite alternate;
+        }
+        
+        .marker-profile-pic {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+        
+        /* Trail styling */
+        .student-trail {
+            stroke-dasharray: 10, 5;
+            animation: dash 2s linear infinite;
+        }
+        
+        .student-trail-warning {
+            stroke-dasharray: 10, 5;
+            animation: dash-warning 1.5s linear infinite;
+        }
+
+        /* Hide routing components without affecting the route display */
+        .leaflet-routing-container, 
+        .leaflet-routing-error,
+        .leaflet-routing-geocoders {
+            display: none !important;
+        }
+        
+        /* Hide the routing instruction markers on the route */
+        .leaflet-routing-icon,
+        .leaflet-routing-alt {
+            display: none !important;
+        }
+        
+        /* Make sure route lines remain visible and animated */
+        .leaflet-overlay-pane path {
+            stroke-dasharray: 10, 5;
+            animation: dash 2s linear infinite;
+            pointer-events: auto !important;
+            cursor: pointer;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -30;
+            }
+        }
+        
+        @keyframes dash-warning {
+            to {
+                stroke-dashoffset: -30;
+            }
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Map popup styling */
+        .map-popup {
+            padding: 5px;
+        }
+        
+        .popup-header {
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .popup-content {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .popup-info {
+            margin-bottom: 4px;
+        }
+        
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.2);
+        }
+        
+        .leaflet-popup-content {
+            margin: 10px 12px;
+            min-width: 200px;
+        }
+        
+        /* Routing Machine styles */
+        .leaflet-routing-container {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            max-width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none !important;
+        }
+        
+        .leaflet-routing-alt {
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        
+        .leaflet-routing-alt table {
+            width: 100%;
+        }
+        
+        .leaflet-routing-alt tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Mobile-friendly styles */
+        @media (max-width: 767px) {
+            #map { height: 300px; }
+            .container { padding-left: 15px; padding-right: 15px; }
+            .card { margin-bottom: 20px; }
+            .student-card { padding: 12px; }
+            .navbar-brand { font-size: 1.2rem; }
+            .btn { width: 100%; margin-bottom: 12px; }
+            h3 { font-size: 1.5rem; }
+            .dropdown-menu { width: 100%; }
+            
+            .student-card, .nav-link, .btn {
+                padding: 12px 15px;
+            }
+            
+            .dropdown-item {
+                padding: 12px 15px;
+            }
+            
+            .list-group-item {
+                padding: 15px;
+            }
+        }
+        
+        /* Moving away alert styling */
+        .moving-away-alert {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background-color: rgba(220, 53, 69, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out forwards;
+            max-width: 350px;
+        }
+        
+        .moving-away-alert .alert-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .moving-away-alert .alert-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        
+        .moving-away-alert .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        
+        .moving-away-alert .close-btn:hover {
+            opacity: 1;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Style for the popup directions */
+        .popup-direction {
+            margin-bottom: 4px;
+            padding-left: 8px;
+            border-left: 2px solid var(--primary-color);
+            font-size: 0.85rem;
+        }
+
+        /* Ensure ALL Leaflet routing lines are visible */
+        .leaflet-routing-container {
+            display: none !important;
+        }
+
+        /* Show the actual route line even when container is hidden */
+        .leaflet-routing-line, 
+        .leaflet-routing-alt-minimized {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+            display: block !important;
+        }
+        
+        /* Make route paths themselves always visible */
+        .leaflet-overlay-pane path,
+        .leaflet-routing-line path {
+            visibility: visible !important;
+            opacity: 1 !important;
+            stroke-dasharray: 10, 5 !important;
+            animation: dash 2s linear infinite !important;
+            pointer-events: auto !important;
+            stroke-width: 6px !important;
+            display: block !important;
+        }
+        
+        /* Specific rules for the route layer */
+        .routing-line-visible {
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Student Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="student-selector" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select Student
+                        </a>
+                        <ul class="dropdown-menu" id="student-dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Loading students...</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="nav-link" id="username-display"></span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Map section - will be full width on mobile -->
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
+                            <h3 class="mb-2 mb-md-0">Student Locations</h3>
+                            <div id="currently-monitoring" class="text-muted"></div>
+                        </div>
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right sidebar - will stack below on mobile -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3>Connect with Student</h3>
+                        <div id="error-message" class="alert alert-danger d-none"></div>
+                        <div class="mb-3">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="student-username"
+                                placeholder="Enter student username"
+                            >
+                        </div>
+                        <button
+                            class="btn btn-primary"
+                            id="send-request-btn"
+                            disabled
+                        >
+                            Send Connection Request
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Connected Students</h5>
+                        <span class="badge bg-info" id="students-count">0</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="connected-students" class="list-group list-group-flush">
+                            <!-- Connected students will be loaded here -->
+                            <div class="list-group-item">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <!-- OpenRouteService API Client -->
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script>
+        // Add this for debugging
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('Global error:', message, 'at', source, ':', lineno, ':', colno);
+            console.error('Error object:', error);
+            return false;
+        };
+
+        // Check authentication
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!token || !user || user.userType !== 'Parent') {
+            window.location.href = '/login.html';
+        }
+
+        // Display username
+        document.getElementById('username-display').textContent = user.fullname || user.username;
+
+        // Initialize map
+        const map = L.map('map', {
+            attributionControl: false  // Disable default attribution control
+        }).setView([0, 0], 2);
+        
+        // Add custom attribution control
+        L.control.attribution({
+            prefix: false  // Disable "Leaflet" prefix
+        }).addAttribution('© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors').addTo(map);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: ''  // Empty attribution since we're using the custom one
+        }).addTo(map);
+        
+        // Add zoom event listener to handle route visibility on zoom
+        map.on('zoomend', function() {
+            // Re-render the active student trail to prevent duplication
+            if (activeStudentId && studentTrails[activeStudentId]) {
+                // Delay slightly to let Leaflet finish rendering
+                setTimeout(() => {
+                    // Force paths to be visible and properly styled
+                    document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').forEach(path => {
+                        path.style.visibility = 'visible';
+                        path.style.opacity = '1';
+                        path.style.strokeDasharray = '10, 5';
+                        path.style.animation = 'dash 2s linear infinite';
+                        path.style.pointerEvents = 'auto';
+                        path.style.stroke = studentMarkers[activeStudentId]?.isMovingAway ? '#dc3545' : '#3388ff';
+                        path.style.strokeWidth = '6px';
+                    });
+                    
+                    // Hide any routing containers that might appear during zoom
+                    document.querySelectorAll('.leaflet-routing-container, .leaflet-routing-container-hide').forEach(container => {
+                        container.style.display = 'none';
+                        container.style.visibility = 'hidden';
+                        container.style.opacity = '0';
+                    });
+                }, 100);
+            }
+        });
+        
+        // Instead of a simple markers Map, we'll use an object to store markers per student
+        const studentMarkers = {};
+        // Store polylines for each student's trail
+        const studentTrails = {};
+        // Maximum trail points to keep (to avoid cluttering the map)
+        const MAX_TRAIL_POINTS = 20;
+        
+        // For tracking which student we're actively monitoring
+        let activeStudentId = null;
+        let activeStudentName = null;
+        let lastActiveLocation = null; // Store last known location of active student
+
+        // School location coordinates (destination) - converted from 14°29'27.2"N 121°03'18.4"E
+        const SCHOOL_LOCATION = [14.4908889, 121.055111];
+        
+        // Function to calculate distance between two points using Haversine formula (returns distance in meters)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // Earth's radius in meters
+            const φ1 = lat1 * Math.PI/180;
+            const φ2 = lat2 * Math.PI/180;
+            const Δφ = (lat2-lat1) * Math.PI/180;
+            const Δλ = (lon2-lon1) * Math.PI/180;
+
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                    Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            return R * c; // in meters
+        }
+        
+        // Function to check if student is moving away from school
+        function isMovingAwayFromSchool(studentId, currentLat, currentLon) {
+            if (!studentMarkers[studentId].previousLocation) {
+                return false; // First location update, can't determine direction yet
+            }
+            
+            const prevLat = studentMarkers[studentId].previousLocation[0];
+            const prevLon = studentMarkers[studentId].previousLocation[1];
+            
+            // Calculate previous and current distances to school
+            const previousDistance = calculateDistance(
+                prevLat, prevLon, 
+                SCHOOL_LOCATION[0], SCHOOL_LOCATION[1]
+            );
+            
+            const currentDistance = calculateDistance(
+                currentLat, currentLon, 
+                SCHOOL_LOCATION[0], SCHOOL_LOCATION[1]
+            );
+            
+            // Student is moving away if current distance is greater than previous
+            // Add a small threshold (10 meters) to avoid notifications for small movements
+            return (currentDistance - previousDistance) > 10;
+        }
+        
+        // Create a school marker with a custom icon
+        const schoolIcon = L.divIcon({
+            className: 'custom-map-marker',
+            html: `<div class="marker-icon"><i class="bi bi-building" style="font-size: 24px; color: #5469d4;"></i></div>`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
+        });
+
+        // Add school marker to the map
+        const schoolMarker = L.marker(SCHOOL_LOCATION, { icon: schoolIcon })
+            .bindPopup(`
+                <div class="map-popup">
+                    <div class="popup-header">
+                        <i class="bi bi-building me-2"></i>
+                        <strong>School</strong>
+                    </div>
+                    <div class="popup-content">
+                        <div class="popup-info">14°29'27.2"N 121°03'18.4"E</div>
+                    </div>
+                </div>
+            `);
+
+        // Initialize SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/trackingHub', { accessTokenFactory: () => token })
+            .withAutomaticReconnect()
+            .build();
+
+        // Handle receiving location updates
+        connection.on('ReceiveLocation', (studentId, username, latitude, longitude, fullname, profilePic) => {
+            console.log(`Receiving location for student ${studentId} (${fullname || username}): ${latitude}, ${longitude}`);
+            
+            // Use fullname if available, otherwise fall back to username
+            const displayName = fullname || username;
+            
+            // Create studentMarkers entry if it doesn't exist
+            if (!studentMarkers[studentId]) {
+                studentMarkers[studentId] = {
+                    marker: null,
+                    isActive: false,
+                    lastUpdate: null,
+                    username: username,
+                    fullname: fullname,
+                    profilePic: profilePic,
+                    trailPoints: [], // Array to store trail points
+                    previousLocation: null, // Added for moving away detection
+                    isMovingAway: false, // Flag to track direction
+                    notifiedMovingAway: false // Track if we've already notified
+                };
+            } else {
+                // Update student info
+                studentMarkers[studentId].username = username;
+                studentMarkers[studentId].fullname = fullname;
+                studentMarkers[studentId].profilePic = profilePic;
+            }
+            
+            // Check if student is moving away from school (only if we have previous location)
+            let movingAwayFromSchool = false;
+            if (studentMarkers[studentId].previousLocation) {
+                movingAwayFromSchool = isMovingAwayFromSchool(studentId, latitude, longitude);
+                
+                // Update moving away status
+                if (movingAwayFromSchool !== studentMarkers[studentId].isMovingAway) {
+                    studentMarkers[studentId].isMovingAway = movingAwayFromSchool;
+                    
+                    // Only notify if student is actively moving away and we haven't notified yet
+                    if (movingAwayFromSchool && !studentMarkers[studentId].notifiedMovingAway) {
+                        // Update notification flag
+                        studentMarkers[studentId].notifiedMovingAway = true;
+                        
+                        // Show notification to parent if this is the active student
+                        if (activeStudentId === studentId) {
+                            showMovingAwayAlert(displayName);
+                        }
+                    } else if (!movingAwayFromSchool) {
+                        // Reset notification flag when student starts moving toward school again
+                        studentMarkers[studentId].notifiedMovingAway = false;
+                    }
+                }
+            }
+            
+            // Remove existing marker if exists
+            if (studentMarkers[studentId].marker) {
+                map.removeLayer(studentMarkers[studentId].marker);
+            }
+
+            // Add new marker with custom icon - use fullname from studentMarkers object
+            const markerClass = movingAwayFromSchool ? 'moving-away-marker' : 'custom-map-marker';
+            const markerBorder = movingAwayFromSchool ? '#dc3545' : '#5469d4'; // Red border for moving away
+            
+            const customIcon = L.divIcon({
+                className: markerClass,
+                html: `<div class="marker-icon"><img src="${studentMarkers[studentId].profilePic || '/images/default-profile.png'}" class="marker-profile-pic" style="border-color: ${markerBorder};" alt="Profile"></div>`,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+            
+            const popupContent = `
+                <div class="map-popup">
+                    <div class="popup-header">
+                        <i class="bi bi-person-fill me-2"></i>
+                        <strong>${displayName}</strong>
+                    </div>
+                    <div class="popup-content">
+                        <div class="popup-info">
+                            <i class="bi bi-geo-alt me-1"></i> Location active
+                            ${movingAwayFromSchool ? '<span class="text-danger ms-2"><i class="bi bi-exclamation-triangle-fill"></i> Moving away from school</span>' : ''}
+                        </div>
+                        <div class="popup-time"><i class="bi bi-clock me-1"></i> ${new Date().toLocaleString()}</div>
+                    </div>
+                </div>
+            `;
+            
+            const marker = L.marker([latitude, longitude], { icon: customIcon })
+                .bindPopup(popupContent);
+                
+            // Add new point to the trail
+            const newPoint = [latitude, longitude];
+            
+            // Add point to the trail points array
+            if (!studentMarkers[studentId].trailPoints) {
+                studentMarkers[studentId].trailPoints = [];
+            }
+            
+            studentMarkers[studentId].trailPoints.push(newPoint);
+            
+            // Limit the number of trail points to avoid performance issues
+            if (studentMarkers[studentId].trailPoints.length > MAX_TRAIL_POINTS) {
+                studentMarkers[studentId].trailPoints.shift(); // Remove oldest point
+            }
+            
+            // Remove existing trail polyline if it exists
+            if (studentTrails[studentId]) {
+                map.removeLayer(studentTrails[studentId]);
+                delete studentTrails[studentId];
+            }
+            
+            // Create road-based routing using Leaflet Routing Machine
+            const routeControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(latitude, longitude), // Current location
+                    L.latLng(SCHOOL_LOCATION[0], SCHOOL_LOCATION[1]) // School location
+                ],
+                lineOptions: {
+                    styles: [{
+                        color: movingAwayFromSchool ? '#dc3545' : '#3388ff', // Red if moving away, blue if not
+                        opacity: 1,
+                        weight: 6,
+                        className: 'routing-line-visible'
+                    }],
+                    addWaypoints: false,
+                    extendToWaypoints: true,
+                    missingRouteTolerance: 100
+                },
+                show: true, // Initially show then hide via code for better rendering
+                showAlternatives: false,
+                fitSelectedRoutes: false,
+                routeWhileDragging: false,
+                autoRoute: true,
+                useZoomParameter: false,
+                draggableWaypoints: false,
+                createMarker: function() { return null; }, // Don't add markers for waypoints
+                formatter: null // Simpler approach - just don't use a formatter
+            });
+            
+            // Store the route control in studentTrails
+            studentTrails[studentId] = routeControl;
+            
+            // Only add to map if this is the active student
+            if (activeStudentId === studentId) {
+                console.log('Adding route control to map for active student:', studentId);
+                routeControl.addTo(map);
+                console.log('Route control added to map');
+                
+                // Immediately try to hide containers and make paths visible
+                document.querySelectorAll('.leaflet-routing-container, .leaflet-routing-container-hide').forEach(container => {
+                    container.style.display = 'none !important';
+                    container.style.visibility = 'hidden !important';
+                    container.style.opacity = '0 !important';
+                });
+                
+                // Attempt to make all paths visible immediately
+                document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').forEach(path => {
+                    path.style.visibility = 'visible !important';
+                    path.style.opacity = '1 !important';
+                    path.style.strokeDasharray = '10, 5 !important';
+                    path.style.animation = 'dash 2s linear infinite !important';
+                });
+                
+                // Also show the school marker
+                schoolMarker.addTo(map);
+                // Add student marker
+                marker.addTo(map);
+                // Center map on this marker
+                map.setView([latitude, longitude], 15);
+                
+                // Update monitoring info
+                document.getElementById('currently-monitoring').innerHTML = 
+                    `Monitoring: <strong>${displayName}</strong> - Last update: ${new Date().toLocaleTimeString()}`;
+            }
+            
+            // Save marker and update status
+            studentMarkers[studentId].marker = marker;
+            studentMarkers[studentId].isActive = true;
+            studentMarkers[studentId].lastUpdate = new Date();
+            studentMarkers[studentId].username = username;
+            studentMarkers[studentId].fullname = displayName;
+            studentMarkers[studentId].location = [latitude, longitude];
+            
+            // Update student status in the list
+            updateStudentStatus(studentId, true);
+            
+            // Update previous location for moving away detection
+            studentMarkers[studentId].previousLocation = [latitude, longitude];
+            
+            // Force route to be visible and make sure UI controls are hidden
+            routeControl.on('routesfound', function(e) {
+                console.log('Route found!', e.routes[0]);
+                
+                // Clean up any duplicate routes first
+                cleanupDuplicateRoutes(studentId);
+                
+                // Create popup with directions when clicking on the route
+                const route = e.routes[0];
+                
+                // Hide ALL routing containers - use multiple selectors to be thorough
+                document.querySelectorAll('.leaflet-routing-container, .leaflet-routing-container-hide').forEach(container => {
+                    container.style.display = 'none';
+                    container.style.visibility = 'hidden';
+                    container.style.opacity = '0';
+                });
+                
+                // Create a timeout to ensure that paths become visible after Leaflet finishes rendering
+                setTimeout(() => {
+                    // Force ALL paths to be visible
+                    document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').forEach(path => {
+                        path.style.visibility = 'visible';
+                        path.style.opacity = '1';
+                        path.style.strokeDasharray = '10, 5';
+                        path.style.animation = 'dash 2s linear infinite';
+                        path.style.pointerEvents = 'auto';
+                        path.style.stroke = movingAwayFromSchool ? '#dc3545' : '#3388ff';
+                        path.style.strokeWidth = '6px';
+                    });
+                    
+                    console.log('Forced paths to be visible');
+                }, 300); // Increased timeout to 300ms
+                
+                // Add click handler for the road directions after a delay to ensure DOM is ready
+                setTimeout(() => {
+                    document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').forEach(path => {
+                        // Make sure path is clickable
+                        path.style.pointerEvents = 'auto';
+                        
+                        // Remove existing event listeners to avoid duplicates
+                        const oldClone = path.cloneNode(true);
+                        path.parentNode.replaceChild(oldClone, path);
+                        
+                        // Add click event listener
+                        oldClone.addEventListener('click', function pathClickHandler(clickEvent) {
+                            const latlng = map.mouseEventToLatLng(clickEvent);
+                            
+                            // Create a directions summary popup
+                            const totalDistance = (route.summary.totalDistance / 1000).toFixed(1); // km
+                            const totalTime = Math.round(route.summary.totalTime / 60); // minutes
+                            
+                            let popupContent = `
+                                <div class="map-popup">
+                                    <div class="popup-header">
+                                        <i class="bi bi-signpost-2-fill me-2"></i>
+                                        <strong>Directions to School</strong>
+                                    </div>
+                                    <div class="popup-content">
+                                        <div class="popup-info">
+                                            <i class="bi bi-geo-alt me-1"></i> Distance: ${totalDistance} km
+                                        </div>
+                                        <div class="popup-info">
+                                            <i class="bi bi-clock me-1"></i> Est. time: ${totalTime} min
+                                        </div>
+                                        <hr style="margin: 8px 0">
+                                        <div style="font-size: 0.85rem; font-weight: 500; color: #5469d4;">
+                                            Key directions:
+                                        </div>
+                            `;
+                            
+                            // Add up to 3 instructions
+                            if (route.instructions && route.instructions.length > 0) {
+                                const instructions = route.instructions.slice(0, 3);
+                                instructions.forEach((instr, idx) => {
+                                    if (instr.text) {
+                                        popupContent += `
+                                            <div class="popup-direction">${idx + 1}. ${instr.text}</div>
+                                        `;
+                                    }
+                                });
+                                
+                                if (route.instructions.length > 3) {
+                                    popupContent += `<div class="small text-muted">...and ${route.instructions.length - 3} more steps</div>`;
+                                }
+                            }
+                            
+                            popupContent += `</div></div>`;
+                            
+                            L.popup()
+                                .setLatLng(latlng)
+                                .setContent(popupContent)
+                                .openOn(map);
+                        });
+                    });
+                }, 500); // Small delay to ensure paths are rendered
+            });
+        });
+
+        connection.on('StudentStoppedTracking', (studentId) => {
+            console.log(`Student ${studentId} stopped tracking`);
+            
+            // Update student status to inactive
+            if (studentMarkers[studentId]) {
+                studentMarkers[studentId].isActive = false;
+            }
+            
+            // Remove trail when student stops tracking
+            if (studentTrails[studentId]) {
+                // Check if it's a routing control or a regular polyline
+                if (studentTrails[studentId].getPlan) {
+                    map.removeControl(studentTrails[studentId]);
+                } else {
+                    map.removeLayer(studentTrails[studentId]);
+                }
+                delete studentTrails[studentId];
+            }
+            
+            // Update student status in the list
+            updateStudentStatus(studentId, false);
+            
+            // If this is the active student, update the UI
+            if (activeStudentId === studentId) {
+                document.getElementById('currently-monitoring').innerHTML = 
+                    `<span class="text-warning">Student ${studentMarkers[studentId]?.fullname || studentMarkers[studentId]?.username || activeStudentName} stopped sharing location</span>`;
+            }
+        });
+
+        function setActiveStudent(studentId, studentName) {
+            // Hide all markers and trails first
+            Object.keys(studentMarkers).forEach(id => {
+                if (studentMarkers[id].marker) {
+                    map.removeLayer(studentMarkers[id].marker);
+                }
+                
+                // Hide trail if exists
+                if (studentTrails[id]) {
+                    // Check if it's a routing control or a polyline
+                    if (studentTrails[id].getPlan) {
+                        map.removeControl(studentTrails[id]);
+                    } else {
+                        map.removeLayer(studentTrails[id]);
+                    }
+                }
+            });
+            
+            // Also hide the school marker initially
+            if (map.hasLayer(schoolMarker)) {
+                map.removeLayer(schoolMarker);
+            }
+            
+            // Set the new active student
+            activeStudentId = studentId;
+            activeStudentName = studentName;
+            
+            // Update dropdown selector text
+            document.getElementById('student-selector').textContent = studentName;
+            
+            // Show only the active student's marker and trail if it exists
+            if (studentMarkers[studentId]) {
+                // Show marker if exists
+                if (studentMarkers[studentId].marker) {
+                    studentMarkers[studentId].marker.addTo(map);
+                }
+                
+                // Show trail if exists
+                if (studentTrails[studentId]) {
+                    // Check if it's a routing control or a polyline
+                    if (studentTrails[studentId].getPlan) {
+                        studentTrails[studentId].addTo(map);
+                        
+                        // Force route to be visible again
+                        setTimeout(() => {
+                            document.querySelectorAll('.leaflet-routing-container, .leaflet-routing-container-hide').forEach(container => {
+                                container.style.display = 'none';
+                                container.style.visibility = 'hidden';
+                                container.style.opacity = '0';
+                            });
+                            
+                            // Force paths to be visible
+                            document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').forEach(path => {
+                                path.style.visibility = 'visible';
+                                path.style.opacity = '1';
+                                path.style.strokeDasharray = '10, 5';
+                                path.style.animation = 'dash 2s linear infinite';
+                                path.style.pointerEvents = 'auto';
+                            });
+                        }, 300); // Increased timeout to 300ms
+                    } else {
+                        studentTrails[studentId].addTo(map);
+                    }
+                }
+                
+                // Always show the school marker when monitoring a student
+                schoolMarker.addTo(map);
+                
+                // Center map between student location and school for better view
+                if (studentMarkers[studentId].location) {
+                    // Calculate bounds to include both student and school
+                    const bounds = L.latLngBounds([
+                        studentMarkers[studentId].location,
+                        SCHOOL_LOCATION
+                    ]);
+                    
+                    // Set view to fit these bounds with some padding
+                    map.fitBounds(bounds, {
+                        padding: [50, 50]
+                    });
+                } else {
+                    // If no student location, center on school
+                    map.setView(SCHOOL_LOCATION, 15);
+                }
+                
+                // Update monitoring info based on active state
+                if (studentMarkers[studentId].isActive) {
+                    document.getElementById('currently-monitoring').innerHTML = 
+                        `Monitoring: <strong>${studentName}</strong> - Last update: ${studentMarkers[studentId].lastUpdate?.toLocaleTimeString() || 'N/A'}`;
+                } else {
+                    document.getElementById('currently-monitoring').innerHTML = 
+                        `<span class="text-warning">Student ${studentName} is not actively sharing location</span>`;
+                }
+            } else {
+                // No marker exists yet
+                document.getElementById('currently-monitoring').innerHTML = 
+                    `<span class="text-primary">Ready to monitor ${studentName}</span>`;
+            }
+            
+            // Update UI to show active student
+            document.querySelectorAll('.student-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            const studentCard = document.querySelector(`[data-student-id="${studentId}"]`);
+            if (studentCard) {
+                studentCard.classList.add('active');
+            }
+            
+            console.log(`Now monitoring student ${studentName} (ID: ${studentId})`);
+        }
+
+        function updateStudentStatus(studentId, isActive) {
+            console.log(`Updating status for student ${studentId}: ${isActive ? 'Active' : 'Inactive'}`);
+            
+            // Update our internal tracking
+            if (studentMarkers[studentId]) {
+                studentMarkers[studentId].isActive = isActive;
+            }
+            
+            // Update the UI
+            const studentElement = document.querySelector(`[data-student-id="${studentId}"]`);
+            if (studentElement) {
+                const statusBadge = studentElement.querySelector('.badge');
+                if (statusBadge) {
+                    if (isActive) {
+                        statusBadge.textContent = 'Active';
+                        statusBadge.classList.remove('bg-secondary');
+                        statusBadge.classList.add('bg-success');
+                        statusBadge.classList.add('bg-pulse');
+                    } else {
+                        statusBadge.textContent = 'Inactive';
+                        statusBadge.classList.remove('bg-success');
+                        statusBadge.classList.remove('bg-pulse');
+                        statusBadge.classList.add('bg-secondary');
+                    }
+                }
+            } else {
+                console.warn(`Student element with ID ${studentId} not found in the DOM`);
+            }
+        }
+
+        // Handle student username input
+        const studentUsernameInput = document.getElementById('student-username');
+        const sendRequestBtn = document.getElementById('send-request-btn');
+        studentUsernameInput.addEventListener('input', () => {
+            sendRequestBtn.disabled = !studentUsernameInput.value.trim();
+        });
+
+        // Handle sending connection request
+        sendRequestBtn.addEventListener('click', async () => {
+            const studentUsername = studentUsernameInput.value.trim();
+            const errorMessage = document.getElementById('error-message');
+            
+            // Clear any previous error messages
+            errorMessage.textContent = '';
+            errorMessage.classList.add('d-none');
+            
+            // Show loading state
+            sendRequestBtn.disabled = true;
+            sendRequestBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Ipinapadala...';
+
+            try {
+                const response = await fetch('/api/connection/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ studentUsername })
+                });
+
+                // Reset button state
+                sendRequestBtn.innerHTML = 'Ipadala ang Request';
+                
+                // Always attempt to parse JSON, even for error responses
+                let responseData;
+                try {
+                    responseData = await response.json();
+                } catch (jsonError) {
+                    console.error('Error parsing JSON response:', jsonError);
+                    responseData = { message: 'May naganap na error. Pakisubukang muli.' };
+                }
+
+                if (response.ok) {
+                    studentUsernameInput.value = '';
+                    sendRequestBtn.disabled = true;
+                    
+                    // Show success modal or alert
+                    alert('Matagumpay na naipadala ang connection request!');
+                    loadConnectedStudents(); // Refresh the list
+                } else {
+                    // Display error message from server or fallback message
+                    errorMessage.textContent = responseData.message || 'Hindi matagumpay ang pagpapadala ng request. Pakisubukang muli.';
+                    errorMessage.classList.remove('d-none');
+                    
+                    // Special handling for rejection limit errors
+                    if (responseData.message && responseData.message.includes('na-reject na ng 3 beses')) {
+                        errorMessage.classList.remove('alert-danger');
+                        errorMessage.classList.add('alert-warning');
+                        
+                        // Show more detailed error message
+                        const errorHTML = `
+                        <div class="text-center mb-3">
+                            <i class="bi bi-exclamation-triangle-fill text-warning fs-1"></i>
+                        </div>
+                        <p class="fw-bold">Hindi na maaaring mag-request sa estudyanteng ito.</p>
+                        <p>${responseData.message}</p>
+                        <div class="alert alert-secondary small mt-3">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Ayon sa aming patakaran, kapag nare-reject ang request ng 3 beses, 
+                            hindi na maaaring mag-request muli sa parehong estudyante. 
+                            Maaari kang mag-request sa ibang estudyante.
+                        </div>`;
+                        
+                        errorMessage.innerHTML = errorHTML;
+                    } else {
+                        errorMessage.classList.remove('alert-warning');
+                        errorMessage.classList.add('alert-danger');
+                    }
+                    
+                    // Re-enable the button for other types of errors
+                    sendRequestBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error sending connection request:', error);
+                errorMessage.textContent = 'May naganap na error sa network. Pakisubukang muli.';
+                errorMessage.classList.remove('d-none');
+                errorMessage.classList.add('alert-danger');
+                
+                // Reset button
+                sendRequestBtn.innerHTML = 'Ipadala ang Request';
+                sendRequestBtn.disabled = false;
+            }
+        });
+
+        // Load connected students
+        async function loadConnectedStudents() {
+            try {
+                document.getElementById('connected-students').innerHTML = '<div class="list-group-item">Loading...</div>';
+                document.getElementById('student-dropdown-menu').innerHTML = '<li><a class="dropdown-item" href="#">Loading students...</a></li>';
+                
+                const response = await fetch('/api/connection/connected', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Connected students data:', data);
+                
+                // Update count
+                document.getElementById('students-count').textContent = data.length;
+                
+                // Update dropdown menu
+                if (data.length === 0) {
+                    document.getElementById('student-dropdown-menu').innerHTML = 
+                        '<li><a class="dropdown-item disabled" href="#">No connected students</a></li>';
+                } else {
+                    const dropdownHtml = data.map(student => {
+                        const studentId = student.studentId;
+                        const username = student.fullname || student.username || 'Unknown Student';
+                        
+                        return `
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="setActiveStudent(${studentId}, '${username}'); return false;">
+                                ${username}
+                            </a>
+                        </li>
+                        `;
+                    }).join('');
+                    document.getElementById('student-dropdown-menu').innerHTML = dropdownHtml;
+                }
+                
+                if (data.length === 0) {
+                    document.getElementById('connected-students').innerHTML = 
+                        '<div class="list-group-item">No connected students</div>';
+                    return;
+                }
+                
+                const html = data.map(student => {
+                    console.log('Processing student:', student);
+                    // Ensure we have studentId and username
+                    const studentId = student.studentId;
+                    const username = student.fullname || student.username || 'Unknown Student';
+                    
+                    return `
+                        <div class="list-group-item student-card" data-student-id="${studentId}" onclick="setActiveStudent(${studentId}, '${username}')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>${username}</strong>
+                                    <div class="small text-muted">${student.email || 'No email'}</div>
+                                </div>
+                                <span class="badge bg-secondary">Inactive</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                document.getElementById('connected-students').innerHTML = html;
+                
+                // If there's only one student, set it as active automatically
+                if (data.length === 1) {
+                    setActiveStudent(data[0].studentId, data[0].username);
+                    // Update the dropdown title
+                    document.getElementById('student-selector').textContent = data[0].username;
+                } else if (data.length > 0 && !activeStudentId) {
+                    // Provide instructions for multiple students
+                    document.getElementById('currently-monitoring').innerHTML = 
+                        '<span class="text-muted">Click on a student from the list to monitor</span>';
+                }
+            } catch (error) {
+                console.error('Error loading connected students:', error);
+                document.getElementById('connected-students').innerHTML = 
+                    `<div class="list-group-item text-danger">Error: ${error.message}</div>`;
+                document.getElementById('student-dropdown-menu').innerHTML = 
+                    '<li><a class="dropdown-item disabled" href="#">Error loading students</a></li>';
+            }
+        }
+
+        // Make setActiveStudent available globally
+        window.setActiveStudent = setActiveStudent;
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        });
+
+        // Moving away alert functionality
+        function showMovingAwayAlert(studentName) {
+            const alertElement = document.createElement('div');
+            alertElement.className = 'moving-away-alert';
+            alertElement.innerHTML = `
+                <div class="alert-title">
+                    <i class="bi bi-exclamation-triangle-fill alert-icon me-2"></i>
+                    Student is moving away from school
+                </div>
+                <p>Student ${studentName} is moving away from school.</p>
+                <div class="d-flex justify-content-end">
+                    <button class="close-btn" onclick="closeMovingAwayAlert()">&times;</button>
+                </div>
+            `;
+            document.body.appendChild(alertElement);
+
+            // Add event listener to close the alert
+            const closeBtn = document.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeMovingAwayAlert);
+            }
+        }
+
+        // Make function available globally
+        window.closeMovingAwayAlert = function() {
+            const alertElement = document.querySelector('.moving-away-alert');
+            if (alertElement) {
+                alertElement.remove();
+            }
+        };
+        
+        // Initialize
+        connection.start()
+            .then(() => {
+                console.log('Connected to SignalR Hub');
+                loadConnectedStudents();
+            })
+            .catch(error => {
+                console.error('SignalR Connection Error:', error);
+                alert('Failed to connect to the tracking service. Please try refreshing the page.');
+            });
+
+        // Function to clean up duplicate routes and ensure only one trail is visible per student
+        function cleanupDuplicateRoutes(studentId) {
+            // Find all elements that might be part of routes
+            const routeElements = document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path');
+            
+            console.log(`Cleaning up possible duplicate routes for student ${studentId}. Found ${routeElements.length} path elements.`);
+            
+            // Get a count before cleanup to detect if we actually found duplicates
+            const beforeCount = routeElements.length;
+            
+            // Keep track of which paths we've processed to avoid duplicates
+            const processedPaths = new Set();
+            
+            routeElements.forEach(path => {
+                // If we've already seen an identical path (same d attribute), remove it
+                const pathData = path.getAttribute('d');
+                if (pathData && processedPaths.has(pathData)) {
+                    console.log('Found duplicate path, removing');
+                    path.remove();
+                } else if (pathData) {
+                    processedPaths.add(pathData);
+                }
+            });
+            
+            // Log the cleanup results
+            const afterCount = document.querySelectorAll('.leaflet-overlay-pane path, .leaflet-routing-line path').length;
+            console.log(`Route cleanup complete. Before: ${beforeCount}, After: ${afterCount}, Removed: ${beforeCount - afterCount}`);
+        }
+    </script>
+</body>
+</html> 
