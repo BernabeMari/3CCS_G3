@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using StudentBadge.Models;
 using StudentBadge.Data;
 using System.IO;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 public class DashboardController : Controller
 {
@@ -46,7 +49,7 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string query = "SELECT Score, ProfilePicturePath, ResumePath FROM Students WHERE IdNumber = @IdNumber";
+            string query = "SELECT Score, ProfilePicturePath, ResumeFileName FROM Students WHERE IdNumber = @IdNumber";
 
             using (var command = new SqlCommand(query, connection))
             {
@@ -71,8 +74,8 @@ public class DashboardController : Controller
                         ViewBag.ProfilePicturePath = !string.IsNullOrEmpty(profilePicturePath) ? profilePicturePath : null;
 
                         // Get resume path
-                        string resumePath = reader["ResumePath"] as string;
-                        ViewBag.ResumePath = !string.IsNullOrEmpty(resumePath) ? resumePath : null;
+                        string resumeFileName = reader["ResumeFileName"] as string;
+                        ViewBag.ResumePath = !string.IsNullOrEmpty(resumeFileName) ? Url.Action("GetResume", "Dashboard") : null;
                     }
                 }
             }
@@ -86,7 +89,7 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string query = "SELECT IdNumber, FullName, Course, Section, IsProfileVisible, ProfilePicturePath, ResumePath, Score, Achievements, Comments, BadgeColor, IsResumeVisible FROM Students ORDER BY Score DESC";
+            string query = "SELECT IdNumber, FullName, Course, Section, IsProfileVisible, ProfilePicturePath, ResumeFileName, Score, Achievements, Comments, BadgeColor, IsResumeVisible FROM Students ORDER BY Score DESC";
 
             using (var command = new SqlCommand(query, connection))
             using (var reader = await command.ExecuteReaderAsync())
@@ -101,7 +104,7 @@ public class DashboardController : Controller
                         Section = reader["Section"].ToString(),
                         IsProfileVisible = reader["IsProfileVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsProfileVisible"]),
                         ProfilePicturePath = reader["ProfilePicturePath"] as string,
-                        ResumePath = reader["ResumePath"] as string,
+                        ResumePath = reader["ResumeFileName"] as string,
                         Score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0,
                         Achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : "",
                         Comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : "",
@@ -183,8 +186,10 @@ public class DashboardController : Controller
 
         bool isProfileVisible = false;
         bool isResumeVisible = false;
+        bool hasProfilePicture = false;
+        bool hasResume = false;
         string profilePicturePath = null;
-        string resumePath = null;
+        string resumeFileName = null;
         int score = 0;
         string achievements = "";
         string comments = "";
@@ -193,7 +198,17 @@ public class DashboardController : Controller
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            string query = "SELECT IsProfileVisible, IsResumeVisible, ProfilePicturePath, ResumePath, Score, Achievements, Comments, BadgeColor FROM Students WHERE IdNumber = @IdNumber";
+            string query = @"SELECT 
+                            IsProfileVisible, 
+                            IsResumeVisible, 
+                            ProfilePicturePath,
+                            ResumeFileName,
+                            Score, 
+                            Achievements, 
+                            Comments, 
+                            BadgeColor
+                        FROM Students 
+                        WHERE IdNumber = @IdNumber";
 
             using (var command = new SqlCommand(query, connection))
             {
@@ -205,12 +220,21 @@ public class DashboardController : Controller
                     {
                         isProfileVisible = reader["IsProfileVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsProfileVisible"]);
                         isResumeVisible = reader["IsResumeVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsResumeVisible"]);
-                        profilePicturePath = reader["ProfilePicturePath"] as string;
-                        resumePath = reader["ResumePath"] as string;
                         score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0;
                         achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : "";
                         comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : "";
                         badgeColor = reader["BadgeColor"] != DBNull.Value ? reader["BadgeColor"].ToString() : "None";
+                        
+                        // Get profile picture path directly
+                        profilePicturePath = reader["ProfilePicturePath"] as string;
+                        hasProfilePicture = !string.IsNullOrEmpty(profilePicturePath);
+                        
+                        // Get resume filename directly
+                        resumeFileName = reader["ResumeFileName"] as string;
+                        hasResume = !string.IsNullOrEmpty(resumeFileName) && 
+                                   (resumeFileName.StartsWith("data:") || 
+                                    resumeFileName.StartsWith("http") || 
+                                    resumeFileName.StartsWith("/"));
                     }
                 }
             }
@@ -218,12 +242,15 @@ public class DashboardController : Controller
 
         ViewBag.IsProfileVisible = isProfileVisible;
         ViewBag.IsResumeVisible = isResumeVisible;
-        ViewBag.ProfilePicturePath = profilePicturePath;
-        ViewBag.ResumePath = resumePath;
+        ViewBag.ProfilePicturePath = hasProfilePicture ? profilePicturePath : "/images/blank.jpg";
+        ViewBag.ResumePath = hasResume ? Url.Action("GetResume", "Dashboard") : "";
+        ViewBag.ResumeFileName = resumeFileName != null && resumeFileName.StartsWith("data:") ? "Resume" : resumeFileName;
         ViewBag.Score = score;
         ViewBag.Achievements = achievements;
         ViewBag.Comments = comments;
         ViewBag.BadgeColor = badgeColor;
+        ViewBag.HasProfilePicture = hasProfilePicture;
+        ViewBag.HasResume = hasResume;
 
         return View();
     }
@@ -252,37 +279,39 @@ public class DashboardController : Controller
                 return Json(new { success = false, message = "Invalid image format." });
             }
 
-            byte[] imageBytes = Convert.FromBase64String(base64Image);
-
-            // Check for reasonable size
-            if (imageBytes.Length > 5 * 1024 * 1024) // 5MB limit
-            {
-                return Json(new { success = false, message = "Image too large. Maximum size is 5MB." });
-            }
-
             string idNumber = HttpContext.Session.GetString("IdNumber");
             if (string.IsNullOrEmpty(idNumber))
             {
                 return Json(new { success = false, message = "User not authenticated." });
             }
 
-            // Generate a unique filename based on ID and timestamp
-            string fileName = $"{idNumber}_{DateTime.Now.Ticks}.jpg";
-            string filePath = Path.Combine("uploads", "profilepictures", fileName);
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filePath);
+            string contentType = "image/jpeg"; // Default value
+            string dataUrl = "";
+            
+            // If the original input includes the content type, use it
+            if (model.Base64Image.Contains("data:"))
+            {
+                string[] parts = model.Base64Image.Split(',');
+                dataUrl = model.Base64Image; // Keep the full data URL
+            }
+            else
+            {
+                // Create a data URL
+                dataUrl = $"data:{contentType};base64,{base64Image}";
+            }
 
-            // Save the file to disk
-            await System.IO.File.WriteAllBytesAsync(fullPath, imageBytes);
-
-            // Store the relative path in the database
+            // Store the data URL directly in the ProfilePicturePath column
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "UPDATE Students SET ProfilePicturePath = @ProfilePicturePath WHERE IdNumber = @IdNumber";
+                string query = @"
+                    UPDATE Students 
+                    SET ProfilePicturePath = @ProfilePicturePath
+                    WHERE IdNumber = @IdNumber";
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@ProfilePicturePath", "/" + filePath.Replace("\\", "/"));
+                    command.Parameters.AddWithValue("@ProfilePicturePath", dataUrl);
                     command.Parameters.AddWithValue("@IdNumber", idNumber);
 
                     int rowsAffected = await command.ExecuteNonQueryAsync();
@@ -293,7 +322,7 @@ public class DashboardController : Controller
                         {
                             success = true,
                             message = "Profile picture saved successfully.",
-                            imageUrl = "/" + filePath.Replace("\\", "/") // Return the URL for immediate display
+                            imageUrl = dataUrl
                         });
                     }
                     else
@@ -328,55 +357,78 @@ public class DashboardController : Controller
                 base64File = base64File.Split(',')[1];
             }
 
-            byte[] fileBytes = Convert.FromBase64String(base64File);
-
-            // Check for reasonable size
-            if (fileBytes.Length > 10 * 1024 * 1024) // 10MB limit
-            {
-                return Json(new { success = false, message = "Resume too large. Maximum size is 10MB." });
-            }
-
             string idNumber = HttpContext.Session.GetString("IdNumber");
             if (string.IsNullOrEmpty(idNumber))
             {
                 return Json(new { success = false, message = "User not authenticated." });
             }
 
-            // Generate a unique filename based on ID and timestamp
-            string safeFileName = $"{idNumber}_{DateTime.Now.Ticks}_{Path.GetFileNameWithoutExtension(fileName)}{Path.GetExtension(fileName)}";
-            string filePath = Path.Combine("uploads", "resumes", safeFileName);
-            string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filePath);
+            // Determine content type based on file extension
+            string contentType = "application/octet-stream"; // Default
+            string extension = Path.GetExtension(fileName).ToLower();
+            if (extension == ".pdf")
+                contentType = "application/pdf";
+            else if (extension == ".doc")
+                contentType = "application/msword";
+            else if (extension == ".docx")
+                contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-            // Ensure directory exists
-            string directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "resumes");
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            // Create a data URL for the resume
+            string dataUrl = $"data:{contentType};base64,{base64File}";
 
-            // Save the file to disk
-            await System.IO.File.WriteAllBytesAsync(fullPath, fileBytes);
+            // Store the original filename in session for later use
+            HttpContext.Session.SetString("OriginalResumeFileName", fileName);
 
-            // Store the relative path in the database
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "UPDATE Students SET ResumePath = @ResumePath WHERE IdNumber = @IdNumber";
+                
+                // Store the data URL and original filename in the database
+                string query = @"
+                    UPDATE Students 
+                    SET ResumeFileName = @ResumeData,
+                        OriginalResumeFileName = @OriginalFileName
+                    WHERE IdNumber = @IdNumber";
+
+                // Check if OriginalResumeFileName column exists, if not then only update ResumeFileName
+                bool columnExists = false;
+                string checkColumnQuery = @"
+                    SELECT COLUMN_NAME 
+                    FROM INFORMATION_SCHEMA.COLUMNS 
+                    WHERE TABLE_NAME = 'Students' AND COLUMN_NAME = 'OriginalResumeFileName'";
+                
+                using (var checkCmd = new SqlCommand(checkColumnQuery, connection))
+                {
+                    var result = await checkCmd.ExecuteScalarAsync();
+                    columnExists = (result != null);
+                }
+
+                if (!columnExists)
+                {
+                    query = @"UPDATE Students SET ResumeFileName = @ResumeData WHERE IdNumber = @IdNumber";
+                }
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@ResumePath", "/" + filePath.Replace("\\", "/"));
+                    command.Parameters.AddWithValue("@ResumeData", dataUrl);
                     command.Parameters.AddWithValue("@IdNumber", idNumber);
-
+                    
+                    if (columnExists)
+                    {
+                        command.Parameters.AddWithValue("@OriginalFileName", fileName);
+                    }
+                    
                     int rowsAffected = await command.ExecuteNonQueryAsync();
-
+                    
                     if (rowsAffected > 0)
                     {
+                        string resumeUrl = Url.Action("GetResume", "Dashboard");
+                        
                         return Json(new
                         {
                             success = true,
                             message = "Resume uploaded successfully.",
-                            resumeUrl = "/" + filePath.Replace("\\", "/") // Return the URL for immediate display
+                            resumeUrl = resumeUrl
                         });
                     }
                     else
@@ -418,16 +470,96 @@ public class DashboardController : Controller
         return View();
     }
 
-    public async Task<IActionResult> EmployerDashboard()
+    public ActionResult EmployerDashboard()
     {
-        ViewBag.EmployerName = HttpContext.Session.GetString("EmployerName");
-        ViewBag.CompanyName = HttpContext.Session.GetString("CompanyName");
-        ViewBag.Position = HttpContext.Session.GetString("Position");
-
-        var allStudents = await GetAllStudentsWithDetails();
-        ViewBag.AllStudents = allStudents;
-
-        return View();
+        try
+        {
+            // Get the employer ID from session
+            string employerId = HttpContext.Session.GetString("EmployerId");
+            
+            if (string.IsNullOrEmpty(employerId))
+            {
+                // If not available in session, try to get from claims
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity != null)
+                {
+                    var userIdClaim = claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                    if (userIdClaim != null)
+                    {
+                        employerId = userIdClaim.Value;
+                    }
+                }
+                
+                // If still not available, redirect to login
+                if (string.IsNullOrEmpty(employerId))
+                {
+                    return RedirectToAction("Login", "Home");
+                }
+                
+                // Store in session for future use
+                HttpContext.Session.SetString("EmployerId", employerId);
+            }
+            
+            string query = "SELECT FullName, Company FROM Employers WHERE EmployerId = @EmployerId";
+            
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@EmployerId", employerId);
+                    
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            ViewBag.EmployerName = reader["FullName"].ToString();
+                            ViewBag.CompanyName = reader["Company"].ToString();
+                        }
+                        else
+                        {
+                            return RedirectToAction("Login", "Home");
+                        }
+                    }
+                }
+                
+                ViewBag.EmployerId = employerId; // Make sure this is set
+                
+                // Get all students for display
+                var students = new List<Student>();
+                string studentsQuery = "SELECT * FROM Students WHERE IsProfileVisible = 1";
+                
+                using (SqlCommand command = new SqlCommand(studentsQuery, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            students.Add(new Student
+                            {
+                                IdNumber = reader["IdNumber"].ToString(),
+                                FullName = reader["FullName"].ToString(),
+                                Course = reader["Course"].ToString(),
+                                Section = reader["Section"].ToString(),
+                                ProfilePicturePath = reader["ProfilePicturePath"]?.ToString(),
+                                Score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0
+                            });
+                        }
+                    }
+                }
+                
+                ViewBag.AllStudents = students;
+            }
+            
+            Console.WriteLine($"EmployerId in ViewBag: {ViewBag.EmployerId}"); // Debugging output
+            
+            return View();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in EmployerDashboard: {ex.Message}");
+            return RedirectToAction("Error", "Home");
+        }
     }
 
     [HttpPost]
@@ -537,6 +669,11 @@ public class DashboardController : Controller
     [HttpGet]
     public async Task<IActionResult> GetStudentProfile(string studentId)
     {
+        if (string.IsNullOrEmpty(studentId))
+        {
+            return Json(new { success = false, message = "Student ID not provided." });
+        }
+
         try
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -544,7 +681,7 @@ public class DashboardController : Controller
                 await connection.OpenAsync();
                 string query = @"
                     SELECT FullName, Course, Section, Score, Achievements, Comments, 
-                           BadgeColor, ProfilePicturePath, ResumePath, IsResumeVisible
+                           BadgeColor, ProfilePicturePath, ResumeFileName, IsResumeVisible
                     FROM Students 
                     WHERE IdNumber = @StudentId AND IsProfileVisible = 1";
 
@@ -556,6 +693,33 @@ public class DashboardController : Controller
                     {
                         if (await reader.ReadAsync())
                         {
+                            // Handle profile picture using existing path
+                            string profilePicture = null;
+                            if (reader["ProfilePicturePath"] != DBNull.Value && !string.IsNullOrEmpty(reader["ProfilePicturePath"].ToString()))
+                            {
+                                profilePicture = reader["ProfilePicturePath"].ToString();
+                            }
+                            
+                            // Handle resume path
+                            string resume = null;
+                            bool isResumeVisible = reader.GetBoolean(reader.GetOrdinal("IsResumeVisible"));
+                            
+                            if (isResumeVisible && reader["ResumeFileName"] != DBNull.Value && !string.IsNullOrEmpty(reader["ResumeFileName"].ToString()))
+                            {
+                                string resumeFileName = reader["ResumeFileName"].ToString();
+                                
+                                // Check if it's already a data URL
+                                if (resumeFileName.StartsWith("data:"))
+                                {
+                                    resume = resumeFileName;
+                                }
+                                else
+                                {
+                                    // Create a URL to the GetResume action
+                                    resume = Url.Action("GetResume", "Dashboard", new { studentId });
+                                }
+                            }
+
                             return Json(new
                             {
                                 success = true,
@@ -563,23 +727,25 @@ public class DashboardController : Controller
                                 course = reader["Course"].ToString(),
                                 section = reader["Section"].ToString(),
                                 score = reader["Score"] != DBNull.Value ? Convert.ToInt32(reader["Score"]) : 0,
-                                achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : null,
-                                comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : null,
-                                badgeColor = reader["BadgeColor"] != DBNull.Value ? reader["BadgeColor"].ToString() : "None",
-                                profilePicturePath = reader["ProfilePicturePath"] != DBNull.Value ? reader["ProfilePicturePath"].ToString() : null,
-                                resumePath = reader["ResumePath"] != DBNull.Value ? reader["ResumePath"].ToString() : null,
-                                isResumeVisible = reader["IsResumeVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsResumeVisible"])
+                                achievements = reader["Achievements"] != DBNull.Value ? reader["Achievements"].ToString() : "",
+                                comments = reader["Comments"] != DBNull.Value ? reader["Comments"].ToString() : "",
+                                badgeColor = reader["BadgeColor"] != DBNull.Value ? reader["BadgeColor"].ToString() : "white",
+                                profilePicture = profilePicture,
+                                isResumeVisible = isResumeVisible,
+                                resume = resume
                             });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Student profile not found or not visible." });
                         }
                     }
                 }
             }
-
-            return Json(new { success = false, message = "Student not found or profile is not visible." });
         }
         catch (Exception ex)
         {
-            return Json(new { success = false, message = "Error retrieving student profile: " + ex.Message });
+            return Json(new { success = false, message = $"Error: {ex.Message}" });
         }
     }
 
@@ -808,6 +974,429 @@ public class DashboardController : Controller
             Console.WriteLine($"Error sending message: {ex.Message}");
             Console.WriteLine($"Stack trace: {ex.StackTrace}");
             return Json(new { success = false, message = "Error sending message: " + ex.Message });
+        }
+    }
+
+    // Add these methods to make the chat functionality work properly
+
+    // This method provides basic student info for the chat header in employer dashboard
+    public async Task<IActionResult> GetStudentBasicInfo(string studentId)
+    {
+        if (string.IsNullOrEmpty(studentId))
+        {
+            return Json(new { success = false, message = "Student ID is required." });
+        }
+
+        try
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"
+                    SELECT FullName, Course, Section, ProfilePicturePath
+                    FROM Students 
+                    WHERE IdNumber = @StudentId AND IsProfileVisible = 1";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@StudentId", studentId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            // Handle profile picture
+                            string profilePicture = null;
+                            if (reader["ProfilePicturePath"] != DBNull.Value && !string.IsNullOrEmpty(reader["ProfilePicturePath"].ToString()))
+                            {
+                                profilePicture = reader["ProfilePicturePath"].ToString();
+                            }
+
+                            return Json(new
+                            {
+                                success = true,
+                                fullName = reader["FullName"].ToString(),
+                                course = $"{reader["Course"]} - {reader["Section"]}",
+                                profilePicture = profilePicture
+                            });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Student not found or profile is not visible." });
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = $"Error: {ex.Message}" });
+        }
+    }
+
+    // This method gets all students an employer has chatted with for the Recent Conversations panel
+    [HttpGet]
+    public async Task<IActionResult> GetEmployerChats(string employerId)
+    {
+        if (string.IsNullOrEmpty(employerId))
+        {
+            employerId = HttpContext.Session.GetString("EmployerId");
+            if (string.IsNullOrEmpty(employerId))
+            {
+                return Json(new { success = false, message = "Employer ID not provided." });
+            }
+        }
+
+        try
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"
+                    SELECT DISTINCT m.StudentId, s.FullName as StudentName, s.ProfilePicturePath,
+                           (SELECT TOP 1 Message FROM EmployerStudentMessages 
+                            WHERE EmployerId = m.EmployerId AND StudentId = m.StudentId 
+                            ORDER BY SentTime DESC) as LastMessage,
+                           (SELECT TOP 1 SentTime FROM EmployerStudentMessages 
+                            WHERE EmployerId = m.EmployerId AND StudentId = m.StudentId 
+                            ORDER BY SentTime DESC) as LastMessageTime
+                    FROM EmployerStudentMessages m
+                    JOIN Students s ON m.StudentId = s.IdNumber
+                    WHERE m.EmployerId = @EmployerId
+                    ORDER BY LastMessageTime DESC";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@EmployerId", employerId);
+                    var chats = new List<object>();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            // Handle profile picture
+                            string profilePicture = null;
+                            if (reader["ProfilePicturePath"] != DBNull.Value && !string.IsNullOrEmpty(reader["ProfilePicturePath"].ToString()))
+                            {
+                                profilePicture = reader["ProfilePicturePath"].ToString();
+                            }
+
+                            chats.Add(new
+                            {
+                                studentId = reader["StudentId"].ToString(),
+                                studentName = reader["StudentName"].ToString(),
+                                profilePicture = profilePicture,
+                                lastMessage = reader["LastMessage"] != DBNull.Value ? reader["LastMessage"].ToString() : null,
+                                lastMessageTime = reader["LastMessageTime"] != DBNull.Value ? Convert.ToDateTime(reader["LastMessageTime"]) : DateTime.MinValue
+                            });
+                        }
+                    }
+
+                    return Json(new { success = true, chats = chats });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = "Error retrieving chats: " + ex.Message });
+        }
+    }
+
+    // This method improves the existing GetMessageHistory method to properly handle the employer dashboard chat
+    [HttpGet]
+    public async Task<IActionResult> GetEmployerMessageHistory(string studentId)
+    {
+        try
+        {
+            string employerId = HttpContext.Session.GetString("EmployerId");
+            if (string.IsNullOrEmpty(employerId))
+            {
+                return Json(new { success = false, message = "Employer not authenticated." });
+            }
+
+            var messages = new List<MessageViewModel>();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"
+                    SELECT m.Message as MessageContent, m.SentTime, m.IsFromEmployer,
+                           e.FullName as EmployerName, e.Company,
+                           s.FullName as StudentName
+                    FROM EmployerStudentMessages m
+                    JOIN Employers e ON m.EmployerId = e.EmployerId
+                    JOIN Students s ON m.StudentId = s.IdNumber
+                    WHERE (m.EmployerId = @EmployerId AND m.StudentId = @StudentId)
+                    ORDER BY m.SentTime ASC";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@EmployerId", employerId);
+                    command.Parameters.AddWithValue("@StudentId", studentId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            bool isFromEmployer = Convert.ToBoolean(reader["IsFromEmployer"]);
+                            messages.Add(new MessageViewModel
+                            {
+                                Content = reader["MessageContent"].ToString(),
+                                SentTime = Convert.ToDateTime(reader["SentTime"]),
+                                IsFromEmployer = isFromEmployer,
+                                EmployerName = isFromEmployer ? reader["EmployerName"].ToString() : "",
+                                Company = isFromEmployer ? reader["Company"].ToString() : "",
+                                StudentName = !isFromEmployer ? reader["StudentName"].ToString() : ""
+                            });
+                        }
+                    }
+                }
+            }
+
+            return Json(new { success = true, messages = messages });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = "Error retrieving messages: " + ex.Message });
+        }
+    }
+
+    // Add new API endpoints to retrieve images and documents from the database
+
+    [HttpGet]
+    public async Task<IActionResult> GetProfilePicture(string studentId = null)
+    {
+        string idNumber = studentId ?? HttpContext.Session.GetString("IdNumber");
+        
+        if (string.IsNullOrEmpty(idNumber))
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = "SELECT ProfilePicturePath FROM Students WHERE IdNumber = @IdNumber";
+                
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IdNumber", idNumber);
+                    
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync() && reader["ProfilePicturePath"] != DBNull.Value)
+                        {
+                            string profilePicturePath = reader["ProfilePicturePath"].ToString();
+                            
+                            // If the profile picture is a data URL
+                            if (profilePicturePath.StartsWith("data:"))
+                            {
+                                string[] parts = profilePicturePath.Split(new[] { ':', ';', ',' }, 4);
+                                if (parts.Length == 4)
+                                {
+                                    string contentType = parts[1];
+                                    string base64Data = parts[3];
+                                    
+                                    byte[] imageData = Convert.FromBase64String(base64Data);
+                                    return File(imageData, contentType);
+                                }
+                            }
+                            
+                            // If it's a regular URL, redirect to it
+                            if (profilePicturePath.StartsWith("http") || profilePicturePath.StartsWith("/"))
+                            {
+                                return Redirect(profilePicturePath);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // If no image found or image is null, return a default image
+            return File("~/images/blank.jpg", "image/jpeg");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Error retrieving profile picture: " + ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetResume(string studentId = null)
+    {
+        string idNumber = studentId ?? HttpContext.Session.GetString("IdNumber");
+        
+        if (string.IsNullOrEmpty(idNumber))
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                
+                // Check if OriginalResumeFileName column exists
+                bool originalFileNameColumnExists = false;
+                string checkColumnQuery = @"
+                    SELECT COLUMN_NAME 
+                    FROM INFORMATION_SCHEMA.COLUMNS 
+                    WHERE TABLE_NAME = 'Students' AND COLUMN_NAME = 'OriginalResumeFileName'";
+                
+                using (var checkCmd = new SqlCommand(checkColumnQuery, connection))
+                {
+                    var result = await checkCmd.ExecuteScalarAsync();
+                    originalFileNameColumnExists = (result != null);
+                }
+                
+                // Get resume data from ResumeFileName column and original filename if available
+                string query = originalFileNameColumnExists
+                    ? "SELECT ResumeFileName, OriginalResumeFileName, IsResumeVisible FROM Students WHERE IdNumber = @IdNumber"
+                    : "SELECT ResumeFileName, IsResumeVisible FROM Students WHERE IdNumber = @IdNumber";
+                
+                string resumeData = null;
+                string originalFileName = null;
+                bool isResumeVisible = false;
+                
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IdNumber", idNumber);
+                    
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync() && reader["ResumeFileName"] != DBNull.Value)
+                        {
+                            resumeData = reader["ResumeFileName"].ToString();
+                            isResumeVisible = reader["IsResumeVisible"] != DBNull.Value && Convert.ToBoolean(reader["IsResumeVisible"]);
+                            
+                            if (originalFileNameColumnExists && reader["OriginalResumeFileName"] != DBNull.Value)
+                            {
+                                originalFileName = reader["OriginalResumeFileName"].ToString();
+                            }
+                        }
+                        else
+                        {
+                            return NotFound("Resume not found.");
+                        }
+                    }
+                }
+                
+                // Check visibility for other students' resumes
+                if (studentId != null && studentId != HttpContext.Session.GetString("IdNumber") && !isResumeVisible)
+                {
+                    return Forbid("This resume is not shared publicly.");
+                }
+                
+                // Try to get original filename from session if not found in database
+                if (string.IsNullOrEmpty(originalFileName))
+                {
+                    originalFileName = HttpContext.Session.GetString("OriginalResumeFileName");
+                }
+                
+                // If the resume is stored as a data URL
+                if (resumeData != null && resumeData.StartsWith("data:"))
+                {
+                    string[] parts = resumeData.Split(new[] { ':', ';', ',' }, 4);
+                    if (parts.Length == 4)
+                    {
+                        string contentType = parts[1];
+                        string base64Data = parts[3];
+                        
+                        byte[] fileData = Convert.FromBase64String(base64Data);
+                        string fileName;
+                        
+                        // Use original filename if available
+                        if (!string.IsNullOrEmpty(originalFileName))
+                        {
+                            fileName = originalFileName;
+                        }
+                        else
+                        {
+                            // Try to extract a content type-based filename
+                            if (contentType.Contains("pdf"))
+                                fileName = "resume.pdf";
+                            else if (contentType.Contains("msword"))
+                                fileName = "resume.doc";
+                            else if (contentType.Contains("openxmlformats"))
+                                fileName = "resume.docx";
+                            else
+                                fileName = "resume";
+                        }
+                        
+                        return File(fileData, contentType, fileName);
+                    }
+                }
+                
+                // If it's a regular URL, redirect to it
+                if (resumeData != null && (resumeData.StartsWith("http") || resumeData.StartsWith("/")))
+                {
+                    return Redirect(resumeData);
+                }
+                
+                return NotFound("Resume not found or format not recognized.");
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Error retrieving resume: " + ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetEmployerMessages(string employerId)
+    {
+        if (string.IsNullOrEmpty(employerId))
+        {
+            employerId = HttpContext.Session.GetString("EmployerId");
+            if (string.IsNullOrEmpty(employerId))
+            {
+                return Json(new { success = false, message = "Employer ID not provided." });
+            }
+        }
+
+        try
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                string query = @"
+                    SELECT m.StudentId, s.FullName as StudentName, m.Message, m.SentTime, m.IsRead, m.IsFromEmployer
+                    FROM EmployerStudentMessages m
+                    JOIN Students s ON m.StudentId = s.IdNumber
+                    WHERE m.EmployerId = @EmployerId AND m.IsFromEmployer = 0
+                    ORDER BY m.SentTime DESC";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@EmployerId", employerId);
+                    var messages = new List<object>();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            messages.Add(new
+                            {
+                                studentId = reader["StudentId"].ToString(),
+                                studentName = reader["StudentName"].ToString(),
+                                message = reader["Message"].ToString(),
+                                sentTime = Convert.ToDateTime(reader["SentTime"]),
+                                isRead = Convert.ToBoolean(reader["IsRead"]),
+                                isFromEmployer = Convert.ToBoolean(reader["IsFromEmployer"])
+                            });
+                        }
+                    }
+
+                    return Json(new { success = true, messages = messages });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = "Error retrieving messages: " + ex.Message });
         }
     }
 }
