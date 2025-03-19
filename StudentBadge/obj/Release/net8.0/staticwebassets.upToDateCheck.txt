@@ -3,6 +3,8 @@ wwwroot\favicon.ico
 wwwroot\fonts\Hagrid-Regular-trial.ttf
 wwwroot\fonts\Hagrid-Text-Extrabold-trial.ttf
 wwwroot\images\blank.jpg
+wwwroot\images\cv.png
+wwwroot\images\notification.png
 wwwroot\images\signupbg.jpg
 wwwroot\images\student.png
 wwwroot\js\site.js
@@ -63,3 +65,8 @@ wwwroot\lib\jquery-validation\LICENSE.md
 wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
 wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\uploads\profilepictures\03000_638773949730804506.jpg
+wwwroot\uploads\profilepictures\03123_638774141932058585.jpg
+wwwroot\uploads\profilepictures\03311_638773977062823362.jpg
+wwwroot\uploads\resumes\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf
+wwwroot\uploads\resumes\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf

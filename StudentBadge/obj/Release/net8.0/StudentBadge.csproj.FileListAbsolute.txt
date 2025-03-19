@@ -117,3 +117,4 @@ C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Releas
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Release\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Release\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\StudentBadge.sourcelink.json
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\bin\Release\net8.0\Dapper.dll

@@ -156,106 +156,489 @@
             display: flex;
             flex-direction: column;
             align-items: center; /* Center horizontally */
-            justify-content: center; /* Center vertically */
+            justify-content: flex-start; /* Start from top */
             text-align: center;
             width: 100%;
-            height: 100vh; /* Full height */
             padding-left: 220px; /* Offset for the sidebar */
+            padding-top: 40px;
+            overflow-y: auto;
         }
 
-        /* Profile Picture Area */
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .visibility-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .visibility-control p {
+            margin: 0 0 0 15px;
+            color: #666;
+        }
+
+        .visibility-status {
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        /* Profile Picture Container - Enhanced */
         .profile-pic-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 30px;
-            padding: 20px;
-            border: 2px dashed #ccc;
+            margin: 20px auto;
+            padding: 25px;
+            border: 2px dashed #4CAF50;
             width: 200px;
             height: 200px;
             border-radius: 10px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
             display: none; /* Initially hidden */
+            text-align: center;
         }
 
-            .profile-pic-container img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 10px;
-            }
+        .profile-pic-container:hover {
+            background-color: #e8f5e9;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
 
-            .profile-pic-container p {
-                font-size: 14px;
-                color: #666;
-            }
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .profile-pic-container p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
 
         /* Edit Button */
         .edit-button {
-            padding: 10px 20px;
+            padding: 12px 22px;
             font-size: 16px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-            .edit-button:hover {
-                background-color: #45a049;
-            }
+        .edit-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
 
         /* Save Button */
         .save-button {
-            padding: 10px 20px;
+            padding: 12px 22px;
             font-size: 16px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: none; /* Initially hidden */
         }
 
-            .save-button:hover {
-                background-color: #0056b3;
-            }
+        .save-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
 
         .resume-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 40px;
             width: 100%;
         }
 
+        /* Resume Upload Container - Enhanced */
         .resume-upload-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
-            padding: 20px;
-            border: 2px dashed #ccc;
+            margin: 20px auto;
+            padding: 25px;
+            border: 2px dashed #4CAF50;
             width: 300px;
             height: 150px;
             border-radius: 10px;
+            background-color: #f8f9fa;
             cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
         }
 
+        .resume-upload-container:hover {
+            background-color: #e8f5e9;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .resume-upload-container p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Current Resume - Improved */
         .current-resume {
-            margin: 20px 0;
-            padding: 10px;
+            margin: 20px auto;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 8px;
             width: 300px;
             text-align: center;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .current-resume a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #e8f5e9;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .current-resume a:hover {
+            background-color: #c8e6c9;
+            transform: translateY(-2px);
+        }
+
+        /* Profile Upload Styles */
+        .profile-upload {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-upload:hover {
+            background: #e8f5e9;
+            border-color: #45a049;
+        }
+
+        .profile-upload.dragover {
+            background: #e8f5e9;
+            border-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        .profile-upload img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
+        }
+
+        .profile-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .profile-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Resume Upload Styles */
+        .resume-upload {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resume-upload:hover {
+            background: #e8f5e9;
+            border-color: #45a049;
+        }
+
+        .resume-upload.dragover {
+            background: #e8f5e9;
+            border-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        .resume-upload img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
+        }
+
+        .resume-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .resume-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Mobile Responsive Styles */
+        @@media (max-width: 768px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .profile-upload, .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-info {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .profile-picture {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .resume-section {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        /* Mobile Menu Toggle - Improved Visibility */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* Mobile Responsive Styles - Enhanced */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .student-info {
+                padding-left: 0;
+                padding: 20px;
+                margin-top: 60px;
+                height: auto;
+            }
+
+            .profile-card, .user-info-card {
+                padding: 20px;
+            }
+
+            .visibility-control {
+                flex-direction: column;
+            }
+
+            .visibility-control p {
+                margin: 10px 0 0 0;
+            }
+
+            .profile-pic-container {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .resume-section {
+                margin-top: 20px;
+                padding: 0 20px;
+            }
+
+            .current-resume, 
+            .resume-upload-container {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .profile-upload, 
+            .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .edit-button, 
+            .save-button {
+                width: 100%;
+                max-width: 200px;
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            /* Improve form controls for touch */
+            .switch {
+                width: 60px;
+                height: 30px;
+            }
+
+            .slider:before {
+                height: 22px;
+                width: 22px;
+                left: 4px;
+                bottom: 4px;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(30px);
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .student-info {
+                padding: 15px;
+            }
+
+            .profile-pic-container {
+                height: 180px;
+            }
+
+            .edit-button, 
+            .save-button {
+                font-size: 14px;
+            }
+        }
+
+        /* Add user info card */
+        .user-info-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .user-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-info-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .user-info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .user-info-value {
+            color: #333;
         }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
@@ -278,54 +661,62 @@
         </aside>
 
         <div class="student-info">
-            <h2>Profile Visibility</h2>
-            <label class="switch">
-                <input type="checkbox" id="togglePrivacy" onchange="togglePrivacySetting()" @(isProfileVisible ? "checked" : "")>
-                <span class="slider round"></span>
-            </label>
-            <p id="privacyStatus">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+            <div class="profile-card">
+                <h2>Profile Visibility</h2>
+                <div class="visibility-control">
+                    <label class="switch">
+                        <input type="checkbox" id="togglePrivacy" onchange="togglePrivacySetting()" @(isProfileVisible ? "checked" : "")>
+                        <span class="slider round"></span>
+                    </label>
+                    <p id="privacyStatus" class="visibility-status">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+                </div>
 
-            <!-- Edit Profile Picture Button -->
-            <button class="edit-button" onclick="showDragDropArea()">Edit Profile Picture</button>
+                <!-- Edit Profile Picture Button -->
+                <button class="edit-button" onclick="showDragDropArea()">Edit Profile Picture</button>
 
+                <!-- Profile Picture Drag and Drop Area -->
+                <div class="profile-pic-container" id="profilePicContainer" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="triggerFileInput()">
+                    <p>Drag and drop your profile picture here or click to select a file</p>
+                    <img id="profilePicPreview" src="" alt="Profile Picture" style="display: none;" />
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleFileInput(event)">
+                </div>
 
-            <!-- Profile Picture Drag and Drop Area -->
-            <div class="profile-pic-container" id="profilePicContainer" ondrop="drop(event)" ondragover="allowDrop(event)">
-                <p>Drag and drop your profile picture here</p>
-                <img id="profilePicPreview" src="" alt="Profile Picture" style="display: none;" />
+                <!-- Save Button -->
+                <button class="save-button" id="saveProfilePic" onclick="saveProfilePic()">Save Profile Picture</button>
             </div>
 
-            <!-- Save Button -->
-            <button class="save-button" id="saveProfilePic" onclick="saveProfilePic()">Save Profile Picture</button>
+            <!-- Resume Section -->
+            <div class="resume-section-container">
+                <div class="profile-card">
+                    <h2>Resume</h2>
+                    <div class="visibility-control">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleResumeVisibility" onchange="toggleResumeVisibility()" @(ViewBag.IsResumeVisible ? "checked" : "")>
+                            <span class="slider round"></span>
+                        </label>
+                        <p id="resumeVisibilityStatus" class="visibility-status">@(ViewBag.IsResumeVisible ? "Your resume is visible to others." : "Your resume is private.")</p>
+                    </div>
+
+                    <!-- Current Resume Status -->
+                    <div class="current-resume" id="currentResumeSection" style="@(ViewBag.HasResume ? "" : "display: none;")">
+                        <p>Current Resume: <a href="@ViewBag.ResumePath" target="_blank" id="currentResumeName">@(String.IsNullOrEmpty(ViewBag.ResumeFileName) ? "View Resume" : ViewBag.ResumeFileName)</a></p>
+                        <button class="edit-button" onclick="showResumeUploadArea()">Replace Resume</button>
+                    </div>
+
+                    <!-- Add Resume Button (shown when no resume exists) -->
+                    <button class="edit-button" id="addResumeButton" style="@(ViewBag.HasResume ? "display: none;" : "")" onclick="showResumeUploadArea()">Add Resume</button>
+
+                    <!-- Resume Upload Area -->
+                    <div class="resume-upload-container" id="resumeUploadContainer" style="display: none;">
+                        <p>Drag and drop your resume here or click to select a file</p>
+                        <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleResumeFileSelect(event)">
+                    </div>
+
+                    <!-- Save Button -->
+                    <button class="save-button" id="saveResume" style="display: none;" onclick="saveResume()">Save Resume</button>
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- Add this section after the profile picture section -->
-    <div class="resume-section">
-        <!-- Make sure this is in the resume section -->
-        <h2>Resume</h2>
-        <label class="switch">
-            <input type="checkbox" id="toggleResumeVisibility" onchange="toggleResumeVisibility()" @(ViewBag.IsResumeVisible ? "checked" : "")>
-            <span class="slider round"></span>
-        </label>
-        <p id="resumeVisibilityStatus">@(ViewBag.IsResumeVisible ? "Your resume is visible to others." : "Your resume is private.")</p>
-
-        <!-- Current Resume Status -->
-        <div class="current-resume" id="currentResumeSection" style="@(string.IsNullOrEmpty(ViewBag.ResumePath) ? "display: none;" : "")">
-            <p>Current Resume: <a href="@ViewBag.ResumePath" target="_blank" id="currentResumeName">View Resume</a></p>
-            <button class="edit-button" onclick="showResumeUploadArea()">Replace Resume</button>
-        </div>
-
-        <!-- Add Resume Button (shown when no resume exists) -->
-        <button class="edit-button" id="addResumeButton" style="@(!string.IsNullOrEmpty(ViewBag.ResumePath) ? "display: none;" : "")" onclick="showResumeUploadArea()">Add Resume</button>
-
-        <!-- Resume Upload Area -->
-        <div class="resume-upload-container" id="resumeUploadContainer" style="display: none;">
-            <p>Drag and drop your resume here or click to select a file</p>
-            <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleResumeFileSelect(event)">
-        </div>
-
-        <!-- Save Button -->
-        <button class="save-button" id="saveResume" style="display: none;" onclick="saveResume()">Save Resume</button>
     </div>
 
     <!-- Hidden input to store base64 resume file -->
@@ -339,7 +730,8 @@
 <script>
     // Show drag-and-drop area when the edit button is clicked
     function showDragDropArea() {
-        document.querySelector('.edit-button').style.display = 'none';  // Hide the edit button
+        // Hide only the profile picture edit button
+        document.querySelector('.profile-card .edit-button').style.display = 'none';  
         document.getElementById('profilePicContainer').style.display = 'flex';  // Show the drag-and-drop area
         document.getElementById('saveProfilePic').style.display = 'inline-block';  // Show the save button
     }
@@ -370,103 +762,6 @@
             }
             reader.readAsDataURL(file);
         }
-    }
-
-        // Example function for uploading profile picture
-    function uploadProfilePicture(inputElement) {
-        const file = inputElement.files[0];
-        if (!file) return;
-
-        // Check file size (max 1MB)
-        if (file.size > 1024 * 1024) {
-            alert("Image is too large. Maximum size is 1MB.");
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const base64Image = e.target.result; // This includes the data URL prefix
-
-            // Send to server
-            fetch('/Dashboard/SaveProfilePicture', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ base64Image: base64Image })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Immediately update the image on the page
-                    document.getElementById('profileImage').src = base64Image;
-                    alert(data.message);
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error uploading image. Please try again.');
-            });
-        };
-        reader.readAsDataURL(file); // Read as data URL which includes the prefix
-    }
-
-    // Save the profile picture
-    function saveProfilePic() {
-        var base64Image = document.getElementById('base64Image').value;
-
-        if (!base64Image) {
-            alert("No image selected.");
-            return;
-        }
-
-        fetch('/Dashboard/SaveProfilePicture', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ Base64Image: base64Image })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("Profile picture saved successfully!");
-            } else {
-                alert("Failed to save profile picture.");
-            }
-        })
-        .catch(error => console.error("Error saving profile picture:", error));
-    }
-
-    // Resize the image before sending it
-    function resizeImage(file, maxWidth, maxHeight, callback) {
-        var img = new Image();
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            img.onload = function() {
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
-
-                // Calculate the new dimensions
-                var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-                var width = img.width * ratio;
-                var height = img.height * ratio;
-
-                // Set the canvas size
-                canvas.width = width;
-                canvas.height = height;
-
-                // Draw the image on the canvas
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // Get the resized image as Base64
-                callback(canvas.toDataURL(file.type));
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
     }
 
     // Handle the file input change event (optional if you have an <input type="file">)
@@ -504,7 +799,7 @@
         .catch(error => console.error("Error updating privacy setting:", error));
     }
 
-        // Show resume upload area
+    // Show resume upload area
     function showResumeUploadArea() {
         document.getElementById('addResumeButton').style.display = 'none';
         document.getElementById('currentResumeSection').style.display = 'none';
@@ -582,7 +877,7 @@
         reader.readAsDataURL(file);
     }
 
-        function toggleResumeVisibility() {
+    function toggleResumeVisibility() {
         var isChecked = document.getElementById("toggleResumeVisibility").checked;
         var statusText = isChecked ? "Your resume is visible to others." : "Your resume is private.";
         document.getElementById("resumeVisibilityStatus").innerText = statusText;
@@ -626,13 +921,17 @@
             if (data.success) {
                 alert('Resume uploaded successfully!');
 
+                // Get the resume from the server
+                const resumeUrl = '/Dashboard/GetResume';
+                
                 // Update UI
                 document.getElementById('resumeUploadContainer').style.display = 'none';
                 document.getElementById('saveResume').style.display = 'none';
 
                 // Update current resume section
                 document.getElementById('currentResumeSection').style.display = 'block';
-                document.getElementById('currentResumeName').href = data.resumeUrl;
+                document.getElementById('currentResumeName').href = resumeUrl;
+                document.getElementById('currentResumeName').textContent = resumeFileName;
 
                 // Hide add button, show current resume
                 document.getElementById('addResumeButton').style.display = 'none';
@@ -645,6 +944,217 @@
             console.error('Error uploading resume:', error);
             alert('Error uploading resume. Please try again.');
         });
+    }
+
+    // Function to handle profile picture upload
+    function saveProfilePic() {
+        var base64Image = document.getElementById('base64Image').value;
+
+        if (!base64Image) {
+            alert("No image selected.");
+            return;
+        }
+
+        fetch('/Dashboard/SaveProfilePicture', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Base64Image: base64Image })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the profile picture on the page with the data URL
+                var profileImg = document.querySelector('.profile-img');
+                if (profileImg) {
+                    profileImg.src = data.imageUrl;
+                }
+                
+                // Hide upload container and show edit button
+                var picContainer = document.getElementById('profilePicContainer');
+                var saveButton = document.getElementById('saveProfilePic');
+                var editButton = document.querySelector('.profile-card .edit-button');
+                
+                if (picContainer) picContainer.style.display = 'none';
+                if (saveButton) saveButton.style.display = 'none';
+                if (editButton) editButton.style.display = 'inline-block';
+                
+                alert("Profile picture saved successfully!");
+            } else {
+                alert("Failed to save profile picture: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error saving profile picture:", error);
+            alert("Error saving profile picture. Please try again.");
+        });
+    }
+    
+    // Resize the image before sending it (utility function)
+    function resizeImage(file, maxWidth, maxHeight, callback) {
+        var img = new Image();
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            img.onload = function() {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+
+                // Calculate the new dimensions
+                var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                var width = img.width * ratio;
+                var height = img.height * ratio;
+
+                // Set the canvas size
+                canvas.width = width;
+                canvas.height = height;
+
+                // Draw the image on the canvas
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Get the resized image as Base64
+                callback(canvas.toDataURL(file.type));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Profile Picture Upload
+    function handleProfilePictureUpload(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('profilePicture', file);
+
+            fetch('/Dashboard/UploadProfilePicture', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('.profile-img').src = data.imagePath;
+                    alert('Profile picture uploaded successfully!');
+                } else {
+                    alert('Failed to upload profile picture: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to upload profile picture. Please try again.');
+            });
+        }
+    }
+
+    // Resume Upload
+    function handleResumeUpload(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('resume', file);
+
+            fetch('/Dashboard/UploadResume', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Resume uploaded successfully!');
+                } else {
+                    alert('Failed to upload resume: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to upload resume. Please try again.');
+            });
+        }
+    }
+
+    // Drag and Drop Functionality
+    function setupDragAndDrop() {
+        const profileUpload = document.getElementById('profileUpload');
+        const resumeUpload = document.getElementById('resumeUpload');
+
+        // Profile Picture Drag and Drop
+        profileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            profileUpload.classList.add('dragover');
+        });
+
+        profileUpload.addEventListener('dragleave', () => {
+            profileUpload.classList.remove('dragover');
+        });
+
+        profileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            profileUpload.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const input = document.getElementById('profilePictureInput');
+                input.files = e.dataTransfer.files;
+                handleProfilePictureUpload(input);
+            } else {
+                alert('Please upload an image file.');
+            }
+        });
+
+        // Resume Drag and Drop
+        resumeUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            resumeUpload.classList.add('dragover');
+        });
+
+        resumeUpload.addEventListener('dragleave', () => {
+            resumeUpload.classList.remove('dragover');
+        });
+
+        resumeUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            resumeUpload.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && (file.type === 'application/pdf' || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                const input = document.getElementById('resumeInput');
+                input.files = e.dataTransfer.files;
+                handleResumeUpload(input);
+            } else {
+                alert('Please upload a PDF or Word document.');
+            }
+        });
+    }
+
+    // Initialize drag and drop when the page loads
+    document.addEventListener('DOMContentLoaded', setupDragAndDrop);
+
+    // Mobile sidebar functionality
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target) && window.innerWidth <= 768) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        const sidebar = document.querySelector('.sidebar');
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Function to trigger file input when container is clicked
+    function triggerFileInput() {
+        document.getElementById('profilePictureInput').click();
     }
 </script>
 

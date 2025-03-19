@@ -271,32 +271,160 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
         }
 
         .modal-content {
-            background-color: #fff6f1;
-            margin: 10% auto;
+            background-color: #fff;
+            margin: 5% auto;
             padding: 20px;
-            border-radius: 8px;
-            width: 50%;
-            text-align: center;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
             position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         .close {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 25px;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #666;
             cursor: pointer;
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f5f5f5;
+            transition: all 0.3s ease;
         }
 
+        .close:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        /* Mobile Modal Styles */
+        @@media (max-width: 768px) {
+            .modal-content {
+                margin: 10% auto;
+                padding: 15px;
+                width: 95%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal .profile-container {
+                flex-direction: column;
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .modal .profile-info {
+                width: 100%;
+                text-align: left;
+            }
+
+            .modal .profile-info h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+                color: #333;
+            }
+
+            .modal .profile-info p {
+                margin: 10px 0;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            .modal .profile-picture {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin: 10px 0;
+            }
+
+            .modal .profile-img {
+                width: 100px;
+                height: 100px;
+                border: 3px solid #fff;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            .modal .resume-section {
+                width: 100%;
+                text-align: center;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 1px solid #eee;
+            }
+
+            .modal .resume-section a {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 15px;
+                background: #f5f5f5;
+                border-radius: 8px;
+                text-decoration: none;
+                color: #333;
+                transition: all 0.3s ease;
+            }
+
+            .modal .resume-section a:hover {
+                background: #e0e0e0;
+            }
+
+            .modal .resume-section img {
+                width: 24px;
+                height: 24px;
+            }
+
+            .close {
+                top: 10px;
+                right: 10px;
+                font-size: 24px;
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .modal-content {
+                margin: 5% auto;
+                padding: 12px;
+                width: 98%;
+            }
+
+            .modal .profile-info h2 {
+                font-size: 18px;
+            }
+
+            .modal .profile-info p {
+                font-size: 13px;
+            }
+
+            .modal .profile-img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .modal .resume-section a {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
 
         .profile-img {
             width: 100px; /* Adjust size as necessary */
@@ -409,6 +537,20 @@
             border-bottom: 1px solid #eee;
             cursor: pointer;
             transition: background-color 0.3s;
+            position: relative;
+            padding-right: 40px;
+        }
+
+        .unread-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .notification-item:hover {
@@ -716,9 +858,248 @@
             background: #555;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* Mobile-specific styles */
+        @@media (max-width: 1200px) {
+            .dashboard-container {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                padding: 20px;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+                margin-right: 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+                padding: 15px;
+                margin-top: 60px;
+            }
+
+            .updates-section {
+                width: 100%;
+                position: relative;
+                top: 0;
+                margin-top: 20px;
+                padding: 15px;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .dashboard-header {
+                padding: 10px;
+                background: white;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 999;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            /* Profile Container Mobile Styles */
+            .profile-container {
+                flex-direction: column;
+                padding: 20px;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                margin-top: 20px;
+            }
+
+            .profile-info {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .profile-info h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+            .profile-picture {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .profile-img {
+                width: 120px;
+                height: 120px;
+                border: 3px solid #fff;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+
+            /* Mobile Chat Styles */
+            .chat-modal {
+                width: 90%;
+                height: 80vh;
+                bottom: 5vh;
+                right: 5%;
+                border-radius: 20px;
+                display: none;
+                flex-direction: column;
+                background: white;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                position: fixed;
+                z-index: 1002;
+            }
+
+            .chat-header {
+                position: relative;
+                padding: 15px;
+                border-radius: 20px 20px 0 0;
+                background: #4CAF50;
+                color: white;
+            }
+
+            .close-chat {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .close-chat:hover {
+                background: rgba(255,255,255,0.3);
+            }
+
+            .chat-messages {
+                flex: 1;
+                padding: 15px;
+                max-height: calc(80vh - 120px);
+                overflow-y: auto;
+                background: #f8f9fa;
+            }
+
+            .chat-input {
+                padding: 15px;
+                border-radius: 0 0 20px 20px;
+                background: white;
+                border-top: 1px solid #eee;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .student-item {
+                padding: 12px;
+                margin: 8px 0;
+                border-radius: 8px;
+            }
+
+            .student-item p {
+                margin: 5px 0;
+                font-size: 14px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .chat-modal {
+                width: 95%;
+                height: 85vh;
+                bottom: 2.5vh;
+                right: 2.5%;
+            }
+
+            .profile-container {
+                padding: 15px;
+            }
+
+            .profile-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .student-item {
+                padding: 10px;
+            }
+
+            .student-item p {
+                font-size: 13px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 20px;
+            }
+
+            .notification-dropdown {
+                width: 100%;
+                right: 0;
+                top: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 15px;
+            }
+        }
+
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="logo">
@@ -1004,23 +1385,37 @@
                     notificationList.innerHTML = '';
                     let unreadCount = 0;
 
+                    // Group messages by employer
+                    const employerMessages = {};
                     data.messages.forEach(message => {
                         if (!message.isRead) unreadCount++;
                         
-                        console.log('Processing message:', {
-                            messageId: message.messageId,
-                            employerName: message.employerName,
-                            employerId: message.employerId
-                        });
+                        if (!employerMessages[message.employerId]) {
+                            employerMessages[message.employerId] = {
+                                employerName: message.employerName,
+                                company: message.company,
+                                lastMessage: message.content,
+                                lastMessageTime: message.sentTime,
+                                unreadCount: 0
+                            };
+                        }
                         
+                        if (!message.isRead) {
+                            employerMessages[message.employerId].unreadCount++;
+                        }
+                    });
+
+                    // Create notification items for each employer
+                    Object.entries(employerMessages).forEach(([employerId, info]) => {
                         const messageElement = document.createElement('div');
-                        messageElement.className = `notification-item ${message.isRead ? '' : 'unread'}`;
-                        messageElement.onclick = () => openMessageDetails(message.messageId, message.employerName, message.employerId);
+                        messageElement.className = `notification-item ${info.unreadCount > 0 ? 'unread' : ''}`;
+                        messageElement.onclick = () => openChat(info.employerName, employerId);
                         
                         messageElement.innerHTML = `
-                            <div class="employer-name">${message.employerName} - ${message.company}</div>
-                            <div class="message-preview">${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}</div>
-                            <div class="message-time">${new Date(message.sentTime).toLocaleString()}</div>
+                            <div class="employer-name">${info.employerName} - ${info.company}</div>
+                            <div class="message-preview">${info.lastMessage.substring(0, 50)}${info.lastMessage.length > 50 ? '...' : ''}</div>
+                            <div class="message-time">${new Date(info.lastMessageTime).toLocaleString()}</div>
+                            ${info.unreadCount > 0 ? `<span class="unread-badge">${info.unreadCount}</span>` : ''}
                         `;
                         
                         notificationList.appendChild(messageElement);
@@ -1040,7 +1435,6 @@
     let currentEmployerId = null;
 
     function openChat(employerName, employerId) {
-        console.log('Opening chat with:', { employerName, employerId });
         if (!employerId) {
             console.error('Invalid employer ID:', employerId);
             return;
@@ -1049,9 +1443,20 @@
         const chatModal = document.getElementById('chatModal');
         document.getElementById('chatEmployerName').textContent = employerName;
         currentEmployerId = employerId;
-        console.log('Set currentEmployerId to:', currentEmployerId);
         chatModal.style.display = 'block';
         loadChatHistory();
+        
+        // Mark all messages from this employer as read
+        fetch(`/Dashboard/MarkEmployerMessagesAsRead?employerId=${employerId}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadNotifications();
+                }
+            })
+            .catch(error => {
+                console.error('Error marking messages as read:', error);
+            });
     }
 
     function closeChat() {
@@ -1213,6 +1618,29 @@
 
     // Initial load
     loadNotifications();
+
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+    }
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function(event) {
+        const sidebar = document.querySelector('.sidebar');
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        
+        if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target) && window.innerWidth <= 1200) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        const sidebar = document.querySelector('.sidebar');
+        if (window.innerWidth > 1200) {
+            sidebar.classList.remove('active');
+        }
+    });
 </script>
 
 </html>

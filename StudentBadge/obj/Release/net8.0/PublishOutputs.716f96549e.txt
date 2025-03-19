@@ -9,6 +9,7 @@ C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Releas
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\Azure.Identity.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\BCrypt.Net-Next.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\BouncyCastle.Cryptography.dll
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\Dapper.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\Google.Protobuf.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\K4os.Compression.LZ4.dll
 C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\PubTmp\Out\K4os.Compression.LZ4.Streams.dll

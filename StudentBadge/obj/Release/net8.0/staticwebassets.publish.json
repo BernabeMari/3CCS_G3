@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0XX3h3bZymGdehaY4OAWADAWnxoJGUjpYpawpxiZBf0=",
+  "Hash": "f7MOHFXCRpZQOwnMJke19UO+Jf3y3Od1lEDGzDoNnFE=",
   "Source": "StudentBadge",
   "BasePath": "_content/StudentBadge",
   "Mode": "Default",
@@ -120,6 +120,48 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\blank.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\cv.png",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "images/cv#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qj8d8br6sh",
+      "Integrity": "ek/YJpUb49HzVxz5wuRgwned3H+ZMJYoGIm4HEaBR+M=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\cv.png"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\notification.png",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "images/notification#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5mifc5ozpp",
+      "Integrity": "A/TyvWCM90SutLPvKMOOoAuk0NZlPpY/I9/NIpBrVwQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\notification.png"
     },
     {
       "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\signupbg.jpg",
@@ -1380,6 +1422,111 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03000_638773949730804506.jpg",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "uploads/profilepictures/03000_638773949730804506#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "aado535kp2",
+      "Integrity": "vkWl1w8GpGHJL2NOYGHAGdIrKjtc+9Gu0TFJXBlNHXs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\profilepictures\\03000_638773949730804506.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03123_638774141932058585.jpg",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "uploads/profilepictures/03123_638774141932058585#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "jbphcb64lx",
+      "Integrity": "kW1eI/8ac1qvDZ7OiRdnFsYL1YrhwwcY43znSz4pldA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\profilepictures\\03123_638774141932058585.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03311_638773977062823362.jpg",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "uploads/profilepictures/03311_638773977062823362#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "lzbfjkalmg",
+      "Integrity": "j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\profilepictures\\03311_638773977062823362.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "c6h56emf0o",
+      "Integrity": "NMSz+3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf",
+      "SourceId": "StudentBadge",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\",
+      "BasePath": "_content/StudentBadge",
+      "RelativePath": "uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "i7jf6fgyhm",
+      "Integrity": "Ag+dJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\resumes\\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf"
     }
   ],
   "Endpoints": [
@@ -1790,6 +1937,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-x9JPhuHn7uIygUxJf1WKz15PB9pM3a1JFpek2NISJOQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/cv.png",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\cv.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22282"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ek/YJpUb49HzVxz5wuRgwned3H+ZMJYoGIm4HEaBR+M=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:19:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ek/YJpUb49HzVxz5wuRgwned3H+ZMJYoGIm4HEaBR+M="
+        }
+      ]
+    },
+    {
+      "Route": "images/cv.qj8d8br6sh.png",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\cv.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "22282"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ek/YJpUb49HzVxz5wuRgwned3H+ZMJYoGIm4HEaBR+M=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:19:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qj8d8br6sh"
+        },
+        {
+          "Name": "label",
+          "Value": "images/cv.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ek/YJpUb49HzVxz5wuRgwned3H+ZMJYoGIm4HEaBR+M="
+        }
+      ]
+    },
+    {
+      "Route": "images/notification.5mifc5ozpp.png",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\notification.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31212"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"A/TyvWCM90SutLPvKMOOoAuk0NZlPpY/I9/NIpBrVwQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 12:32:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5mifc5ozpp"
+        },
+        {
+          "Name": "label",
+          "Value": "images/notification.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-A/TyvWCM90SutLPvKMOOoAuk0NZlPpY/I9/NIpBrVwQ="
+        }
+      ]
+    },
+    {
+      "Route": "images/notification.png",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\images\\notification.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31212"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"A/TyvWCM90SutLPvKMOOoAuk0NZlPpY/I9/NIpBrVwQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 12:32:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-A/TyvWCM90SutLPvKMOOoAuk0NZlPpY/I9/NIpBrVwQ="
         }
       ]
     },
@@ -6710,6 +7021,416 @@
         {
           "Name": "integrity",
           "Value": "sha256-16aFlqtpsG9RyieKZUUUjkJpqTgcJtWXwT312I4Iz1s="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03000_638773949730804506.aado535kp2.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03000_638773949730804506.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9260"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vkWl1w8GpGHJL2NOYGHAGdIrKjtc+9Gu0TFJXBlNHXs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 08:49:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "aado535kp2"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/profilepictures/03000_638773949730804506.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vkWl1w8GpGHJL2NOYGHAGdIrKjtc+9Gu0TFJXBlNHXs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03000_638773949730804506.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03000_638773949730804506.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9260"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vkWl1w8GpGHJL2NOYGHAGdIrKjtc+9Gu0TFJXBlNHXs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 08:49:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vkWl1w8GpGHJL2NOYGHAGdIrKjtc+9Gu0TFJXBlNHXs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03123_638774141932058585.jbphcb64lx.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03123_638774141932058585.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5933"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kW1eI/8ac1qvDZ7OiRdnFsYL1YrhwwcY43znSz4pldA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 14:09:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jbphcb64lx"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/profilepictures/03123_638774141932058585.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-kW1eI/8ac1qvDZ7OiRdnFsYL1YrhwwcY43znSz4pldA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03123_638774141932058585.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03123_638774141932058585.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5933"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kW1eI/8ac1qvDZ7OiRdnFsYL1YrhwwcY43znSz4pldA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 14:09:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-kW1eI/8ac1qvDZ7OiRdnFsYL1YrhwwcY43znSz4pldA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03311_638773977062823362.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03311_638773977062823362.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12723"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:35:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/profilepictures/03311_638773977062823362.lzbfjkalmg.jpg",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\profilepictures\\03311_638773977062823362.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12723"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:35:06 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "lzbfjkalmg"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/profilepictures/03311_638773977062823362.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.c6h56emf0o.pdf",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "976234"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NMSz+3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:03:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c6h56emf0o"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NMSz+3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "976234"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NMSz+3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:03:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NMSz+3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.i7jf6fgyhm.pdf",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "411429"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ag+dJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:35:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "i7jf6fgyhm"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ag+dJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf",
+      "AssetFile": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\wwwroot\\uploads\\resumes\\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "411429"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Ag+dJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 12 Mar 2025 09:35:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Ag+dJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4="
         }
       ]
     }

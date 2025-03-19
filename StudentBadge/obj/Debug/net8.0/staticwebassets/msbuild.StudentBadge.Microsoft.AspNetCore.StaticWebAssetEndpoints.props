@@ -804,53 +804,5 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-hjIBkvmgxQXbNXK3B9YQ3t06RwLuQSQzC/dpvuB/lMk="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1117"},{"Name":"Content-Type","Value":"text/plain"},{"Name":"ETag","Value":"\u0022hjIBkvmgxQXbNXK3B9YQ3t06RwLuQSQzC/dpvuB/lMk=\u0022"},{"Name":"Last-Modified","Value":"Sun, 02 Mar 2025 09:44:26 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/profilepictures/03000_638773949730804506.aado535kp2.jpg">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\profilepictures\03000_638773949730804506.jpg'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"aado535kp2"},{"Name":"integrity","Value":"sha256-vkWl1w8GpGHJL2NOYGHAGdIrKjtc\u002B9Gu0TFJXBlNHXs="},{"Name":"label","Value":"_content/StudentBadge/uploads/profilepictures/03000_638773949730804506.jpg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"9260"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022vkWl1w8GpGHJL2NOYGHAGdIrKjtc\u002B9Gu0TFJXBlNHXs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 08:49:33 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/profilepictures/03000_638773949730804506.jpg">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\profilepictures\03000_638773949730804506.jpg'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-vkWl1w8GpGHJL2NOYGHAGdIrKjtc\u002B9Gu0TFJXBlNHXs="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"9260"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022vkWl1w8GpGHJL2NOYGHAGdIrKjtc\u002B9Gu0TFJXBlNHXs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 08:49:33 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/profilepictures/03311_638773977062823362.jpg">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\profilepictures\03311_638773977062823362.jpg'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"12723"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:35:06 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/profilepictures/03311_638773977062823362.lzbfjkalmg.jpg">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\profilepictures\03311_638773977062823362.jpg'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"lzbfjkalmg"},{"Name":"integrity","Value":"sha256-j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs="},{"Name":"label","Value":"_content/StudentBadge/uploads/profilepictures/03311_638773977062823362.jpg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"12723"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022j3IRiJVSY9rq7e3LIHC2dPQ54aErhAZajEYa6mPUAzs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:35:06 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.c6h56emf0o.pdf">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\resumes\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"c6h56emf0o"},{"Name":"integrity","Value":"sha256-NMSz\u002B3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY="},{"Name":"label","Value":"_content/StudentBadge/uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"976234"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022NMSz\u002B3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:03:54 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/resumes/03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\resumes\03000_638773958342513744_Bernabe, Mari John Robert M_GMC.pdf'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-NMSz\u002B3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"976234"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022NMSz\u002B3/0uWstWrF6IwjdQFsUa8Aq73S0ewgKkGUDlmY=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:03:54 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.i7jf6fgyhm.pdf">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\resumes\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"i7jf6fgyhm"},{"Name":"integrity","Value":"sha256-Ag\u002BdJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4="},{"Name":"label","Value":"_content/StudentBadge/uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"411429"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022Ag\u002BdJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:35:25 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/StudentBadge/uploads/resumes/03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\resumes\03311_638773977253847402_Bernabe, Mari John Robert M_PSA.pdf'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Ag\u002BdJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"411429"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022Ag\u002BdJ3KqbdC3TAPZbkT1IQwZJCJYipWK2nUxIg7Y6T4=\u0022"},{"Name":"Last-Modified","Value":"Wed, 12 Mar 2025 09:35:25 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>
