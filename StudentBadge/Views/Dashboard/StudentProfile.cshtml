@@ -1,0 +1,1317 @@
+@{
+    var fullName = ViewBag.FullName;
+    var idNumber = ViewBag.IdNumber;
+    var course = ViewBag.Course;
+    var sectionn = ViewBag.Section;
+    var score = ViewBag.Score;
+    var allStudents = ViewBag.AllStudents as List<Student>;
+    var isProfileVisible = ViewBag.IsProfileVisible != null ? (bool)ViewBag.IsProfileVisible : false;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #c3e8b6, #badbd2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+            .logo img {
+                width: 60px;
+            }
+
+            .logo h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin: 10px 0 5px;
+                color: #333;
+            }
+
+            .logo p {
+                font-size: 14px;
+                color: #555;
+                font-weight: 500;
+            }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-link i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .sidebar-link.active {
+                background: #fff6f1;
+                font-weight: bold;
+                color: #222;
+                box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-link:hover {
+                background: rgba(255, 255, 255, 0.5);
+                transform: scale(1.02);
+            }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: 40%;
+            height: 150vh;
+            overflow-y: auto;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: flex-start; /* Start from top */
+            text-align: center;
+            width: 100%;
+            padding-left: 220px; /* Offset for the sidebar */
+            padding-top: 40px;
+            overflow-y: auto;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .visibility-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .visibility-control p {
+            margin: 0 0 0 15px;
+            color: #666;
+        }
+
+        .visibility-status {
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        /* Profile Picture Container - Enhanced */
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            padding: 25px;
+            border: 2px dashed #4CAF50;
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+            text-align: center;
+        }
+
+        .profile-pic-container:hover {
+            background-color: #e8f5e9;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .profile-pic-container p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Edit Button */
+        .edit-button {
+            padding: 12px 22px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .edit-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Save Button */
+        .save-button {
+            padding: 12px 22px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none; /* Initially hidden */
+        }
+
+        .save-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .resume-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Resume Upload Container - Enhanced */
+        .resume-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            padding: 25px;
+            border: 2px dashed #4CAF50;
+            width: 300px;
+            height: 150px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .resume-upload-container:hover {
+            background-color: #e8f5e9;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .resume-upload-container p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Current Resume - Improved */
+        .current-resume {
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .current-resume a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #e8f5e9;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .current-resume a:hover {
+            background-color: #c8e6c9;
+            transform: translateY(-2px);
+        }
+
+        /* Profile Upload Styles */
+        .profile-upload {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-upload:hover {
+            background: #e8f5e9;
+            border-color: #45a049;
+        }
+
+        .profile-upload.dragover {
+            background: #e8f5e9;
+            border-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        .profile-upload img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
+        }
+
+        .profile-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .profile-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Resume Upload Styles */
+        .resume-upload {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resume-upload:hover {
+            background: #e8f5e9;
+            border-color: #45a049;
+        }
+
+        .resume-upload.dragover {
+            background: #e8f5e9;
+            border-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        .resume-upload img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
+        }
+
+        .resume-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .resume-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Mobile Responsive Styles */
+        @@media (max-width: 768px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .profile-upload, .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-info {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .profile-picture {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .resume-section {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        /* Mobile Menu Toggle - Improved Visibility */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* Mobile Responsive Styles - Enhanced */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .student-info {
+                padding-left: 0;
+                padding: 20px;
+                margin-top: 60px;
+                height: auto;
+            }
+
+            .profile-card, .user-info-card {
+                padding: 20px;
+            }
+
+            .visibility-control {
+                flex-direction: column;
+            }
+
+            .visibility-control p {
+                margin: 10px 0 0 0;
+            }
+
+            .profile-pic-container {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .resume-section {
+                margin-top: 20px;
+                padding: 0 20px;
+            }
+
+            .current-resume, 
+            .resume-upload-container {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .profile-upload, 
+            .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .edit-button, 
+            .save-button {
+                width: 100%;
+                max-width: 200px;
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            /* Improve form controls for touch */
+            .switch {
+                width: 60px;
+                height: 30px;
+            }
+
+            .slider:before {
+                height: 22px;
+                width: 22px;
+                left: 4px;
+                bottom: 4px;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(30px);
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .student-info {
+                padding: 15px;
+            }
+
+            .profile-pic-container {
+                height: 180px;
+            }
+
+            .edit-button, 
+            .save-button {
+                font-size: 14px;
+            }
+        }
+
+        /* Add user info card */
+        .user-info-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .user-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-info-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .user-info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .user-info-value {
+            color: #333;
+        }
+
+        /* Password Change Styles */
+        .password-section {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .password-submit {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .password-submit:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .password-feedback {
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .password-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .password-feedback.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Dashboard</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="#" class="sidebar-link active">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <div class="student-info">
+            <div class="profile-card">
+                <h2>Profile Visibility</h2>
+                <div class="visibility-control">
+                    <label class="switch">
+                        <input type="checkbox" id="togglePrivacy" onchange="togglePrivacySetting()" @(isProfileVisible ? "checked" : "")>
+                        <span class="slider round"></span>
+                    </label>
+                    <p id="privacyStatus" class="visibility-status">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+                </div>
+
+                <!-- Edit Profile Picture Button -->
+                <button class="edit-button" onclick="showDragDropArea()">Edit Profile Picture</button>
+
+                <!-- Profile Picture Drag and Drop Area -->
+                <div class="profile-pic-container" id="profilePicContainer" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="triggerFileInput()">
+                    <p>Drag and drop your profile picture here or click to select a file</p>
+                    <img id="profilePicPreview" src="" alt="Profile Picture" style="display: none;" />
+                    <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleFileInput(event)">
+                </div>
+
+                <!-- Save Button -->
+                <button class="save-button" id="saveProfilePic" onclick="saveProfilePic()">Save Profile Picture</button>
+            </div>
+
+            <!-- Resume Section -->
+            <div class="resume-section-container">
+                <div class="profile-card">
+                    <h2>Resume</h2>
+                    <div class="visibility-control">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleResumeVisibility" onchange="toggleResumeVisibility()" @(ViewBag.IsResumeVisible ? "checked" : "")>
+                            <span class="slider round"></span>
+                        </label>
+                        <p id="resumeVisibilityStatus" class="visibility-status">@(ViewBag.IsResumeVisible ? "Your resume is visible to others." : "Your resume is private.")</p>
+                    </div>
+
+                    <!-- Current Resume Status -->
+                    <div class="current-resume" id="currentResumeSection" style="@(ViewBag.HasResume ? "" : "display: none;")">
+                        <p>Current Resume: <a href="@ViewBag.ResumePath" target="_blank" id="currentResumeName">@(String.IsNullOrEmpty(ViewBag.ResumeFileName) ? "View Resume" : ViewBag.ResumeFileName)</a></p>
+                        <button class="edit-button" onclick="showResumeUploadArea()">Replace Resume</button>
+                    </div>
+
+                    <!-- Add Resume Button (shown when no resume exists) -->
+                    <button class="edit-button" id="addResumeButton" style="@(ViewBag.HasResume ? "display: none;" : "")" onclick="showResumeUploadArea()">Add Resume</button>
+
+                    <!-- Resume Upload Area -->
+                    <div class="resume-upload-container" id="resumeUploadContainer" style="display: none;">
+                        <p>Drag and drop your resume here or click to select a file</p>
+                        <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleResumeFileSelect(event)">
+                    </div>
+
+                    <!-- Save Button -->
+                    <button class="save-button" id="saveResume" style="display: none;" onclick="saveResume()">Save Resume</button>
+                </div>
+            </div>
+
+            <!-- Password Change Section -->
+            <div class="password-section">
+                <h2>Change Password</h2>
+                <form id="passwordChangeForm" class="password-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="password-submit">Change Password</button>
+                    <div id="passwordFeedback" class="password-feedback"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden input to store base64 resume file -->
+    <input type="hidden" id="base64Resume" />
+    <input type="hidden" id="resumeFileName" />
+    <!-- Hidden input to store base64 image -->
+    <input type="hidden" id="base64Image" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Show drag-and-drop area when the edit button is clicked
+        function showDragDropArea() {
+            // Hide only the profile picture edit button
+            document.querySelector('.profile-card .edit-button').style.display = 'none';  
+            document.getElementById('profilePicContainer').style.display = 'flex';  // Show the drag-and-drop area
+            document.getElementById('saveProfilePic').style.display = 'inline-block';  // Show the save button
+        }
+
+        // Allow dropping of the image file
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        // Handle the drop event
+        function drop(event) {
+            event.preventDefault();
+            var file = event.dataTransfer.files[0];  // Get the first file
+
+            // Check if the file is an image
+            if (file && file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // Set the base64 string to the hidden input
+                    var base64Image = e.target.result.split(',')[1];  // Remove 'data:image/*;base64,'
+
+                    // Set the hidden input value to the base64 image string
+                    document.getElementById('base64Image').value = base64Image;
+
+                    // Display the image preview
+                    document.getElementById('profilePicPreview').style.display = 'block';
+                    document.getElementById('profilePicPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Handle the file input change event (optional if you have an <input type="file">)
+        function handleFileInput(event) {
+            var file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                resizeImage(file, 300, 300, function(base64Image) {
+                    // Display the image preview
+                    document.getElementById('profilePicPreview').style.display = 'block';
+                    document.getElementById('profilePicPreview').src = base64Image;
+                    // Store the base64 image string
+                    document.getElementById('base64Image').value = base64Image;
+                });
+            } else {
+                alert('Please select a valid image file.');
+            }
+        }
+
+        function togglePrivacySetting() {
+            var isChecked = document.getElementById("togglePrivacy").checked;
+            var statusText = isChecked ? "Your profile is visible to employers." : "Your profile is hidden.";
+            document.getElementById("privacyStatus").innerText = statusText;
+
+            fetch('/Dashboard/UpdatePrivacySetting', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isVisible: isChecked })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Privacy setting updated:", data);
+            })
+            .catch(error => console.error("Error updating privacy setting:", error));
+        }
+
+        // Show resume upload area
+        function showResumeUploadArea() {
+            document.getElementById('addResumeButton').style.display = 'none';
+            document.getElementById('currentResumeSection').style.display = 'none';
+            document.getElementById('resumeUploadContainer').style.display = 'flex';
+            document.getElementById('saveResume').style.display = 'inline-block';
+
+            // Make the container clickable to trigger file input
+            document.getElementById('resumeUploadContainer').addEventListener('click', function() {
+                document.getElementById('resumeFileInput').click();
+            });
+        }
+
+        // Handle file selection through the file input
+        function handleResumeFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                processResumeFile(file);
+            }
+        }
+
+        // Handle drag and drop for resume
+        document.getElementById('resumeUploadContainer').addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#4CAF50';
+        });
+
+        document.getElementById('resumeUploadContainer').addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#ccc';
+        });
+
+        document.getElementById('resumeUploadContainer').addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#ccc';
+
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                processResumeFile(file);
+            }
+        });
+
+        // Process the selected resume file
+        function processResumeFile(file) {
+            // Check file type
+            const acceptedTypes = ['.pdf', '.doc', '.docx'];
+            const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+            if (!acceptedTypes.includes(fileExtension)) {
+                alert('Please upload a PDF, DOC, or DOCX file.');
+                return;
+            }
+
+            // Check file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File too large. Maximum size is 10MB.');
+                return;
+            }
+
+            // Read file as base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Store base64 file and filename
+                document.getElementById('base64Resume').value = e.target.result;
+                document.getElementById('resumeFileName').value = file.name;
+
+                // Update UI to show file selected
+                document.getElementById('resumeUploadContainer').innerHTML = `
+                    <p>Selected file: ${file.name}</p>
+                    <p>(${(file.size / 1024).toFixed(2)} KB)</p>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function toggleResumeVisibility() {
+            var isChecked = document.getElementById("toggleResumeVisibility").checked;
+            var statusText = isChecked ? "Your resume is visible to others." : "Your resume is private.";
+            document.getElementById("resumeVisibilityStatus").innerText = statusText;
+
+            fetch('/Dashboard/UpdateResumeVisibility', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ isVisible: isChecked })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Resume visibility updated:", data);
+            })
+            .catch(error => console.error("Error updating resume visibility:", error));
+        }
+
+        // Save resume
+        function saveResume() {
+            const base64Resume = document.getElementById('base64Resume').value;
+            const resumeFileName = document.getElementById('resumeFileName').value;
+
+            if (!base64Resume || !resumeFileName) {
+                alert('No file selected.');
+                return;
+            }
+
+            fetch('/Dashboard/SaveResume', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ResumeFile: base64Resume,
+                    ResumeFileName: resumeFileName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Resume uploaded successfully!');
+
+                    // Get the resume from the server
+                    const resumeUrl = '/Dashboard/GetResume';
+                    
+                    // Update UI
+                    document.getElementById('resumeUploadContainer').style.display = 'none';
+                    document.getElementById('saveResume').style.display = 'none';
+
+                    // Update current resume section
+                    document.getElementById('currentResumeSection').style.display = 'block';
+                    document.getElementById('currentResumeName').href = resumeUrl;
+                    document.getElementById('currentResumeName').textContent = resumeFileName;
+
+                    // Hide add button, show current resume
+                    document.getElementById('addResumeButton').style.display = 'none';
+                    document.getElementById('currentResumeSection').style.display = 'block';
+                } else {
+                    alert('Failed to upload resume: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading resume:', error);
+                alert('Error uploading resume. Please try again.');
+            });
+        }
+
+        // Function to handle profile picture upload
+        function saveProfilePic() {
+            var base64Image = document.getElementById('base64Image').value;
+
+            if (!base64Image) {
+                alert("No image selected.");
+                return;
+            }
+
+            fetch('/Dashboard/SaveProfilePicture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Base64Image: base64Image })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the profile picture on the page with the data URL
+                    var profileImg = document.querySelector('.profile-img');
+                    if (profileImg) {
+                        profileImg.src = data.imageUrl;
+                    }
+                    
+                    // Hide upload container and show edit button
+                    var picContainer = document.getElementById('profilePicContainer');
+                    var saveButton = document.getElementById('saveProfilePic');
+                    var editButton = document.querySelector('.profile-card .edit-button');
+                    
+                    if (picContainer) picContainer.style.display = 'none';
+                    if (saveButton) saveButton.style.display = 'none';
+                    if (editButton) editButton.style.display = 'inline-block';
+                    
+                    alert("Profile picture saved successfully!");
+                } else {
+                    alert("Failed to save profile picture: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error saving profile picture:", error);
+                alert("Error saving profile picture. Please try again.");
+            });
+        }
+        
+        // Resize the image before sending it (utility function)
+        function resizeImage(file, maxWidth, maxHeight, callback) {
+            var img = new Image();
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+
+                    // Calculate the new dimensions
+                    var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                    var width = img.width * ratio;
+                    var height = img.height * ratio;
+
+                    // Set the canvas size
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Draw the image on the canvas
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Get the resized image as Base64
+                    callback(canvas.toDataURL(file.type));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Profile Picture Upload
+        function handleProfilePictureUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('profilePicture', file);
+
+                fetch('/Dashboard/UploadProfilePicture', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('.profile-img').src = data.imagePath;
+                        alert('Profile picture uploaded successfully!');
+                    } else {
+                        alert('Failed to upload profile picture: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to upload profile picture. Please try again.');
+                });
+            }
+        }
+
+        // Resume Upload
+        function handleResumeUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('resume', file);
+
+                fetch('/Dashboard/UploadResume', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Resume uploaded successfully!');
+                    } else {
+                        alert('Failed to upload resume: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to upload resume. Please try again.');
+                });
+            }
+        }
+
+        // Drag and Drop Functionality
+        function setupDragAndDrop() {
+            const profileUpload = document.getElementById('profileUpload');
+            const resumeUpload = document.getElementById('resumeUpload');
+
+            // Profile Picture Drag and Drop
+            profileUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                profileUpload.classList.add('dragover');
+            });
+
+            profileUpload.addEventListener('dragleave', () => {
+                profileUpload.classList.remove('dragover');
+            });
+
+            profileUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                profileUpload.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const input = document.getElementById('profilePictureInput');
+                    input.files = e.dataTransfer.files;
+                    handleProfilePictureUpload(input);
+                } else {
+                    alert('Please upload an image file.');
+                }
+            });
+
+            // Resume Drag and Drop
+            resumeUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                resumeUpload.classList.add('dragover');
+            });
+
+            resumeUpload.addEventListener('dragleave', () => {
+                resumeUpload.classList.remove('dragover');
+            });
+
+            resumeUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                resumeUpload.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && (file.type === 'application/pdf' || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                    const input = document.getElementById('resumeInput');
+                    input.files = e.dataTransfer.files;
+                    handleResumeUpload(input);
+                } else {
+                    alert('Please upload a PDF or Word document.');
+                }
+            });
+        }
+
+        // Initialize drag and drop when the page loads
+        document.addEventListener('DOMContentLoaded', setupDragAndDrop);
+
+        // Mobile sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target) && window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Function to trigger file input when container is clicked
+        function triggerFileInput() {
+            document.getElementById('profilePictureInput').click();
+        }
+
+        // Password Change Functionality
+        $(document).ready(function() {
+            $('#passwordChangeForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const currentPassword = $('#currentPassword').val();
+                const newPassword = $('#newPassword').val();
+                const confirmPassword = $('#confirmPassword').val();
+                const feedbackElement = $('#passwordFeedback');
+                
+                // Clear previous feedback
+                feedbackElement.removeClass('success error').hide();
+                
+                // Validate passwords
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    feedbackElement.text('All fields are required.').addClass('error').show();
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    feedbackElement.text('New passwords do not match.').addClass('error').show();
+                    return;
+                }
+                
+                // Submit password change request
+                $.ajax({
+                    url: '/Dashboard/ChangeStudentPassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        CurrentPassword: currentPassword,
+                        NewPassword: newPassword
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            feedbackElement.text(response.message || 'Password changed successfully!').addClass('success').show();
+                            $('#passwordChangeForm')[0].reset();
+                        } else {
+                            feedbackElement.text(response.message || 'Failed to change password.').addClass('error').show();
+                        }
+                    },
+                    error: function() {
+                        feedbackElement.text('An error occurred. Please try again later.').addClass('error').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
