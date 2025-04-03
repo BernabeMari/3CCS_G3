@@ -1,2 +1,0 @@
-Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Login failed for user 'zyb\octop'..
-Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Cannot open database "StudentBadge" requested by the login. The login failed..
