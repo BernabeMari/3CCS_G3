@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\downloads\\3ccs_g3-main\\studentbadge\\data\\studentcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:data\\studentcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\downloads\\3ccs_g3-main\\studentbadge\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\downloads\\3ccs_g3-main\\studentbadge\\views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\downloads\\3ccs_g3-main\\studentbadge\\views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StudentContext.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Data\\StudentContext.cs",
+              "RelativeDocumentMoniker": "Data\\StudentContext.cs",
+              "ToolTip": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Data\\StudentContext.cs",
+              "RelativeToolTip": "Data\\StudentContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-01T12:36:18.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Student.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Models\\Student.cs",
+              "RelativeDocumentMoniker": "Models\\Student.cs",
+              "ToolTip": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Models\\Student.cs",
+              "RelativeToolTip": "Models\\Student.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA7wBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-01T10:32:47.346Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EmployerDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ViewState": "AgIAALcIAAAAAAAAAAAkwNQIAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-01T10:40:25.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StudentDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\StudentDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\Downloads\\3CCS_G3-main\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\StudentDashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-01T10:27:10.52Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
