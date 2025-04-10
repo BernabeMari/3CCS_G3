@@ -1,0 +1,113 @@
+@{
+    string currentPage = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+}
+
+<div class="sidebar">
+    <div class="logo">
+        <img src="~/images/student1.png" alt="EduBadge Logo">
+        <h2>EduBadge</h2>
+        <p>Student Dashboard</p>
+    </div>
+    <nav>
+        <a href="/Dashboard/StudentDashboard" class="sidebar-link @(currentPage == "StudentDashboard" ? "active" : "")">
+            <i class="fas fa-th-large"></i> Dashboard
+        </a>
+        <a href="/Dashboard/StudentProfile" class="sidebar-link @(currentPage == "StudentProfile" ? "active" : "")">
+            <i class="fas fa-user"></i> Profile
+        </a>
+        <a href="/ProgrammingTest/AvailableTests" class="sidebar-link @(currentPage == "AvailableTests" ? "active" : "")">
+            <i class="fas fa-tasks"></i> Available Tests
+        </a>
+        <a href="/ProgrammingTest/StudentTests" class="sidebar-link @(currentPage == "StudentTests" ? "active" : "")">
+            <i class="fas fa-code"></i> Completed Tests
+        </a>
+        <a href="/Challenge/AvailableChallenges" class="sidebar-link @(currentPage == "AvailableChallenges" ? "active" : "")">
+            <i class="fas fa-trophy"></i> Challenges
+        </a>
+        <a href="/Challenge/CompletedChallenges" class="sidebar-link @(currentPage == "CompletedChallenges" ? "active" : "")">
+            <i class="fas fa-check-circle"></i> Completed Challenges
+        </a>
+        <a href="/ProgrammingTest/Certificates" class="sidebar-link @(currentPage == "Certificates" ? "active" : "")">
+            <i class="fas fa-award"></i> My Certificates
+        </a>
+        <a href="/Home/Login" class="sidebar-link">
+            <i class="fas fa-sign-out-alt"></i> Log Out
+        </a>
+    </nav>
+</div>
+
+<style>
+    .sidebar {
+        width: 210px;
+        background: linear-gradient(180deg, #8b0000, #c0392b);
+        padding: 25px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 100;
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .logo img {
+        width: 60px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background: white;
+        padding: 5px;
+    }
+
+    .logo h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 10px 0 5px;
+        color: #fff;
+    }
+
+    .logo p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 20px;
+        margin: 8px 0;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-link i {
+        margin-right: 12px;
+        font-size: 18px;
+    }
+
+    .sidebar-link.active {
+        background: #fff6f1;
+        font-weight: bold;
+        color: #e74c3c;
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+        color: #fff;
+    }
+</style> 

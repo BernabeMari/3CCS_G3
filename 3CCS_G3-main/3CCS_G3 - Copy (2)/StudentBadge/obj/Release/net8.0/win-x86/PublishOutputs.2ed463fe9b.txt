@@ -1,0 +1,5 @@
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\win-x86\PubTmp\Out\appsettings.Development.json
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\win-x86\PubTmp\Out\appsettings.json
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\win-x86\PubTmp\Out\StudentBadge.pdb
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\win-x86\PubTmp\Out\sni.dll
+C:\Users\octop\source\repos\WebApplication1\StudentBadge\StudentBadge\obj\Release\net8.0\win-x86\PubTmp\Out\StudentBadge.exe
