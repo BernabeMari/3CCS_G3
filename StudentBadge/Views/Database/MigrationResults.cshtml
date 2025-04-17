@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Migration Results";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    bool success = ViewBag.Success ?? false;
+    string results = ViewBag.Results ?? "No results available";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header @(success ? "bg-success" : "bg-danger") text-white">
+                    <h2>Database Migration Results</h2>
+                </div>
+                <div class="card-body">
+                    @if (success)
+                    {
+                        <div class="alert alert-success">
+                            <strong>Success!</strong> The database migration has been completed.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Error!</strong> The database migration encountered problems.
+                        </div>
+                    }
+                    
+                    <h4>Migration Log:</h4>
+                    <div class="bg-light p-3 mt-3" style="max-height: 400px; overflow-y: auto;">
+                        <pre>@results</pre>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="/Home/Index" class="btn btn-primary">Return to Home</a>
+                        <a href="/Database/Index" class="btn btn-outline-secondary ml-2">Back to Migration Tool</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

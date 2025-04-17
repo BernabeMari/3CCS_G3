@@ -1,0 +1,6 @@
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\images\student.png
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\uploads\employers\EMP202503122014318314_638783335261456714.jpg
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\uploads\employers\EMP202503122014318314_638783459255645554.jpg
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\uploads\employers\EMP202503122014318314_638783459903771114.jpg
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\uploads\employers\EMP202503122014318314_638783460137921561.jpg
+C:\Users\octop\source\repos\test\3CCS_G3 - Copy (2) - Copy\StudentBadge\wwwroot\uploads\employers\EMP202503122014318314_638783475267487906.jpg
