@@ -1,0 +1,2376 @@
+@{
+    var fullName = ViewBag.FullName;
+    var idNumber = ViewBag.IdNumber;
+    var course = ViewBag.Course;
+    var section = ViewBag.Section;
+    var score = ViewBag.Score;
+    var profilePicturePath = ViewBag.ProfilePicturePath ?? "/images/blank.jpg";
+    
+    // Store ID for JavaScript safely
+    var jsIdNumber = idNumber;
+    
+    // Get year level information - default to 0 if not available
+    var yearLevel = ViewBag.StudentYearLevel ?? 0;
+    var isGraduate = yearLevel == 5;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 28px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .student-info {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8a2be2;
+            margin-right: 25px;
+        }
+
+        .student-details {
+            flex: 1;
+        }
+
+        .student-details h2 {
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .student-id {
+            display: inline-block;
+            background: #ffeee9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8a2be2;
+            margin-bottom: 12px;
+        }
+
+        .course-info {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .course-box, .section-box {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .course-box i, .section-box i {
+            margin-right: 8px;
+                color: #8a2be2;
+        }
+
+        .score-container {
+            margin-left: auto;
+            text-align: center;
+            min-width: 140px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #8a2be2;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-circle {
+            fill: transparent;
+            stroke: #8a2be2;
+            stroke-width: 8;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+
+        /* Messages Panel Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .messages-panel {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-panel h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .messages-panel h2 i {
+            margin-right: 10px;
+                    color: #8a2be2;
+        }
+
+        .previous-chats {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .previous-chat-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f9f9f9;
+        }
+
+        .previous-chat-item:hover {
+            background: #ffeee9;
+            transform: translateY(-2px);
+        }
+
+        .previous-chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .previous-chat-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .previous-chat-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .previous-chat-company {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .previous-chat-last-message {
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .previous-chat-time {
+            font-size: 12px;
+            color: #999;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        /* Chat Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            max-height: 80vh;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-header h3 i {
+            margin-right: 10px;
+                    color: #8a2be2;
+        }
+
+        .modal-header .company-name {
+            font-size: 14px;
+            color: #666;
+            margin-left: 30px;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 50vh;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-content {
+            padding: 12px 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .message-from-employer .message-content {
+            background: #f1f1f1;
+            align-self: flex-start;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-from-student .message-content {
+            background: #ffeee9;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-meta {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .message-from-employer .message-meta {
+            align-self: flex-start;
+        }
+
+        .message-from-student .message-meta {
+            align-self: flex-end;
+        }
+
+        .message-form {
+            display: flex;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .message-input:focus {
+                border-color: #8a2be2;
+        }
+
+        .send-button {
+            background: #8a2be2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-button:hover {
+                background: #8a2be2;
+            transform: translateY(-2px);
+        }
+
+        .send-button i {
+            margin-right: 8px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Messages panel */
+        .messages-panel-floating {
+            position: fixed;
+            right: 15px;
+            bottom: 15px;
+            z-index: 990;
+        }
+
+        .messages-icon {
+            background: #8a2be2;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .messages-icon:hover {
+            transform: scale(1.1);
+                background: #8a2be2;
+        }
+
+        .messages-icon i {
+            font-size: 22px;
+        }
+
+        .messages-dropdown {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 320px;
+            max-height: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            display: none;
+        }
+
+        .messages-dropdown.active {
+            display: block;
+        }
+
+        .messages-dropdown-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            color: #333;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Employer info modal */
+        .employer-info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .employer-info-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            position: relative;
+        }
+
+        .employer-info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .employer-profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8a2be2;
+            margin-right: 15px;
+        }
+
+        .employer-info-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .employer-info-company {
+            font-size: 16px;
+            color: #666;
+            margin: 0;
+        }
+
+        .employer-info-details {
+            margin-top: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            width: 120px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .view-employer-info {
+            background: none;
+            border: none;
+            color: #8a2be2;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .view-employer-info:hover {
+            transform: scale(1.1);
+        }
+
+        .close-employer-info {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-employer-info:hover {
+            color: #333;
+        }
+
+        .employer-description {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Video Call Modal Styles */
+        .video-call-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-call-content {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .call-from {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .caller-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8a2be2;
+            margin-right: 15px;
+        }
+
+        .caller-info h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .caller-info p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .call-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            gap: 20px;
+        }
+
+        .answer-btn, .decline-btn {
+            padding: 10px 0;
+            width: 120px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .answer-btn {
+            background-color: #8a2be2;
+            color: white;
+        }
+
+        .answer-btn:hover {
+                background-color: #8a2be2;
+        }
+
+        .decline-btn {
+            background-color: #8a2be2;
+            color: white;
+        }
+
+        .decline-btn:hover {
+                background-color: #8a2be2;
+        }
+        
+        .call-timer {
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .chat-employer-info {
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+        }
+        
+        .chat-employer-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid #8a2be2;
+        }
+        
+        .chat-employer-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-employer-details h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .company-name {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Additional styling sections */
+        .badge-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+        
+        .badge-gold {
+            background-color: #fff2cc;
+            color: #bf9000;
+        }
+        
+        .badge-silver {
+            background-color: #e6e6e6;
+            color: #808080;
+        }
+        
+        .badge-bronze {
+            background-color: #f7d9c4;
+            color: #a55129;
+        }
+        
+        .badge-blue {
+            background-color: #d9e1f2;
+            color: #2f5597;
+        }
+        
+        .badge-red {
+            background-color: #f7d9d9;
+            color: #c00000;
+        }
+        
+        .badge-green {
+            background-color: #ffeee9;
+            color: #e74c3c;
+        }
+        
+        .badge-purple {
+            background-color: #e4d9f7;
+            color: #7030a0;
+        }
+        
+        .badge-teal {
+            background-color: #d9f2ef;
+            color: #19847e;
+        }
+        
+        .badge-orange {
+            background-color: #fbe5d6;
+            color: #ed7d31;
+        }
+        
+        .badge-pink {
+            background-color: #fddfed;
+            color: #df197b;
+        }
+        
+        /* For the modals and profile sections */
+        .profile-section h3 i,
+        .video-section h3 i,
+        .achievements h3 i,
+        .badges h3 i {
+            color: #8a2be2;
+            margin-right: 10px;
+        }
+        
+        /* For the text editor and rich content */
+        .note-toolbar .btn-group .btn-primary {
+            background-color: #8a2be2 !important;
+            border-color: #8a2be2 !important;
+        }
+        
+        .note-toolbar .btn-group .btn-primary:hover {
+                background-color: #8a2be2 !important;
+        }
+        
+        /* For the data tables and lists */
+        .data-table .sorting_asc,
+        .data-table .sorting_desc {
+            background-color: #ffeee9 !important;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-online {
+            background-color: #008000;
+        }
+        
+        .status-away {
+            background-color: #f39c12;
+        }
+        
+        .status-offline {
+            background-color: #e74c3c;
+        }
+
+        h1, h2, h3 {
+            color: #8a2be2;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+                background-color: #8a2be2;
+        }
+
+        .student-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .student-actions .action-btn {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #ffeee9;
+                color: #8a2be2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .student-actions .action-btn:hover {
+                    background: #8a2be2;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Certificate Upload Section Styles */
+        .certificate-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 25px;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .certificate-section h2 {
+            font-size: 22px;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .certificate-section h2 i {
+                    color: #8a2be2;
+            margin-right: 10px;
+        }
+
+        .certificate-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .certificate-containers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .certificate-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e1e1e1;
+        }
+
+        .certificate-container h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .certificate-upload-form {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            margin-bottom: 12px;
+        }
+
+        .form-row label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-row input[type="text"],
+        .form-row input[type="date"],
+        .form-row textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .form-row textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(to right, #8a2be2, #8a2be2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .upload-btn i {
+            margin-right: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .certificate-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .certificate-item {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #8a2be2;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .certificate-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .certificate-item h4 {
+            font-size: 16px;
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .certificate-item .certificate-details {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .certificate-item .certificate-status {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .certificate-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .certificate-status.verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .certificate-actions {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .certificate-actions button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+
+        .certificate-actions button:hover {
+                    color: #8a2be2;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        /* Add these CSS styles in the style section */
+        .badge-indicator {
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .badge-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        
+        .badge-value {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .badge-platinum {
+            background-color: #00aaff;
+            box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+        }
+        
+        .badge-gold {
+            background-color: #ffd700;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            color: #000;
+        }
+        
+        .badge-silver {
+            background-color: #c0c0c0;
+            box-shadow: 0 2px 8px rgba(192, 192, 192, 0.3);
+            color: #000;
+        }
+        
+        .badge-bronze {
+            background-color: #cd7f32;
+            box-shadow: 0 2px 8px rgba(205, 127, 50, 0.3);
+        }
+        
+        .badge-rising {
+            background-color: #98fb98;
+            box-shadow: 0 2px 8px rgba(152, 251, 152, 0.3);
+            color: #000;
+        }
+        
+        .badge-needs {
+            background-color: #ffcccb;
+            box-shadow: 0 2px 8px rgba(255, 204, 203, 0.3);
+            color: #000;
+        }
+
+        /* Add these CSS styles in the style section */
+        .badge-level-guide {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #e1e1e1;
+        }
+        
+        .badge-level-guide h3 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .badge-level-guide h3 i {
+                    color: #8a2be2;
+            margin-right: 10px;
+        }
+        
+        .badge-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .badge-level-item {
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            transition: transform 0.2s;
+        }
+        
+        .badge-level-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .badge-threshold {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Portal</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/StudentDashboard" class="sidebar-link active">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/Dashboard/StudentProfile" class="sidebar-link">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                @if (!isGraduate)
+                {
+                    <a href="/ProgrammingTest/AvailableTests" class="sidebar-link">
+                        <i class="fas fa-tasks"></i> Available Tests
+                    </a>
+                }
+                else
+                {
+                    <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <i class="fas fa-tasks"></i> Available Tests (Graduate)
+                    </span>
+                }
+                <a href="/ProgrammingTest/StudentTests" class="sidebar-link">
+                    <i class="fas fa-code"></i> Completed Tests
+                </a>
+                @if (!isGraduate)
+                {
+                    <a href="/Challenge/AvailableChallenges" class="sidebar-link">
+                        <i class="fas fa-trophy"></i> Challenges
+                    </a>
+                }
+                else
+                {
+                    <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <i class="fas fa-trophy"></i> Challenges (Graduate)
+                    </span>
+                }
+                <a href="/Challenge/CompletedChallenges" class="sidebar-link">
+                    <i class="fas fa-check-circle"></i> Completed Challenges
+                </a>
+                <a href="/ProgrammingTest/Certificates" class="sidebar-link">
+                    <i class="fas fa-award"></i> My Certificates
+                </a>
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content">
+            <h1>Student Portal</h1>
+
+            <!-- Student Info Section -->
+            <div class="student-info">
+                <img src="@profilePicturePath" alt="Profile Picture" class="profile-picture">
+                <div class="student-details">
+                    <h2>@fullName</h2>
+                    <div class="student-id">
+                        <i class="fas fa-id-card"></i> @idNumber
+                    </div>
+                    <div class="course-info">
+                        <div class="course-box">
+                            <i class="fas fa-book-open"></i> @course
+                        </div>
+                        <div class="section-box">
+                            <i class="fas fa-users"></i> @("Section " + section)
+                        </div>
+                    </div>
+                </div>
+                <div class="score-container">
+                    <div class="score-circle">
+                        <div class="score-value" id="student-score" data-score="@score">@score%</div>
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-circle" stroke-width="8" stroke-dasharray="301.44" stroke-dashoffset="0" r="48" cx="60" cy="60"/>
+                        </svg>
+                    </div>
+                    <p>Current Score</p>
+                    <div class="badge-indicator">
+                        <div class="badge-label">Current Badge:</div>
+                        <div class="badge-value @(score >= 95 ? "badge-platinum" : 
+                              score >= 85 ? "badge-gold" : 
+                              score >= 75 ? "badge-silver" : 
+                              score >= 65 ? "badge-bronze" : 
+                              score >= 50 ? "badge-rising" : "badge-needs")">
+                            @(score >= 95 ? "Platinum" : 
+                              score >= 85 ? "Gold" : 
+                              score >= 75 ? "Silver" : 
+                              score >= 65 ? "Bronze" : 
+                              score >= 50 ? "Rising Star" : "Needs Improvement")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certificate Upload Section -->
+            <div class="certificate-section">
+                <h2><i class="fas fa-certificate"></i> My Certificates</h2>
+                <p>Upload your seminar/webinar and extracurricular certificates for verification by teachers.</p>
+                
+                <div class="certificate-containers">
+                    <!-- Seminar/Webinar Certificates -->
+                    <div class="certificate-container">
+                        <h3>Seminar/Webinar Certificates</h3>
+                        
+                        <div class="certificate-upload-form">
+                            <form id="seminarCertificateForm">
+                                <div class="form-row">
+                                    <label for="seminarTitle">Certificate Title</label>
+                                    <input type="text" id="seminarTitle" name="title" required placeholder="e.g. Web Development Seminar">
+                                </div>
+                                <div class="form-row">
+                                    <label for="seminarDescription">Description (Optional)</label>
+                                    <textarea id="seminarDescription" name="description" placeholder="Brief description of the seminar or webinar"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label for="seminarDate">Date Issued</label>
+                                    <input type="date" id="seminarDate" name="issueDate" required>
+                                </div>
+                                <div class="form-row">
+                                    <label for="seminarFile">Upload Certificate (PDF, JPG, PNG)</label>
+                                    <input type="file" id="seminarFile" name="file" accept=".pdf,.jpg,.jpeg,.png" required style="width: 100%">
+                                </div>
+                                <button type="submit" class="upload-btn">
+                                    <i class="fas fa-upload"></i> Upload Certificate
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div id="seminarCertificateList" class="certificate-list">
+                            <!-- Certificates will be loaded here dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-file-upload"></i>
+                                <p>No certificates uploaded yet</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Extracurricular Certificates -->
+                    <div class="certificate-container">
+                        <h3>Extracurricular Certificates</h3>
+                        
+                        <div class="certificate-upload-form">
+                            <form id="extracurricularCertificateForm">
+                                <div class="form-row">
+                                    <label for="extraTitle">Certificate Title</label>
+                                    <input type="text" id="extraTitle" name="title" required placeholder="e.g. Basketball Tournament">
+                                </div>
+                                <div class="form-row">
+                                    <label for="extraDescription">Description (Optional)</label>
+                                    <textarea id="extraDescription" name="description" placeholder="Brief description of the extracurricular activity"></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <label for="extraDate">Date Issued</label>
+                                    <input type="date" id="extraDate" name="issueDate" required>
+                                </div>
+                                <div class="form-row">
+                                    <label for="extraFile">Upload Certificate (PDF, JPG, PNG)</label>
+                                    <input type="file" id="extraFile" name="file" accept=".pdf,.jpg,.jpeg,.png" required style="width: 100%">
+                                </div>
+                                <button type="submit" class="upload-btn">
+                                    <i class="fas fa-upload"></i> Upload Certificate
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div id="extraCertificateList" class="certificate-list">
+                            <!-- Certificates will be loaded here dynamically -->
+                            <div class="empty-state">
+                                <i class="fas fa-file-upload"></i>
+                                <p>No certificates uploaded yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incoming Video Call Modal -->
+            <div id="videoCallModal" class="video-call-modal">
+                <div class="video-call-content">
+                    <h2>Incoming Video Call</h2>
+                    <div class="call-from">
+                        <img id="callerPic" src="/images/blank.jpg" alt="Caller" class="caller-pic">
+                        <div class="caller-info">
+                            <h3 id="callerName">Loading...</h3>
+                            <p id="callerCompany">Loading...</p>
+                        </div>
+                    </div>
+                    <p>is calling you...</p>
+                    <div class="call-timer" id="callTimer">00:30</div>
+                    <div class="call-buttons">
+                        <button id="answerBtn" class="answer-btn">
+                            <i class="fas fa-phone"></i> Answer
+                        </button>
+                        <button id="declineBtn" class="decline-btn">
+                            <i class="fas fa-phone-slash"></i> Decline
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Badge Level Guide Section -->
+            <div class="badge-level-guide">
+                <h3><i class="fas fa-award"></i> Badge Level Guide</h3>
+                <p>Your badge level is determined by your overall score. Improve your score to achieve higher badge levels!</p>
+                
+                <div class="badge-levels">
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-platinum">Platinum</div>
+                        <div class="badge-threshold">95% or higher</div>
+                    </div>
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-gold">Gold</div>
+                        <div class="badge-threshold">85% - 94%</div>
+                    </div>
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-silver">Silver</div>
+                        <div class="badge-threshold">75% - 84%</div>
+                    </div>
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-bronze">Bronze</div>
+                        <div class="badge-threshold">65% - 74%</div>
+                    </div>
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-rising">Rising Star</div>
+                        <div class="badge-threshold">50% - 64%</div>
+                    </div>
+                    <div class="badge-level-item">
+                        <div class="badge-value badge-needs">Needs Improvement</div>
+                        <div class="badge-threshold">Below 50%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="chat-employer-info">
+                    <img id="chatEmployerProfilePic" src="/images/blank.jpg" alt="Employer" class="chat-employer-pic">
+                    <div class="chat-employer-details">
+                        <h3 id="chatEmployerName">Employer Name</h3>
+                        <span class="company-name" id="chatEmployerCompany">Company Name</span>
+                    </div>
+                </div>
+                <button class="view-employer-info" id="viewEmployerInfoBtn" title="View Employer Information">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+                <button class="close-modal" onclick="closeChat()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be loaded here dynamically -->
+                </div>
+                <div class="message-form">
+                    <input type="text" id="messageInput" class="message-input" placeholder="Type your message...">
+                    <button id="sendMessageBtn" class="send-button">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Messages Panel -->
+    <div class="messages-panel-floating">
+        <div class="messages-icon" onclick="toggleMessagesDropdown()">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="messages-dropdown" id="messagesDropdown">
+            <div class="messages-dropdown-header">Recent Conversations</div>
+            <div id="floatingPreviousChats">
+                <!-- Previous chats will be loaded here -->
+                <div class="loading-chats" style="padding: 20px; text-align: center; color: #666;">
+                    Loading previous chats...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversations section (add this section) -->
+    <div class="recent-conversations" style="display: none;">
+        <h3>Recent Conversations</h3>
+        <div id="previousChats">
+            <!-- Previous chats will be loaded here -->
+        </div>
+        <div id="noMessagesPlaceholder" style="text-align: center; padding: 20px; color: #999;">
+            You have no recent conversations.
+        </div>
+    </div>
+
+    <!-- Employer info modal -->
+    <div id="employerInfoModal" class="employer-info-modal">
+        <div class="employer-info-content">
+            <div class="employer-info-header">
+                <img id="employerProfilePic" src="/images/blank.jpg" alt="Employer Profile" class="employer-profile-pic">
+                <div>
+                    <h2 id="employerInfoName" class="employer-info-name">Employer Name</h2>
+                    <p id="employerInfoCompany" class="employer-info-company">Company Name</p>
+                </div>
+            </div>
+            <div class="employer-info-details">
+                <div class="info-row">
+                    <span class="info-label">Company:</span>
+                    <span id="employerCompanyInfo" class="info-value">Company Name</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span id="employerEmailInfo" class="info-value">employer@example.com</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span id="employerPhoneInfo" class="info-value">+1234567890</span>
+                </div>
+            </div>
+            <button class="close-employer-info" onclick="closeEmployerInfo()">&times;</button>
+            <p id="employerDescriptionInfo" class="employer-description">Employer description will appear here.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <!-- Add this before the closing body tag -->
+    <div id="alertContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+    
+    <script>
+        let currentEmployerId = '';
+        let currentEmployerName = '';
+        let currentEmployerCompany = '';
+        let currentEmployerInfo = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up progress ring animation
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+            
+            function setProgress(percent) {
+                const offset = circumference - (percent / 100) * circumference;
+                circle.style.strokeDashoffset = offset;
+            }
+            
+            // Get student score and animate progress
+            const scoreElement = document.getElementById('student-score');
+            const score = parseInt(scoreElement.getAttribute('data-score'), 10);
+            
+            // Animate the progress ring
+            let currentProgress = 0;
+            const progressInterval = setInterval(() => {
+                if (currentProgress >= score) {
+                    clearInterval(progressInterval);
+                } else {
+                    currentProgress += 1;
+                    setProgress(currentProgress);
+                }
+            }, 20);
+
+            // Load recent chats
+            loadRecentChats();
+
+            // Set up message sending
+            document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Initialize SignalR connection for video calls
+            setupSignalR();
+        });
+
+        // Toggle messages dropdown
+        function toggleMessagesDropdown() {
+            const dropdown = document.getElementById('messagesDropdown');
+            dropdown.classList.toggle('active');
+            
+            if (dropdown.classList.contains('active')) {
+                loadFloatingChats();
+            }
+        }
+        
+        // Load chats for floating panel
+        function loadFloatingChats() {
+            const previousChats = document.getElementById('floatingPreviousChats');
+            previousChats.innerHTML = '<div class="loading-chats" style="padding: 20px; text-align: center; color: #666;">Loading previous chats...</div>';
+            
+            fetch(`/Dashboard/GetStudentChats`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received chats data for floating panel:", data);
+                    
+                    if (data.success && data.chats && data.chats.length > 0) {
+                        previousChats.innerHTML = '';
+                        
+                        data.chats.forEach(chat => {
+                            const chatItem = document.createElement('div');
+                            chatItem.className = 'previous-chat-item';
+                            chatItem.onclick = function() {
+                                openChat(chat.employerId, chat.employerName, chat.company);
+                                toggleMessagesDropdown(); // Close dropdown after selecting a chat
+                            };
+                            
+                            const avatar = document.createElement('img');
+                            avatar.className = 'previous-chat-avatar';
+                            if (chat.profilePicture) {
+                                avatar.src = chat.profilePicture;
+                            } else {
+                                avatar.src = '/images/blank.jpg';
+                            }
+                            avatar.onerror = function() { this.src = '/images/blank.jpg'; };
+                            
+                            const infoDiv = document.createElement('div');
+                            infoDiv.className = 'previous-chat-info';
+                            
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'previous-chat-name';
+                            nameDiv.textContent = chat.employerName;
+                            
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = 'previous-chat-last-message';
+                            messageDiv.textContent = chat.lastMessage || 'No messages yet';
+                            
+                            infoDiv.appendChild(nameDiv);
+                            infoDiv.appendChild(messageDiv);
+                            
+                            const timeDiv = document.createElement('div');
+                            timeDiv.className = 'previous-chat-time';
+                            timeDiv.textContent = new Date(chat.lastMessageTime).toLocaleDateString();
+                            
+                            chatItem.appendChild(avatar);
+                            chatItem.appendChild(infoDiv);
+                            chatItem.appendChild(timeDiv);
+                            
+                            previousChats.appendChild(chatItem);
+                        });
+                    } else {
+                        previousChats.innerHTML = '<div class="no-messages" style="padding: 20px; text-align: center; color: #999;">No conversations yet.</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading floating chats:', error);
+                    previousChats.innerHTML = '<div style="padding: 20px; text-align: center; color: #d32f2f;">Failed to load chats. Please try again.</div>';
+                });
+        }
+
+        // Load recent conversations
+        function loadRecentChats() {
+            fetch(`/Dashboard/GetStudentChats`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received chats data:", data); // Debug
+                    const previousChats = document.getElementById('previousChats');
+                    const noMessagesPlaceholder = document.getElementById('noMessagesPlaceholder');
+                    
+                    // Check if elements exist before manipulating them
+                    if (!previousChats || !noMessagesPlaceholder) {
+                        console.error('Required DOM elements are missing');
+                        return;
+                    }
+                    
+                    if (data.success && data.chats && data.chats.length > 0) {
+                        if (noMessagesPlaceholder) noMessagesPlaceholder.style.display = 'none';
+                        previousChats.innerHTML = '';
+                        
+                        data.chats.forEach(chat => {
+                            const chatItem = document.createElement('div');
+                            chatItem.className = 'previous-chat-item';
+                            chatItem.onclick = function() {
+                                openChat(chat.employerId, chat.employerName, chat.company);
+                            };
+                            
+                            const avatar = document.createElement('img');
+                            avatar.className = 'previous-chat-avatar';
+                            if (chat.profilePicture) {
+                                avatar.src = chat.profilePicture;
+                            } else {
+                                avatar.src = '/images/blank.jpg';
+                            }
+                            avatar.onerror = function() { this.src = '/images/blank.jpg'; };
+                            
+                            const infoDiv = document.createElement('div');
+                            infoDiv.className = 'previous-chat-info';
+                            
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'previous-chat-name';
+                            nameDiv.textContent = chat.employerName;
+                            
+                            const companyDiv = document.createElement('div');
+                            companyDiv.className = 'previous-chat-company';
+                            companyDiv.textContent = chat.company;
+                            
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = 'previous-chat-last-message';
+                            messageDiv.textContent = chat.lastMessage || 'No messages yet';
+                            
+                            const timeDiv = document.createElement('div');
+                            timeDiv.className = 'previous-chat-time';
+                            timeDiv.textContent = new Date(chat.lastMessageTime).toLocaleDateString();
+                            
+                            infoDiv.appendChild(nameDiv);
+                            infoDiv.appendChild(companyDiv);
+                            infoDiv.appendChild(messageDiv);
+                            
+                            chatItem.appendChild(avatar);
+                            chatItem.appendChild(infoDiv);
+                            chatItem.appendChild(timeDiv);
+                            
+                            previousChats.appendChild(chatItem);
+                        });
+                    } else {
+                        if (noMessagesPlaceholder) noMessagesPlaceholder.style.display = 'block';
+                        if (previousChats) previousChats.innerHTML = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading chats:', error);
+                });
+        }
+
+        // Open chat with a selected employer
+        function openChat(employerId, employerName, company) {
+            currentEmployerId = employerId;
+            currentEmployerName = employerName;
+            currentEmployerCompany = company;
+            
+            document.getElementById('chatModal').style.display = 'flex';
+            document.getElementById('chatEmployerName').textContent = employerName;
+            document.getElementById('chatEmployerCompany').textContent = company;
+            
+            // Set default profile pic
+            document.getElementById('chatEmployerProfilePic').src = '/images/blank.jpg';
+            
+            // Load message history
+            loadMessageHistory(employerId);
+            
+            // Fetch employer details to get profile picture and other info
+            fetchEmployerDetails(employerId)
+                .then(data => {
+                    if (data.success && data.employer && data.employer.profilePicturePath) {
+                        document.getElementById('chatEmployerProfilePic').src = data.employer.profilePicturePath;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching employer details for chat:", error);
+                });
+            
+            // Setup employer info button
+            document.getElementById('viewEmployerInfoBtn').onclick = openEmployerInfo;
+        }
+
+        // Close chat modal
+        function closeChat() {
+            document.getElementById('chatModal').style.display = 'none';
+        }
+
+        // Load message history for a specific employer
+        function loadMessageHistory(employerId) {
+            fetch(`/Dashboard/GetStudentMessageHistory?employerId=${employerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Received message history:", data); // Debug
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = '';
+                    
+                    if (data.success && data.messages && data.messages.length > 0) {
+                        data.messages.forEach(message => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = `message ${message.isFromEmployer ? 'message-from-employer' : 'message-from-student'}`;
+                            
+                            const contentDiv = document.createElement('div');
+                            contentDiv.className = 'message-content';
+                            contentDiv.textContent = message.content;
+                            
+                            const metaDiv = document.createElement('div');
+                            metaDiv.className = 'message-meta';
+                            
+                            const date = new Date(message.sentTime);
+                            let timeString = `${message.isFromEmployer ? message.employerName : 'You'} • `;
+                            
+                            try {
+                                if (!isNaN(date.getTime())) {
+                                    timeString += `${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${date.toLocaleDateString()}`;
+                                } else {
+                                    timeString += 'Unknown date';
+                                }
+                            } catch (e) {
+                                timeString += 'Unknown date';
+                                console.error('Error formatting date:', e);
+                            }
+                            
+                            metaDiv.textContent = timeString;
+                            
+                            messageDiv.appendChild(contentDiv);
+                            messageDiv.appendChild(metaDiv);
+                            
+                            chatMessages.appendChild(messageDiv);
+                        });
+                        
+                        // Scroll to bottom of chat
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    } else {
+                        chatMessages.innerHTML = '<div class="no-messages">No messages yet. Start a conversation!</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading message history:', error);
+                    document.getElementById('chatMessages').innerHTML = 
+                        '<div class="no-messages">Error loading messages. Please try again.</div>';
+                });
+        }
+
+        // Send a message to the current employer
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            // Clear input field
+            messageInput.value = '';
+            
+            // Add message to UI immediately for better UX
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message message-from-student';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = message;
+            
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'message-meta';
+            metaDiv.textContent = 'You • Sending...';
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(metaDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Send message to server
+            fetch('/Dashboard/SendStudentMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    StudentId: currentEmployerId,
+                    Message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update sent timestamp
+                    let timeString = 'You • Just now';
+                    if (data.sentTime) {
+                        try {
+                            const date = new Date(data.sentTime);
+                            if (!isNaN(date.getTime())) {
+                                timeString = `You • ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${date.toLocaleDateString()}`;
+                            }
+                        } catch (e) {
+                            console.error('Error formatting date:', e);
+                        }
+                    }
+                    metaDiv.textContent = timeString;
+                    
+                    // Refresh chats list
+                    loadRecentChats();
+                } else {
+                    metaDiv.textContent = 'You • Failed to send';
+                    metaDiv.style.color = 'red';
+                    console.error('Failed to send message:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                metaDiv.textContent = 'You • Failed to send';
+                metaDiv.style.color = 'red';
+            });
+        }
+
+        // Fetch employer details for the info modal
+        function fetchEmployerDetails(employerId) {
+            return fetch(`/Dashboard/GetEmployerDetails?employerId=${employerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.employer) {
+                        currentEmployerInfo = data.employer;
+                        return data;
+                    } else {
+                        console.error('Error fetching employer details:', data.message);
+                        return { success: false, message: data.message };
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching employer details:', error);
+                    return { success: false, message: error.message };
+                });
+        }
+
+        // Open employer info modal
+        function openEmployerInfo() {
+            const infoModal = document.getElementById('employerInfoModal');
+            
+            // Use the stored employer info or fallback to current basic info
+            if (currentEmployerInfo) {
+                document.getElementById('employerInfoName').textContent = currentEmployerInfo.fullName;
+                document.getElementById('employerInfoCompany').textContent = currentEmployerInfo.company;
+                document.getElementById('employerCompanyInfo').textContent = currentEmployerInfo.company;
+                document.getElementById('employerEmailInfo').textContent = currentEmployerInfo.email || 'Not provided';
+                document.getElementById('employerPhoneInfo').textContent = currentEmployerInfo.phoneNumber || 'Not provided';
+                document.getElementById('employerDescriptionInfo').textContent = currentEmployerInfo.description || 'No description available';
+                
+                const profilePic = document.getElementById('employerProfilePic');
+                if (currentEmployerInfo.profilePicturePath) {
+                    profilePic.src = currentEmployerInfo.profilePicturePath;
+                } else {
+                    profilePic.src = '/images/blank.jpg';
+                }
+                profilePic.onerror = function() { this.src = '/images/blank.jpg'; };
+            } else {
+                // Fallback to basic info we already have
+                document.getElementById('employerInfoName').textContent = currentEmployerName;
+                document.getElementById('employerInfoCompany').textContent = currentEmployerCompany;
+                document.getElementById('employerCompanyInfo').textContent = currentEmployerCompany;
+                document.getElementById('employerEmailInfo').textContent = 'Information not available';
+                document.getElementById('employerPhoneInfo').textContent = 'Information not available';
+                document.getElementById('employerDescriptionInfo').textContent = 'Detailed information not available';
+                document.getElementById('employerProfilePic').src = '/images/blank.jpg';
+            }
+            
+            infoModal.style.display = 'flex';
+        }
+
+        // Close employer info modal
+        function closeEmployerInfo() {
+            document.getElementById('employerInfoModal').style.display = 'none';
+        }
+
+        // Video call variables
+        let connection;
+        let callId;
+        let callTimer;
+        let timerCount = 30;
+        
+        // Video call DOM elements
+        const videoCallModal = document.getElementById('videoCallModal');
+        const callerPic = document.getElementById('callerPic');
+        const callerName = document.getElementById('callerName');
+        const callerCompany = document.getElementById('callerCompany');
+        const callTimerElement = document.getElementById('callTimer');
+        const answerBtn = document.getElementById('answerBtn');
+        const declineBtn = document.getElementById('declineBtn');
+        
+        // Setup SignalR for video calls
+        async function setupSignalR() {
+            try {
+                // Create SignalR connection
+                connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/videoCallHub")
+                    .withAutomaticReconnect()
+                    .build();
+                
+                // Handle incoming call from an employer
+                connection.on("IncomingCall", (incomingCallId, employerId) => {
+                    // Get employer details and show call modal
+                    handleIncomingCall(incomingCallId, employerId);
+                });
+                
+                // Start the connection
+                await connection.start();
+                console.log("SignalR connection established");
+                
+                // Register the student's connection
+                await connection.invoke("RegisterConnection", "@jsIdNumber", "student");
+            } catch (error) {
+                console.error("Error setting up SignalR:", error);
+            }
+        }
+        
+        // Handle incoming video call
+        async function handleIncomingCall(incomingCallId, employerId) {
+            try {
+                // Store the call ID
+                callId = incomingCallId;
+                
+                // Get employer details
+                const response = await fetch(`/Dashboard/GetEmployerDetails?employerId=${employerId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update UI with employer details
+                    callerName.textContent = data.employer.fullName;
+                    callerCompany.textContent = data.employer.company;
+                    if (data.employer.profilePicturePath) {
+                        callerPic.src = data.employer.profilePicturePath;
+                    } else {
+                        callerPic.src = '/images/blank.jpg';
+                    }
+                    
+                    // Show call modal
+                    videoCallModal.style.display = 'flex';
+                    
+                    // Start timer for auto-decline
+                    startCallTimer();
+                } else {
+                    console.error("Error getting employer details:", data.message);
+                }
+            } catch (error) {
+                console.error("Error handling incoming call:", error);
+            }
+        }
+        
+        // Start call timer
+        function startCallTimer() {
+            timerCount = 30; // 30 seconds
+            updateTimer();
+            
+            callTimer = setInterval(() => {
+                timerCount--;
+                updateTimer();
+                
+                if (timerCount <= 0) {
+                    // Auto-decline call if timer runs out
+                    clearInterval(callTimer);
+                    declineCall();
+                }
+            }, 1000);
+        }
+        
+        // Update timer display
+        function updateTimer() {
+            const seconds = timerCount % 60;
+            callTimerElement.textContent = `00:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+        
+        // Answer the call
+        function answerCall() {
+            // Clear the timer
+            clearInterval(callTimer);
+            
+            // Hide the modal
+            videoCallModal.style.display = 'none';
+            
+            // Respond to the call
+            connection.invoke("RespondToCall", callId, "@jsIdNumber", "accept")
+                .then(() => {
+                    // Redirect to the video call page
+                    window.location.href = `/VideoCall/StudentVideoCall?callId=${callId}`;
+                })
+                .catch((error) => {
+                    console.error("Error accepting call:", error);
+                });
+        }
+        
+        // Decline the call
+        function declineCall() {
+            // Clear the timer
+            clearInterval(callTimer);
+            
+            // Hide the modal
+            videoCallModal.style.display = 'none';
+            
+            // Respond to the call
+            connection.invoke("RespondToCall", callId, "@jsIdNumber", "decline")
+                .catch((error) => {
+                    console.error("Error declining call:", error);
+                });
+        }
+        
+        // Event listeners for call buttons
+        answerBtn.addEventListener('click', answerCall);
+        declineBtn.addEventListener('click', declineCall);
+
+        $(document).ready(function() {
+            // Load certificates when the page loads
+            loadCertificates('seminar', 'seminarCertificateList');
+            loadCertificates('extracurricular', 'extraCertificateList');
+            
+            // Handle seminar certificate upload
+            $('#seminarCertificateForm').on('submit', function(e) {
+                e.preventDefault();
+                uploadCertificate(this, 'seminar', 'seminarCertificateList');
+            });
+            
+            // Handle extracurricular certificate upload
+            $('#extracurricularCertificateForm').on('submit', function(e) {
+                e.preventDefault();
+                uploadCertificate(this, 'extracurricular', 'extraCertificateList');
+            });
+        });
+        
+        function loadCertificates(certificateType, containerId) {
+            $.ajax({
+                url: '/Dashboard/GetStudentCertificates?certificateType=' + certificateType,
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        const container = $('#' + containerId);
+                        container.empty();
+                        
+                        if (response.certificates.length === 0) {
+                            container.html(`
+                                <div class="empty-state">
+                                    <i class="fas fa-file-upload"></i>
+                                    <p>No certificates uploaded yet</p>
+                                </div>
+                            `);
+                            return;
+                        }
+                        
+                        response.certificates.forEach(cert => {
+                            const issueDate = new Date(cert.issueDate).toLocaleDateString();
+                            const uploadDate = new Date(cert.uploadDate).toLocaleDateString();
+                            
+                            let statusHtml = cert.isVerified ? 
+                                '<span class="certificate-status verified"><i class="fas fa-check-circle"></i> Verified</span>' : 
+                                '<span class="certificate-status pending"><i class="fas fa-clock"></i> Pending Verification</span>';
+                            
+                            container.append(`
+                                <div class="certificate-item" data-id="${cert.certificateId}">
+                                    <h4>${cert.title}</h4>
+                                    <div class="certificate-details">
+                                        Issue Date: ${issueDate} | Uploaded: ${uploadDate}
+                                    </div>
+                                    <div class="certificate-details">
+                                        ${cert.description || 'No description provided'}
+                                    </div>
+                                    ${statusHtml}
+                                    <div class="certificate-actions">
+                                        <button onclick="viewCertificate(${cert.certificateId})" title="View Certificate">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button onclick="deleteCertificate(${cert.certificateId}, '${containerId}')" title="Delete Certificate">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    } else {
+                        console.error('Error loading certificates:', response.message);
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error loading certificates:', xhr.responseText);
+                }
+            });
+        }
+        
+        function uploadCertificate(form, certificateType, containerId) {
+            const formData = new FormData(form);
+            formData.append('certificateType', certificateType);
+            
+            $.ajax({
+                url: '/Dashboard/UploadCertificate',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        // Reset form and reload certificates
+                        form.reset();
+                        loadCertificates(certificateType, containerId);
+                        showAlert('success', 'Certificate uploaded successfully! It will be reviewed by a teacher.');
+                    } else {
+                        showAlert('error', response.message);
+                    }
+                },
+                error: function(xhr) {
+                    showAlert('error', 'Error uploading certificate. Please try again.');
+                    console.error('Error uploading certificate:', xhr.responseText);
+                }
+            });
+        }
+        
+        function viewCertificate(certificateId) {
+            window.open('/Dashboard/ViewCertificate/' + certificateId, '_blank');
+        }
+        
+        function deleteCertificate(certificateId, containerId) {
+            if (confirm('Are you sure you want to delete this certificate?')) {
+                $.ajax({
+                    url: '/Dashboard/DeleteCertificate',
+                    type: 'POST',
+                    data: { certificateId: certificateId },
+                    success: function(response) {
+                        if (response.success) {
+                            const certificateType = containerId === 'seminarCertificateList' ? 'seminar' : 'extracurricular';
+                            loadCertificates(certificateType, containerId);
+                            showAlert('success', 'Certificate deleted successfully!');
+                        } else {
+                            showAlert('error', response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        showAlert('error', 'Error deleting certificate. Please try again.');
+                        console.error('Error deleting certificate:', xhr.responseText);
+                    }
+                });
+            }
+        }
+        
+        function showAlert(type, message) {
+            // Define different styles based on alert type
+            let alertClass, icon, bgColor, borderColor, textColor;
+            
+            if (type === 'success') {
+                alertClass = 'alert-success';
+                icon = 'check-circle';
+                bgColor = '#d4edda';
+                borderColor = '#c3e6cb';
+                textColor = '#155724';
+            } else if (type === 'error') {
+                alertClass = 'alert-danger';
+                icon = 'exclamation-circle';
+                bgColor = '#f8d7da';
+                borderColor = '#f5c6cb';
+                textColor = '#721c24';
+            } else if (type === 'warning') {
+                alertClass = 'alert-warning';
+                icon = 'exclamation-triangle';
+                bgColor = '#fff3cd';
+                borderColor = '#ffeeba';
+                textColor = '#856404';
+            } else {
+                alertClass = 'alert-info';
+                icon = 'info-circle';
+                bgColor = '#d1ecf1';
+                borderColor = '#bee5eb';
+                textColor = '#0c5460';
+            }
+            
+            const alertId = 'alert-' + Date.now();
+            const alertHtml = `
+                <div id="${alertId}" class="custom-alert ${alertClass}" style="
+                    background-color: ${bgColor};
+                    color: ${textColor};
+                    border-left: 4px solid ${borderColor};
+                    padding: 12px 20px;
+                    border-radius: 4px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    opacity: 0;
+                    transform: translateX(50px);
+                    transition: all 0.3s ease-in-out;
+                    position: relative;
+                    max-width: 350px;
+                ">
+                    <i class="fas fa-${icon}" style="margin-right: 10px; font-size: 18px;"></i>
+                    <span style="flex: 1;">${message}</span>
+                    <button type="button" onclick="document.getElementById('${alertId}').remove();" style="
+                        background: transparent;
+                        border: none;
+                        color: ${textColor};
+                        opacity: 0.7;
+                        cursor: pointer;
+                        padding: 0 5px;
+                        font-size: 16px;
+                    ">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Add to container
+            $('#alertContainer').append(alertHtml);
+            
+            // Animate in
+            setTimeout(() => {
+                $(`#${alertId}`).css({
+                    'opacity': 1,
+                    'transform': 'translateX(0)'
+                });
+            }, 50);
+            
+            // Auto hide after 5 seconds
+            setTimeout(function() {
+                $(`#${alertId}`).css({
+                    'opacity': 0,
+                    'transform': 'translateX(50px)'
+                });
+                
+                setTimeout(() => {
+                    $(`#${alertId}`).remove();
+                }, 300);
+            }, 5000);
+        
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,640 @@
+@{
+    var employerName = ViewBag.EmployerName;
+    var username = ViewBag.Username;
+    var companyName = ViewBag.CompanyName;
+    var email = ViewBag.Email;
+    var phoneNumber = ViewBag.PhoneNumber;
+    var description = ViewBag.Description;
+    var profilePicturePath = ViewBag.ProfilePicturePath ?? "/images/default-profile.png";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Profile</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+       .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 28px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .profile-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-bottom: 20px;
+        }
+
+        .profile-section {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .profile-picture-container {
+            width: 180px;
+            margin-right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8a2be2;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .upload-btn {
+            background: #8a2be2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+                background: #8a2be2;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+                border-color: #8a2be2;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            background: #8a2be2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .save-btn:hover {
+                background: #8a2be2;
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            background-color: #f1f1f1;
+            color: #333;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #8a2be2;
+            border-left: 4px solid #8a2be2;
+        }
+
+        /* Drag and drop area for profile picture */
+        .drag-area {
+            width: 180px;
+            height: 180px;
+            border: 2px dashed #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .drag-area.active {
+            border-color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .drag-area i {
+            font-size: 50px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .drag-area p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin: 0;
+        }
+
+        .drag-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: none;
+        }
+
+        /* Mobile responsiveness */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-picture-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Mobile menu toggle button */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile menu toggle for responsive design -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Employer Dashboard</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/EmployerDashboard" class="sidebar-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                 <a href="/Dashboard/MarkedStudents" class="sidebar-link">
+                <i class="fas fa-bookmark"></i>
+                <span>Marked Students</span>
+            </a>
+                <a href="/Dashboard/EmployerProfile" class="sidebar-link active">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="content">
+            <h1>Employer Profile</h1>
+
+            <!-- Success/Error Messages (shown conditionally) -->
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> @TempData["Error"]
+                </div>
+            }
+
+            <div class="profile-card">
+                <h2>Profile Information</h2>
+
+                <form id="profileForm" action="/Dashboard/UpdateEmployerProfileForm" method="post" enctype="multipart/form-data">
+                    <div class="profile-section">
+                        <div class="profile-picture-container">
+                            <img src="@profilePicturePath" alt="Profile Picture" class="profile-picture" id="profile-img">
+                            <button type="button" class="upload-btn" id="uploadBtn">
+                                <i class="fas fa-camera"></i> Change Photo
+                            </button>
+                            <input type="file" id="profile-picture-input" name="ProfilePicture" accept="image/*" style="display: none;">
+                            
+                            <!-- Drag & Drop Area (initially hidden) -->
+                            <div class="drag-area" id="drag-area">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & Drop or Click to Upload</p>
+                                <img id="preview-img" src="#" alt="Preview">
+                            </div>
+                        </div>
+
+                        <div style="flex: 1;">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" name="FullName" value="@employerName">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="Username" value="@username">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password">Password (leave blank to keep current)</label>
+                                <input type="password" class="form-control" id="password" name="Password" placeholder="••••••••">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" class="form-control" id="companyName" name="CompanyName" value="@companyName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="Email" value="@email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" value="@phoneNumber">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Company Description</label>
+                        <textarea class="form-control" id="description" name="Description">@description</textarea>
+                    </div>
+                    
+                    <div style="text-align: right;">
+                        <button type="button" class="cancel-btn">Cancel</button>
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Mobile menu toggle
+            $("#mobile-menu-toggle").click(function() {
+                $(".sidebar").toggleClass("active");
+            });
+
+            // Profile picture upload button
+            $("#uploadBtn").click(function() {
+                $("#profile-picture-input").click();
+            });
+
+            // Handle file selection
+            $("#profile-picture-input").change(function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Resize the image before previewing
+                    resizeImage(file, 800, 800, function(resizedImage) {
+                        $("#profile-img").attr("src", resizedImage);
+                    });
+                }
+            });
+
+            // Preview selected image
+            function previewImage(file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#profile-img").attr("src", e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+
+            // Cancel button
+            $(".cancel-btn").click(function() {
+                window.location.href = "/Dashboard/EmployerDashboard";
+            });
+
+            // Drag and drop functionality
+            const dragArea = document.getElementById("drag-area");
+            const profileInput = document.getElementById("profile-picture-input");
+            const previewImg = document.getElementById("preview-img");
+
+            // Toggle drag area
+            $("#uploadBtn").click(function() {
+                $("#profile-img").toggle();
+                $("#drag-area").toggle();
+                $(this).text($("#drag-area").is(":visible") ? "Cancel" : "Change Photo");
+            });
+
+            // Drag events
+            ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+                dragArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ["dragenter", "dragover"].forEach(eventName => {
+                dragArea.addEventListener(eventName, highlight, false);
+            });
+
+            ["dragleave", "drop"].forEach(eventName => {
+                dragArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                dragArea.classList.add("active");
+            }
+
+            function unhighlight() {
+                dragArea.classList.remove("active");
+            }
+
+            dragArea.addEventListener("drop", handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                
+                if (file && file.type.startsWith('image/')) {
+                    profileInput.files = dt.files;
+                    // Resize the image before previewing
+                    resizeImage(file, 800, 800, function(resizedImage) {
+                        previewImg.src = resizedImage;
+                        previewImg.style.display = "block";
+                        $("#profile-img").attr("src", resizedImage);
+                    });
+                }
+            }
+
+            // Resize image before uploading
+            function resizeImage(file, maxWidth, maxHeight, callback) {
+                const img = new Image();
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    img.onload = function() {
+                        // Calculate new dimensions while preserving aspect ratio
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        // Create canvas and resize image
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Get the resized image
+                        const resizedImage = canvas.toDataURL(file.type);
+                        callback(resizedImage);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // Submit form with AJAX to preserve the resized image
+            $("#profileForm").on("submit", function(e) {
+                const profileImg = document.getElementById("profile-img");
+                
+                // If the image has been changed, add it as a hidden input
+                if (profileImg.src.startsWith("data:image")) {
+                    // Create a hidden input for the base64 image
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "ProfilePictureBase64";
+                    hiddenInput.value = profileImg.src;
+                    
+                    // Append it to the form
+                    this.appendChild(hiddenInput);
+                }
+            });
+
+            // Click on drag area to select file
+            dragArea.addEventListener("click", function() {
+                profileInput.click();
+            });
+        });
+    </script>
+</body>
+</html> 

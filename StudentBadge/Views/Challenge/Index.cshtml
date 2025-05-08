@@ -1,0 +1,348 @@
+@model IEnumerable<dynamic>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges - Teacher Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px !important;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+       .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+        }
+
+        .btn-primary:hover {
+                background-color: #8a2be2;
+                border-color: #8a2be2;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border: none;
+            background-color: white;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .actions-column {
+            width: 120px;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .status-inactive {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        .btn-icon {
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            font-weight: 600;
+            color: #555;
+            border-top: none;
+            padding: 15px 10px;
+        }
+
+        .table td {
+            padding: 12px 10px;
+            vertical-align: middle;
+        }
+
+        .alert-auto-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            opacity: 0.95;
+        }
+        
+        .year-card {
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .year-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .year-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8a2be2;
+        }
+        
+        .year-stats {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+       <div class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="School Logo" style="width: 80px; height: auto;">
+                <h2>EduBadge</h2>
+                <p>Teacher Portal</p>
+            </div>
+            
+            <a href="/Teacher/Dashboard" class="sidebar-link" data-tab="dashboard">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="/ProgrammingTest/Index" class="sidebar-link">
+                <i class="fas fa-code"></i> Programming Tests
+            </a>
+            
+            <a href="#" class="sidebar-link active">
+                <i class="fas fa-trophy"></i> Challenges
+            </a>
+
+            <a href="/PendingCertificates" class="sidebar-link">
+                <i class="fas fa-certificate"></i> Verify Certificates
+            </a>
+            
+            <a href="#" class="sidebar-link" onclick="window.location.href='/Home/Login'; return false;">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>School Years</h1>
+                <a href="/Challenge/Create" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> New Challenge
+                </a>
+            </div>
+            
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-auto-close">
+                    @TempData["Success"]
+                </div>
+            }
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-auto-close">
+                    @TempData["Error"]
+                </div>
+            }
+            
+            <div class="row">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var yearGroup in Model)
+                    {
+                        <div class="col-md-4 mb-4">
+                            <div class="card year-card" onclick="window.location.href='/Challenge/ChallengesByYear?yearLevel=@yearGroup.SchoolYear'">
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h2 class="year-title mb-0">@yearGroup.SchoolYear</h2>
+                                        <i class="fas fa-school fa-2x text-muted"></i>
+                                    </div>
+                                    <div class="year-stats">
+                                        <p class="mb-1">
+                                            <i class="fas fa-trophy me-2"></i>
+                                            <strong>@yearGroup.ChallengeCount</strong> Challenges
+                                        </p>
+                                        <p class="mb-1">
+                                            <i class="fas fa-question-circle me-2"></i>
+                                            <strong>@yearGroup.TotalQuestions</strong> Questions
+                                        </p>
+                                        <p class="mb-0 text-muted">
+                                            <i class="fas fa-calendar-alt me-2"></i>
+                                            Created @yearGroup.FirstCreatedDate.ToString("MMM yyyy")
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body text-center py-5">
+                                <i class="fas fa-school fa-3x text-muted mb-3"></i>
+                                <h5>No School Years Created Yet</h5>
+                                <p class="text-muted">Create your first challenge to get started.</p>
+                                <a href="/Challenge/Create" class="btn btn-primary mt-2">
+                                    <i class="fas fa-plus-circle"></i> Create Challenge
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-close alerts after 3 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                var alerts = document.querySelectorAll('.alert-auto-close');
+                alerts.forEach(function (alert) {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.5s';
+                    setTimeout(function () {
+                        alert.remove();
+                    }, 500);
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

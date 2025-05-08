@@ -1,0 +1,2084 @@
+@{
+    var fullName = ViewBag.FullName;
+    var idNumber = ViewBag.IdNumber;
+    var course = ViewBag.Course;
+    var sectionn = ViewBag.Section;
+    var score = ViewBag.Score;
+    var allStudents = ViewBag.AllStudents as List<Student>;
+    var isProfileVisible = ViewBag.IsProfileVisible != null ? (bool)ViewBag.IsProfileVisible : false;
+    var isResumeVisible = ViewBag.IsResumeVisible != null ? (bool)ViewBag.IsResumeVisible : false;
+    var profilePicturePath = ViewBag.ProfilePicturePath;
+    var hasProfilePicture = ViewBag.HasProfilePicture != null ? (bool)ViewBag.HasProfilePicture : false;
+    var hasResume = ViewBag.HasResume != null ? (bool)ViewBag.HasResume : false;
+    
+    // Get year level information - default to 0 if not available
+    var yearLevel = ViewBag.StudentYearLevel ?? 0;
+    var isGraduate = yearLevel == 5;
+    
+    // Add timestamp to prevent caching
+    var timestamp = DateTime.Now.Ticks;
+    if (profilePicturePath != null && !profilePicturePath.Contains("?t="))
+    {
+        profilePicturePath = profilePicturePath + "?t=" + timestamp;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar is fixed on the left */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+           .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+            .logo h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin: 10px 0 5px;
+                color: #fff;
+            }
+
+            .logo p {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.8);
+                font-weight: 500;
+            }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-link i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .sidebar-link.active {
+                background: #fff6f1;
+                font-weight: bold;
+                color: #8a2be2;
+                box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-link:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.02);
+                color: #fff;
+            }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: 40%;
+            height: 150vh;
+            overflow-y: auto;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 25px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 25px;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 4px;
+                bottom: 3px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+        input:checked + .slider {
+            background-color: #8a2be2;
+        }
+
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: flex-start; /* Start from top */
+            text-align: center;
+            width: 100%;
+            padding-left: 220px; /* Offset for the sidebar */
+            padding-top: 40px;
+            overflow-y: auto;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .visibility-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .visibility-control p {
+            margin: 0 0 0 15px;
+            color: #666;
+        }
+
+        .visibility-status {
+            font-weight: 500;
+            color: #4CAF50;
+        }
+
+        /* Profile Picture Container - Enhanced */
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            padding: 25px;
+            border: 2px dashed #4CAF50;
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+            text-align: center;
+        }
+
+        .profile-pic-container:hover {
+            background-color: #e8f5e9;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .profile-pic-container p {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Edit Button */
+        .edit-button {
+            padding: 12px 22px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .edit-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Save Button */
+        .save-button {
+            padding: 12px 22px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none; /* Initially hidden */
+            font-weight: 600;
+            width: auto;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .save-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .resume-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Current Resume - Improved */
+        .current-resume {
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .current-resume a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #e8f5e9;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .current-resume a:hover {
+            background-color: #c8e6c9;
+            transform: translateY(-2px);
+        }
+
+        /* Profile Upload Styles */
+        .profile-upload {
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-upload:hover {
+            background: #e8f5e9;
+            border-color: #45a049;
+        }
+
+        .profile-upload.dragover {
+            background: #e8f5e9;
+            border-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        .profile-upload img {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
+        }
+
+        .profile-upload p {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .profile-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Resume Upload Styles */
+        .resume-upload {
+            border: 2px dashed #ccc;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+        
+        .resume-upload:hover {
+            border-color: #4CAF50;
+            background-color: #f0f9f0;
+        }
+        
+        .resume-upload.dragover {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        
+        .browse-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .browse-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .file-preview {
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            background-color: #f0f8ff;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            word-break: break-all;
+            margin-bottom: 5px;
+        }
+        
+        .file-size {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .upload-ready {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .upload-progress {
+            width: 100%;
+            margin: 15px 0;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 30px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            font-size: 14px;
+            z-index: 1;
+        }
+        
+        .resume-note {
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        #profileUploadProgress {
+            width: 100%;
+            margin: 15px 0;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            height: 30px;
+        }
+        
+        /* Change button styling */
+        .change-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 15px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .change-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive Styles */
+        @@media (max-width: 768px) {
+            .profile-container {
+                padding: 15px;
+            }
+
+            .profile-upload, .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-info {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .profile-picture {
+                width: 100%;
+                margin: 15px 0;
+            }
+
+            .profile-img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .resume-section {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        /* Mobile Menu Toggle - Improved Visibility */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle i {
+            font-size: 20px;
+            color: white;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        /* Mobile Responsive Styles - Enhanced */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .student-info {
+                padding-left: 0;
+                padding: 20px;
+                margin-top: 60px;
+                height: auto;
+            }
+
+            .profile-card, .user-info-card {
+                padding: 20px;
+            }
+
+            .visibility-control {
+                flex-direction: column;
+            }
+
+            .visibility-control p {
+                margin: 10px 0 0 0;
+            }
+
+            .profile-pic-container {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .resume-section {
+                margin-top: 20px;
+                padding: 0 20px;
+            }
+
+            .current-resume {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .profile-upload, 
+            .resume-upload {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .edit-button, 
+            .save-button {
+                width: 100%;
+                max-width: 200px;
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            /* Improve form controls for touch */
+            .switch {
+                width: 60px;
+                height: 30px;
+            }
+
+            .slider:before {
+                height: 22px;
+                width: 22px;
+                left: 4px;
+                bottom: 4px;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(30px);
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .student-info {
+                padding: 15px;
+            }
+
+            .profile-pic-container {
+                height: 180px;
+            }
+
+            .edit-button, 
+            .save-button {
+                font-size: 14px;
+            }
+        }
+
+        /* Add user info card */
+        .user-info-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .user-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .user-info-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .user-info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .user-info-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .user-info-value {
+            color: #333;
+        }
+
+        /* Password Change Styles */
+        .password-section {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-section h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .password-submit {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .password-submit:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .password-feedback {
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: none;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .password-feedback.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .password-feedback.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .profile-save-btn {
+            display: block;
+            margin: 20px auto !important;
+            background-color: #4CAF50 !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2) !important;
+        }
+
+        @@keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .upload-ready {
+            color: #28a745;
+            font-weight: bold;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .compression-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        
+        .compression-chart {
+            width: 100%;
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin: 5px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .compression-bar {
+            height: 100%;
+            background-color: #20c997;
+            transition: width 0.6s ease;
+            border-radius: 5px;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #8a2be2;
+            margin-right: 25px;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+                background-color: #8a2be2;
+        }
+
+        .section-header {
+            background: #ffeee9;
+            color: #8a2be2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .badge-pill {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .badge-primary {
+            background: #ffeee9;
+            color: #8a2be2;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .resumeThumbnail {
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            padding: 5px;
+            margin-top: 10px;
+            background-color: #ffeee9;
+        }
+
+        .view-resume-btn {
+            background-color: #8a2be2;
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 5px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .view-resume-btn:hover {
+                background-color: #8a2be2;
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 5% auto;
+            padding: 0;
+            width: 80%;
+            max-width: 900px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: #fafafa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+                color: #8a2be2;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-modal:hover {
+                color: #8a2be2;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #8a2be2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .download-btn, .alt-viewer-btn {
+            display: inline-block;
+            background-color: #8a2be2;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .download-btn:hover, .alt-viewer-btn:hover {
+                background-color: #8a2be2;
+            transform: translateY(-2px);
+        }
+
+        @@media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            #resumeViewer {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/images/student1.png?v=@DateTime.Now.Ticks" alt="StudentBadge Logo" />
+                <h2>EduBadge</h2>
+                <p>Student Portal</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/Dashboard/StudentProfile" class="sidebar-link active">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                @if (!isGraduate)
+                {
+                    <a href="/ProgrammingTest/AvailableTests" class="sidebar-link">
+                        <i class="fas fa-tasks"></i> Available Tests
+                    </a>
+                }
+                else
+                {
+                    <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <i class="fas fa-tasks"></i> Available Tests (Graduate)
+                    </span>
+                }
+                <a href="/ProgrammingTest/StudentTests" class="sidebar-link">
+                    <i class="fas fa-code"></i> Completed Tests
+                </a>
+                @if (!isGraduate)
+                {
+                    <a href="/Challenge/AvailableChallenges" class="sidebar-link">
+                        <i class="fas fa-trophy"></i> Challenges
+                    </a>
+                }
+                else
+                {
+                    <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                        <i class="fas fa-trophy"></i> Challenges (Graduate)
+                    </span>
+                }
+                <a href="/Challenge/CompletedChallenges" class="sidebar-link">
+                    <i class="fas fa-check-circle"></i> Completed Challenges
+                </a>
+                <a href="/ProgrammingTest/Certificates" class="sidebar-link">
+                    <i class="fas fa-award"></i> My Certificates
+                </a>
+                <a href="/Account/Logout" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+
+        <div class="student-info">
+            <div class="profile-card">
+                <h2>Profile Visibility</h2>
+                <div class="visibility-control">
+                    <label class="switch">
+                        <input type="checkbox" id="togglePrivacy" onchange="togglePrivacySetting()" @(isProfileVisible ? "checked" : "")>
+                        <span class="slider round"></span>
+                    </label>
+                    <p id="privacyStatus" class="visibility-status">@(isProfileVisible ? "Your profile is visible to employers." : "Your profile is hidden.")</p>
+                </div>
+
+                <!-- Current Profile Picture Section -->
+                <div class="profile-picture-section">
+                    <h3>Profile Picture</h3>
+                    
+                    <!-- Button for changing profile picture -->
+                    <button type="button" class="change-button" onclick="showDragDropArea()">
+                        <i class="fas fa-camera"></i> Change Profile Picture
+                    </button>
+
+                    <!-- Profile Picture Drag and Drop Area (initially hidden) -->
+                    <div class="profile-pic-container" id="profilePicContainer" style="display: none;" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="triggerFileInput()">
+                        <p>Drag and drop your profile picture here or click to select a file</p>
+                        <p class="file-size-note">(Max file size: 2MB)</p>
+                        <input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleFileInput(event)">
+                        <div id="profileUploadProgress" class="upload-progress" style="display: none;">
+                            <div class="progress-bar"></div>
+                            <p class="progress-text">Preparing upload...</p>
+                        </div>
+                    </div>
+
+                    <!-- Save Button (initially hidden) -->
+                    <button class="save-button profile-save-btn" id="saveProfilePic" style="display: none;" onclick="saveProfilePic()">Save Profile Picture</button>
+                </div>
+            </div>
+
+            <!-- Resume Section -->
+            <div class="resume-section-container">
+                <div class="profile-card">
+                    <h2>Resume</h2>
+                    <div class="visibility-control">
+                        <label class="switch">
+                            <input type="checkbox" id="toggleResumeVisibility" onchange="toggleResumeVisibility()" @(ViewBag.IsResumeVisible ? "checked" : "")>
+                            <span class="slider round"></span>
+                        </label>
+                        <p id="resumeVisibilityStatus" class="visibility-status">@(ViewBag.IsResumeVisible ? "Your resume is visible to others." : "Your resume is private.")</p>
+                    </div>
+
+                    <!-- Current Resume Status -->
+                    <div class="current-resume" id="currentResumeSection" style="@(ViewBag.HasResume ? "" : "display: none;")">
+                        <p>Current Resume: <a href="javascript:void(0);" onclick="openResumeModal()" id="currentResumeName">@(String.IsNullOrEmpty(ViewBag.ResumeFileName) ? "View Resume" : ViewBag.ResumeFileName)</a></p>
+                        <p class="resume-note">Last updated: @(ViewBag.ResumeUploadDate?.ToString("MMM dd, yyyy") ?? "N/A")</p>
+                        <button class="edit-button" onclick="showResumeUploadArea()">Replace Resume</button>
+                    </div>
+
+                    <!-- Add Resume Button (shown when no resume exists) -->
+                    <button class="edit-button" id="addResumeButton" style="@(ViewBag.HasResume ? "display: none;" : "")" onclick="showResumeUploadArea()">Add Resume</button>
+
+                    <!-- Resume Upload Area -->
+                    <div class="resume-upload" id="resumeDragDrop" style="display: none;">
+                        <img src="/Content/images/upload.svg" alt="Upload">
+                        <p>Drag and drop your resume here</p>
+                        <p>or</p>
+                        <button type="button" class="browse-btn" onclick="document.getElementById('resumeFileInput').click()">Browse Files</button>
+                        <p class="file-size-note">(Max file size: 5MB - PDF only)</p>
+                        <input type="file" id="resumeFileInput" accept=".pdf" style="display: none;" onchange="handleResumeFileSelect(event)">
+                        <div id="resumeUploadProgress" class="upload-progress" style="display: none;">
+                            <div class="progress-bar"></div>
+                            <p class="progress-text">Preparing upload...</p>
+                        </div>
+                        <div id="resumePreview" class="file-preview" style="display: none;">
+                            <p class="file-name">No file selected</p>
+                            <p class="file-size"></p>
+                            <p class="upload-ready">Ready to upload ✓</p>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button class="save-button" id="saveResume" style="display: none;" onclick="saveResume()">Save Resume</button>
+                </div>
+            </div>
+
+            <!-- Employer Chat Availability Section -->
+            <div class="profile-card">
+                <h2>Employer Chat Availability</h2>
+                <div class="visibility-control">
+                    <label class="switch">
+                        <input type="checkbox" id="toggleChatAvailability" onchange="toggleChatAvailability()" @(ViewBag.IsChatAvailable ? "checked" : "")>
+                        <span class="slider round"></span>
+                    </label>
+                    <p id="chatAvailabilityStatus" class="visibility-status">@(ViewBag.IsChatAvailable ? "Employers can chat with you during set hours." : "Employers cannot chat with you.")</p>
+                </div>
+
+                <div id="chatTimesContainer" style="@(ViewBag.IsChatAvailable ? "" : "display: none;")">
+                    <div class="form-group">
+                        <label for="chatStartTime">Available From:</label>
+                        <input type="time" id="chatStartTime" value="@ViewBag.ChatStartTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="chatEndTime">Available Until:</label>
+                        <input type="time" id="chatEndTime" value="@ViewBag.ChatEndTime" class="form-control">
+                    </div>
+                    <button class="edit-button" onclick="saveChatTimes()" style="margin-top: 15px;">Save Chat Hours</button>
+                </div>
+            </div>
+
+            <!-- Password Change Section -->
+            <div class="password-section">
+                <h2>Change Password</h2>
+                <form id="passwordChangeForm" class="password-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="password-submit">Change Password</button>
+                    <div id="passwordFeedback" class="password-feedback"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden input to store base64 resume file -->
+    <input type="hidden" id="base64Resume" />
+    <input type="hidden" id="resumeFileName" />
+    <!-- Hidden input to store base64 image -->
+    <input type="hidden" id="base64Image" />
+    <!-- Hidden input to store resume path -->
+    <input type="hidden" id="resumePath" value="@ViewBag.ResumePath" />
+
+    <!-- Resume Viewer Modal -->
+    <div id="resumeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal" onclick="closeResumeModal()">&times;</span>
+                <h2>Resume Viewer</h2>
+            </div>
+            <div class="modal-body">
+                <div id="viewerLoading" class="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>Loading resume...</p>
+                </div>
+                <iframe id="resumeViewer" width="100%" height="500px" style="border: none;"></iframe>
+                <div id="viewerFallback" style="display: none; text-align: center; padding: 20px;">
+                    <p>If the resume doesn't load correctly, you can:</p>
+                    <a id="directDownloadLink" href="#" class="download-btn" target="_blank">
+                        <i class="fas fa-download"></i> Download the Resume
+                    </a>
+                    <button onclick="tryAlternativeViewer()" class="alt-viewer-btn">
+                        <i class="fas fa-sync-alt"></i> Try Alternative Viewer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Show drag-and-drop area when the edit button is clicked
+        function showDragDropArea() {
+            // Hide only the profile picture edit button
+            document.querySelector('.profile-card .edit-button').style.display = 'none';  
+            document.getElementById('profilePicContainer').style.display = 'flex';  // Show the drag-and-drop area
+            
+            // Show the save button with proper styling
+            var saveBtn = document.getElementById('saveProfilePic');
+            saveBtn.style.display = 'block';
+            saveBtn.style.margin = '20px auto';
+        }
+
+        // Allow dropping of the image file
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        // Handle the file input change event (optional if you have an <input type="file">)
+        function handleFileInput(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File too large. Maximum size is 2MB.');
+                    return;
+                }
+
+                // Show progress indicator
+                const progressBar = document.querySelector('#profileUploadProgress .progress-bar');
+                const progressText = document.querySelector('#profileUploadProgress .progress-text');
+                const uploadProgress = document.getElementById('profileUploadProgress');
+                
+                uploadProgress.style.display = 'block';
+                progressBar.style.width = '30%';
+                progressText.textContent = 'Reading file...';
+
+                const originalSizeKB = (file.size / 1024).toFixed(2);
+
+                // Resize and compress the image
+                resizeImage(file, 500, 500, function(base64Image) {
+                    progressBar.style.width = '80%';
+                    progressText.textContent = 'Compressing image...';
+                    
+                    // Calculate compressed size
+                    const compressedSize = Math.round((base64Image.length * 3) / 4) - 
+                                          (base64Image.endsWith('==') ? 2 : base64Image.endsWith('=') ? 1 : 0);
+                    const compressedSizeKB = (compressedSize / 1024).toFixed(2);
+                    const compressionRatio = ((1 - (compressedSize / file.size)) * 100).toFixed(0);
+                    
+                    setTimeout(() => {
+                        // Store the base64 image string
+                        document.getElementById('base64Image').value = base64Image.split(',')[1]; // Remove the data URL prefix
+                        
+                        // Show compression results with chart
+                        document.getElementById('profilePicContainer').innerHTML = `
+                            <p>Image processed successfully</p>
+                            <div class="compression-info">
+                                <p>Original: ${originalSizeKB} KB → Compressed: ${compressedSizeKB} KB</p>
+                                <div class="compression-chart">
+                                    <div class="compression-bar" style="width: ${compressionRatio}%"></div>
+                                </div>
+                                <p class="upload-ready">Reduced by ${compressionRatio}% ✓</p>
+                            </div>
+                        `;
+                        
+                        // Show the save button
+                        document.getElementById('saveProfilePic').style.display = 'block';
+                        document.getElementById('saveProfilePic').style.margin = '20px auto';
+                    }, 100);
+                });
+            }
+        }
+
+        // Handle the drop event
+        function drop(event) {
+            event.preventDefault();
+            var file = event.dataTransfer.files[0];  // Get the first file
+
+            // Check if the file is an image
+            if (file && file.type.startsWith('image/')) {
+                // Check file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('File too large. Maximum size is 2MB.');
+                    return;
+                }
+
+                // Show progress indicator
+                const progressBar = document.querySelector('#profileUploadProgress .progress-bar');
+                const progressText = document.querySelector('#profileUploadProgress .progress-text');
+                const uploadProgress = document.getElementById('profileUploadProgress');
+                
+                uploadProgress.style.display = 'block';
+                progressBar.style.width = '30%';
+                progressText.textContent = 'Reading file...';
+
+                const originalSizeKB = (file.size / 1024).toFixed(2);
+
+                // Use the same compression function as handleFileInput
+                resizeImage(file, 500, 500, function(base64Image) {
+                    progressBar.style.width = '80%';
+                    progressText.textContent = 'Compressing image...';
+                    
+                    // Calculate compressed size
+                    const compressedSize = Math.round((base64Image.length * 3) / 4) - 
+                                          (base64Image.endsWith('==') ? 2 : base64Image.endsWith('=') ? 1 : 0);
+                    const compressedSizeKB = (compressedSize / 1024).toFixed(2);
+                    const compressionRatio = ((1 - (compressedSize / file.size)) * 100).toFixed(0);
+                    
+                    setTimeout(() => {
+                        // Store the base64 image string
+                        document.getElementById('base64Image').value = base64Image.split(',')[1]; // Remove the data URL prefix
+                        
+                        // Show compression results with chart
+                        document.getElementById('profilePicContainer').innerHTML = `
+                            <p>Image processed successfully</p>
+                            <div class="compression-info">
+                                <p>Original: ${originalSizeKB} KB → Compressed: ${compressedSizeKB} KB</p>
+                                <div class="compression-chart">
+                                    <div class="compression-bar" style="width: ${compressionRatio}%"></div>
+                                </div>
+                                <p class="upload-ready">Reduced by ${compressionRatio}% ✓</p>
+                            </div>
+                        `;
+                        
+                        // Show the save button
+                        document.getElementById('saveProfilePic').style.display = 'block';
+                        document.getElementById('saveProfilePic').style.margin = '20px auto';
+                    }, 100);
+                });
+            }
+        }
+
+        // Use form submission with the correct database column name
+        function togglePrivacySetting() {
+            var isChecked = document.getElementById("togglePrivacy").checked;
+            var statusText = isChecked ? "Your profile is visible to employers." : "Your profile is hidden.";
+            document.getElementById("privacyStatus").innerText = statusText;
+            
+            // Update profile visibility with setting type indicator
+            updateProfileVisibility(isChecked);
+        }
+        
+        // Save profile visibility with setting type indicator
+        function updateProfileVisibility(isVisible) {
+            fetch('/Dashboard/UpdateProfileVisibility', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    isVisible: isVisible
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Profile visibility updated:", data);
+                if (!data.success) {
+                    throw new Error(data.message || "Failed to update profile visibility");
+                }
+            })
+            .catch(error => {
+                console.error("Error updating profile visibility:", error);
+                // Revert the UI state on error
+                const toggle = document.getElementById("togglePrivacy");
+                toggle.checked = !toggle.checked;
+                const statusText = toggle.checked ? "Your profile is visible to employers." : "Your profile is hidden.";
+                document.getElementById("privacyStatus").innerText = statusText;
+                alert("Failed to update profile visibility. Please try again later.");
+            });
+        }
+        
+        // Resume visibility toggle
+        function toggleResumeVisibility() {
+            var isChecked = document.getElementById("toggleResumeVisibility").checked;
+            var statusText = isChecked ? "Your resume is visible to others." : "Your resume is private.";
+            document.getElementById("resumeVisibilityStatus").innerText = statusText;
+            
+            // Update resume visibility with setting type indicator
+            updateResumeVisibility(isChecked);
+        }
+        
+        // Save resume visibility with setting type indicator
+        function updateResumeVisibility(isVisible) {
+            fetch('/Dashboard/UpdateResumeVisibility', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    isVisible: isVisible
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Resume visibility updated:", data);
+                if (!data.success) {
+                    throw new Error(data.message || "Failed to update resume visibility");
+                }
+            })
+            .catch(error => {
+                console.error("Error updating resume visibility:", error);
+                // Revert the UI state on error
+                const toggle = document.getElementById("toggleResumeVisibility");
+                toggle.checked = !toggle.checked;
+                const statusText = toggle.checked ? "Your resume is visible to others." : "Your resume is private.";
+                document.getElementById("resumeVisibilityStatus").innerText = statusText;
+                alert("Failed to update resume visibility. Please try again later.");
+            });
+        }
+
+        // Show resume upload area
+        function showResumeUploadArea() {
+            document.getElementById('addResumeButton').style.display = 'none';
+            document.getElementById('currentResumeSection').style.display = 'none';
+            document.getElementById('resumeDragDrop').style.display = 'flex';
+            document.getElementById('saveResume').style.display = 'inline-block';
+            
+            // Set up drag and drop events
+            const resumeDropArea = document.getElementById('resumeDragDrop');
+            
+            resumeDropArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('dragover');
+            });
+
+            resumeDropArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+            });
+
+            resumeDropArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+                
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    processResumeFile(file);
+                }
+            });
+            
+            // Add a click event listener to the browse button
+            document.querySelector('.browse-btn').addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent the container's click from triggering too
+                document.getElementById('resumeFileInput').click();
+            });
+        }
+
+        // Handle file selection through the file input
+        function handleResumeFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                processResumeFile(file);
+            }
+        }
+
+        // Process the resume file
+        function processResumeFile(file) {
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File too large. Maximum size is 5MB.');
+                return;
+            }
+            
+            // Check file type
+            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please select a valid resume file (PDF, DOC, DOCX).');
+                return;
+            }
+
+            // Show progress
+            const progressBar = document.querySelector('#resumeUploadProgress .progress-bar');
+            const progressText = document.querySelector('#resumeUploadProgress .progress-text');
+            const uploadProgress = document.getElementById('resumeUploadProgress');
+            const dragDropArea = document.getElementById('resumeDragDrop');
+            const preview = document.getElementById('resumePreview');
+            
+            // Hide drag drop area, show progress
+            dragDropArea.style.display = 'none';
+            uploadProgress.style.display = 'block';
+            progressBar.style.width = '40%';
+            progressText.textContent = 'Reading file...';
+            
+            // Read file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                progressBar.style.width = '80%';
+                progressText.textContent = 'Processing...';
+                
+                // Store in hidden inputs
+                document.getElementById('base64Resume').value = e.target.result.split(',')[1];
+                document.getElementById('resumeFileName').value = file.name;
+                
+                // Show preview
+                setTimeout(() => {
+                    uploadProgress.style.display = 'none';
+                    preview.style.display = 'block';
+                    preview.querySelector('.file-name').textContent = file.name;
+                    preview.querySelector('.file-size').textContent = `(${(file.size / 1024).toFixed(2)} KB)`;
+                    
+                    // Ensure the save button is visible
+                    document.getElementById('saveResume').style.display = 'block';
+                }, 500);
+            };
+            
+            reader.onerror = function() {
+                alert('Error reading file. Please try again.');
+                uploadProgress.style.display = 'none';
+                dragDropArea.style.display = 'block';
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Toggle chat availability
+        function toggleChatAvailability() {
+            var isChecked = document.getElementById("toggleChatAvailability").checked;
+            var statusText = isChecked ? "Employers can chat with you during set hours." : "Employers cannot chat with you.";
+            document.getElementById("chatAvailabilityStatus").innerText = statusText;
+            
+            // Show/hide the time settings based on the toggle state
+            document.getElementById("chatTimesContainer").style.display = isChecked ? "block" : "none";
+
+            // Save the current state without time settings and also update video call availability
+            updateChatAvailability(isChecked);
+            
+            // Also update video call availability to match chat availability
+            updateVideoCallAvailability(isChecked);
+        }
+
+        // Update video call availability to match chat availability setting
+        function updateVideoCallAvailability(isAvailable) {
+            fetch('/Dashboard/UpdateVideoCallAvailability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    isAvailable: isAvailable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Video call availability updated:", data);
+            })
+            .catch(error => console.error("Error updating video call availability:", error));
+        }
+        
+        // Save chat availability to the server
+        function updateChatAvailability(isAvailable) {
+            fetch('/Dashboard/UpdateChatAvailability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    isAvailable: isAvailable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Chat availability updated:", data);
+            })
+            .catch(error => console.error("Error updating chat availability:", error));
+        }
+
+        // Save chat time settings to the server
+        function saveChatTimes() {
+            var startTime = document.getElementById("chatStartTime").value;
+            var endTime = document.getElementById("chatEndTime").value;
+            
+            // Validate times
+            if (!startTime || !endTime) {
+                alert("Please set both start and end times.");
+                return;
+            }
+            
+            // Convert to Date objects for comparison
+            var start = new Date("2000-01-01T" + startTime);
+            var end = new Date("2000-01-01T" + endTime);
+            
+            // Check if end time is after start time
+            if (end <= start) {
+                alert("End time must be after start time.");
+                return;
+            }
+            
+            fetch('/Dashboard/UpdateChatTimes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    startTime: startTime,
+                    endTime: endTime
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Chat availability times saved successfully!");
+                } else {
+                    alert("Failed to save chat times: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error saving chat times:", error);
+                alert("Error saving chat times. Please try again.");
+            });
+        }
+
+        // Save resume to the server
+        function saveResume() {
+            const base64Resume = document.getElementById('base64Resume').value;
+            const fileName = document.getElementById('resumeFileName').value;
+            
+            if (!base64Resume) {
+                alert('No file selected.');
+                return;
+            }
+            
+            // Disable save button and show loading state
+            const saveButton = document.getElementById('saveResume');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Uploading...';
+            saveButton.disabled = true;
+            
+            fetch('/FileHandler/SaveResume', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ResumeFile: base64Resume,
+                    ResumeFileName: fileName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                saveButton.disabled = false;
+                saveButton.textContent = originalText;
+                
+                if (data.success) {
+                    alert('Resume uploaded successfully!');
+                    
+                    // Update the current resume section
+                    document.getElementById('currentResumeName').textContent = fileName;
+                    document.getElementById('currentResumeName').href = data.resumeUrl;
+                    
+                    // Show current resume section, hide upload container
+                    document.getElementById('currentResumeSection').style.display = 'block';
+                    document.getElementById('resumeDragDrop').style.display = 'none';
+                    document.getElementById('saveResume').style.display = 'none';
+                    document.getElementById('addResumeButton').style.display = 'none';
+                    
+                    // Reload the page to show updated information
+                    window.location.reload();
+                } else {
+                    alert('Failed to upload resume: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading resume:', error);
+                alert('Error uploading resume. Please try again.');
+                saveButton.disabled = false;
+                saveButton.textContent = originalText;
+            });
+        }
+
+        // Function to handle profile picture upload
+        function saveProfilePic() {
+            var base64Image = document.getElementById('base64Image').value;
+
+            if (!base64Image) {
+                alert("No image selected.");
+                return;
+            }
+
+            // Show loader or disable button
+            const saveButton = document.getElementById('saveProfilePic');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Uploading...';
+            saveButton.disabled = true;
+
+            fetch('/FileHandler/SaveProfilePicture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ Base64Image: base64Image })
+            })
+            .then(response => response.json())
+            .then(data => {
+                saveButton.disabled = false;
+                saveButton.textContent = originalText;
+                
+                if (data.success) {
+                    alert("Profile picture saved successfully!");
+                    
+                    // Hide upload container and show change button
+                    document.getElementById('profilePicContainer').style.display = 'none';
+                    document.getElementById('saveProfilePic').style.display = 'none';
+                    document.querySelector('.change-button').style.display = 'block';
+                    
+                    // Reload the page to show the new profile picture
+                    window.location.reload();
+                } else {
+                    alert("Failed to save profile picture: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error saving profile picture:", error);
+                alert("Error saving profile picture. Please try again.");
+                saveButton.disabled = false;
+                saveButton.textContent = originalText;
+            });
+        }
+        
+        // Resize the image before sending it (utility function)
+        function resizeImage(file, maxWidth, maxHeight, callback) {
+            var img = new Image();
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+
+                    // Calculate the new dimensions
+                    var ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                    var width = img.width * ratio;
+                    var height = img.height * ratio;
+
+                    // Set the canvas size
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    // Draw the image on the canvas
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Get the resized image as Base64 with compression
+                    // Adjust quality based on original file size for better compression
+                    let quality = 0.7; // Default quality
+                    if (file.size > 1000000) { // If larger than 1MB
+                        quality = 0.5;
+                    } else if (file.size < 200000) { // If smaller than 200KB
+                        quality = 0.85;
+                    }
+                    
+                    // For PNG images, use PNG format with lower quality
+                    if (file.type === 'image/png') {
+                        callback(canvas.toDataURL('image/png', quality));
+                    } else {
+                        // For other formats (JPEG, etc.), convert to JPEG for better compression
+                        callback(canvas.toDataURL('image/jpeg', quality));
+                    }
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Profile Picture Upload
+        function handleProfilePictureUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append('profilePicture', file);
+
+                fetch('/FileHandler/UploadProfilePicture', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('.profile-img').src = data.imagePath;
+                        alert('Profile picture uploaded successfully!');
+                    } else {
+                        alert('Failed to upload profile picture: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to upload profile picture. Please try again.');
+                });
+            }
+        }
+
+        // Drag and Drop Functionality for profile picture only
+        function setupProfilePictureDragAndDrop() {
+            const profileUpload = document.getElementById('profilePicContainer');
+
+            if (profileUpload) {
+                // Profile Picture Drag and Drop
+                profileUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    profileUpload.classList.add('dragover');
+                });
+
+                profileUpload.addEventListener('dragleave', () => {
+                    profileUpload.classList.remove('dragover');
+                });
+
+                profileUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    profileUpload.classList.remove('dragover');
+                    const file = e.dataTransfer.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const input = document.getElementById('profilePictureInput');
+                        input.files = e.dataTransfer.files;
+                        handleProfilePictureUpload(input);
+                    } else {
+                        alert('Please upload an image file.');
+                    }
+                });
+            }
+        }
+
+        // Initialize profile picture drag and drop when the page loads
+        document.addEventListener('DOMContentLoaded', setupProfilePictureDragAndDrop);
+
+        // Mobile sidebar functionality
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target) && window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Function to trigger file input when container is clicked
+        function triggerFileInput() {
+            document.getElementById('profilePictureInput').click();
+        }
+
+        // Password Change Functionality
+        $(document).ready(function() {
+            // Initialize and verify resume visibility toggle state
+            console.log("Resume visibility from server:", @(ViewBag.IsResumeVisible ? "true" : "false"));
+            const resumeToggle = document.getElementById("toggleResumeVisibility");
+            if (resumeToggle) {
+                console.log("Initial resume toggle state:", resumeToggle.checked);
+            }
+            
+            // Initialize and verify profile visibility toggle state
+            console.log("Profile visibility from server:", @(isProfileVisible ? "true" : "false"));
+            const profileToggle = document.getElementById("togglePrivacy");
+            if (profileToggle) {
+                console.log("Initial profile toggle state:", profileToggle.checked);
+            }
+            
+            // Password form handling
+            $('#passwordChangeForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const currentPassword = $('#currentPassword').val();
+                const newPassword = $('#newPassword').val();
+                const confirmPassword = $('#confirmPassword').val();
+                const feedbackElement = $('#passwordFeedback');
+                
+                // Clear previous feedback
+                feedbackElement.removeClass('success error').hide();
+                
+                // Validate passwords
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    feedbackElement.text('All fields are required.').addClass('error').show();
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    feedbackElement.text('New passwords do not match.').addClass('error').show();
+                    return;
+                }
+                
+                // Submit password change request
+                $.ajax({
+                    url: '/StudentDashboard/ChangeStudentPassword',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        CurrentPassword: currentPassword,
+                        NewPassword: newPassword
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            feedbackElement.text(response.message || 'Password changed successfully!').addClass('success').show();
+                            $('#passwordChangeForm')[0].reset();
+                        } else {
+                            feedbackElement.text(response.message || 'Failed to change password.').addClass('error').show();
+                        }
+                    },
+                    error: function() {
+                        feedbackElement.text('An error occurred. Please try again later.').addClass('error').show();
+                    }
+                });
+            });
+        });
+        
+        // Resume Modal Functions
+        function openResumeModal() {
+            const resumePath = document.getElementById('resumePath').value;
+            const resumeModal = document.getElementById('resumeModal');
+            const resumeViewer = document.getElementById('resumeViewer');
+            const viewerLoading = document.getElementById('viewerLoading');
+            const viewerFallback = document.getElementById('viewerFallback');
+            const directDownloadLink = document.getElementById('directDownloadLink');
+            
+            // Reset elements
+            viewerLoading.style.display = 'block';
+            viewerFallback.style.display = 'none';
+            resumeViewer.style.display = 'none';
+            
+            // Set direct download link
+            directDownloadLink.href = resumePath;
+            
+            // Use Google Docs Viewer to display the resume - this works for PDFs, DOCs, etc.
+            // Need to use the full URL including domain for Google Docs Viewer
+            const fullUrl = window.location.origin + resumePath;
+            const encodedUrl = encodeURIComponent(fullUrl);
+            resumeViewer.src = "https://docs.google.com/viewer?url=" + encodedUrl + "&embedded=true";
+            
+            // Show the modal
+            resumeModal.style.display = 'block';
+            
+            // Disable scrolling on the body
+            document.body.style.overflow = 'hidden';
+            
+            // Set timeout to show fallback if iframe doesn't load in 5 seconds
+            setTimeout(() => {
+                viewerFallback.style.display = 'block';
+            }, 5000);
+            
+            // Handle iframe load event
+            resumeViewer.onload = function() {
+                viewerLoading.style.display = 'none';
+                resumeViewer.style.display = 'block';
+            };
+        }
+        
+        function tryAlternativeViewer() {
+            const resumePath = document.getElementById('resumePath').value;
+            const resumeViewer = document.getElementById('resumeViewer');
+            const viewerLoading = document.getElementById('viewerLoading');
+            
+            // Reset elements
+            viewerLoading.style.display = 'block';
+            resumeViewer.style.display = 'none';
+            
+            // Try Office 365 Viewer instead
+            if (resumePath.toLowerCase().endsWith('.pdf')) {
+                // For PDFs, try using PDF.js viewer
+                resumeViewer.src = resumePath;
+            } else {
+                // For Office documents, try Microsoft Office Web Viewer
+                const encodedUrl = encodeURIComponent(window.location.origin + resumePath);
+                resumeViewer.src = "https://view.officeapps.live.com/op/embed.aspx?src=" + encodedUrl;
+            }
+            
+            // Handle iframe load event
+            resumeViewer.onload = function() {
+                viewerLoading.style.display = 'none';
+                resumeViewer.style.display = 'block';
+            };
+        }
+        
+        function closeResumeModal() {
+            const resumeModal = document.getElementById('resumeModal');
+            const resumeViewer = document.getElementById('resumeViewer');
+            
+            // Hide the modal
+            resumeModal.style.display = 'none';
+            
+            // Clear the iframe source to stop any ongoing loading
+            resumeViewer.src = '';
+            
+            // Re-enable scrolling on the body
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal when clicking outside the content
+        window.onclick = function(event) {
+            const resumeModal = document.getElementById('resumeModal');
+            if (event.target === resumeModal) {
+                closeResumeModal();
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeResumeModal();
+            }
+        });
+    </script>
+</body>
+</html>

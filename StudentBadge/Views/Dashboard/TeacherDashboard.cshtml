@@ -1,0 +1,2704 @@
+@model List<StudentBadge.Models.Student>
+@{
+    var teacherName = ViewBag.TeacherName;
+    var teacherId = ViewBag.TeacherId;
+    var department = ViewBag.Department;
+    var position = ViewBag.Position;
+    var totalStudentCount = ViewBag.TotalStudentCount;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Portal</title>
+
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+      .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .teacher-info {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .teacher-details {
+            flex: 1;
+        }
+
+        .teacher-details h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #8a2be2;
+        }
+
+        .teacher-id {
+            display: inline-block;
+            background: #ffeee9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8a2be2;
+            margin-bottom: 12px;
+        }
+
+        .department-info {
+            display: flex;
+            gap: 15px;
+        }
+
+        .department-box, .position-box {
+            background: #f8f9fa;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .department-box i, .position-box i {
+            margin-right: 8px;
+                color: #8a2be2;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffeee9;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+        .stat-icon i {
+            font-size: 20px;
+            color: #8a2be2;
+        }
+
+        .stat-details h3 {
+            font-size: 22px;
+            margin: 0;
+            color: #8a2be2;
+        }
+
+        .stat-details p {
+            font-size: 14px;
+            margin: 5px 0 0;
+            color: #555;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #8a2be2;
+            margin-bottom: 5px;
+        }
+
+        .student-list {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .student-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .student-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .student-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .student-id-number {
+            font-size: 14px;
+            background: #f5f5f5;
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+
+        .student-info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .info-badge {
+            font-size: 13px;
+            background: #f1f8e9;
+            padding: 3px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-badge i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .badge-platinum {
+            background: linear-gradient(145deg, #e6e6e6, #f0f0f0);
+            color: #7b7b7b;
+            border: 1px solid #d4d4d4;
+        }
+
+        .badge-gold {
+            background: linear-gradient(145deg, #fef9e7, #fcf3cf);
+            color: #b7950b;
+            border: 1px solid #f9e79f;
+        }
+
+        .badge-silver {
+            background: linear-gradient(145deg, #f5f7fa, #c3c3c3);
+            color: #616a6b;
+            border: 1px solid #d5d8dc;
+        }
+
+        .badge-bronze {
+            background: linear-gradient(145deg, #edbb99, #dc7633);
+            color: #873600;
+            border: 1px solid #e59866;
+        }
+
+        .badge-rising-star {
+            background: linear-gradient(145deg, #d6eaf8, #85c1e9);
+            color: #1b4f72;
+            border: 1px solid #aed6f1;
+        }
+
+        .badge-warning {
+            background: linear-gradient(145deg, #fadbd8, #f5b7b1);
+            color: #943126;
+            border: 1px solid #f1948a;
+        }
+
+        .student-achievements-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -10px;
+            margin-left: -10px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group-grade {
+            flex: 0 0 calc(20% - 20px);
+            margin: 0 10px 15px;
+        }
+
+        @@media (max-width: 992px) {
+            .form-group-grade {
+                flex: 0 0 calc(33.33% - 20px);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .form-group-grade {
+                flex: 0 0 calc(50% - 20px);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .form-group-grade {
+                flex: 0 0 calc(100% - 20px);
+            }
+        }
+
+        .score-calculation {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .score-formula, .overall-score {
+            margin: 5px 0;
+        }
+
+        .score-formula p, .overall-score p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+                background-color: #8a2be2;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .success-message, .error-message {
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #f5f5f5;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #5c6bc0;
+            color: white;
+        }
+
+        /* Achievement entries styling */
+        .achievements-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-entry {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .achievement-title {
+            flex: 1;
+        }
+        
+        .remove-achievement {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .add-achievement {
+            margin-bottom: 15px;
+        }
+
+        .comments-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .comment-entry {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .comment-text {
+            flex: 1;
+        }
+        
+        .remove-comment {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .add-comment {
+            margin-bottom: 15px;
+        }
+
+        .disabled-grade {
+            opacity: 0.6;
+        }
+        .disabled-grade input {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        /* Student card style */
+        .student-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #8a2be2;
+            transition: all 0.3s ease;
+        }
+
+        .student-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Pill styles for badges */
+        .pill {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .pill-primary {
+            background: #ffeee9;
+            color: #8a2be2;
+        }
+
+        /* Pagination styles */
+        .page-link {
+            color: #8a2be2;
+            border-color: #ffe0d9;
+        }
+
+        .page-link:hover {
+            background-color: #ffeee9;
+            border-color: #8a2be2;
+            color: #8a2be2;
+        }
+
+        .page-item.active .page-link {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+        }
+
+        h1, h2, h3 {
+            color: #8a2be2;
+        }
+
+        .student-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .student-actions .action-btn {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #ffeee9;
+                color: #8a2be2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .student-actions .action-btn:hover {
+                    background: #8a2be2;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Tab content styles for proper hide/show */
+        .tab-content > .tab-pane {
+            display: none;
+        }
+        
+        .tab-content > .active {
+            display: block;
+        }
+        
+        .tab-content > .tab-pane.show.active {
+            display: block;
+        }
+        
+        /* Override for specific tab styles */
+        #grades-content, #attendance-content {
+            display: none;
+        }
+        
+        #grades-content.active, #attendance-content.active {
+            display: block;
+        }
+        
+        /* Add CSS for attendance tabs */
+        .nav-tabs .nav-link {
+            color: #5a6268;
+            border: 1px solid #dee2e6;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background-color: #8a2be2;
+            color: white;
+                border-color: #8a2be2;
+        }
+        
+        .attendance-records-table {
+            margin-top: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .attendance-records-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 12px 15px;
+        }
+        
+        .attendance-records-table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .attendance-records-table tbody tr:hover {
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+        
+        .attendance-search {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .attendance-search:focus {
+                border-color: #8a2be2;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+            outline: none;
+        }
+        
+        .attendance-records-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 25px;
+        }
+        
+        .attendance-records-container h5 {
+            font-size: 18px;
+            color: #8a2be2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .attendance-records-container h5:before {
+            content: "\f073";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: #8a2be2;
+        }
+        
+        .attendance-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #8a2be2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* Extra-Curricular styles */
+        .extracurricular-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #8a2be2;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .extracurricular-records-table {
+            margin-top: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .extracurricular-records-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            color: #495057;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 12px 15px;
+        }
+        
+        .extracurricular-records-table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .extracurricular-records-table tbody tr:hover {
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+        
+        .extracurricular-search {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .extracurricular-search:focus {
+            border-color: #8a2be2;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+            outline: none;
+        }
+        
+        .extracurricular-records-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 25px;
+        }
+        
+        .extracurricular-records-container h5 {
+            font-size: 18px;
+                color: #8a2be2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .extracurricular-recording-form h5 {
+            font-size: 18px;
+            color: #8a2be2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .extracurricular-recording-form h5:before {
+            content: "\f091";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+                color: #8a2be2;
+        }
+        
+        /* Styling for score buttons */
+        .score-buttons {
+            width: 100%;
+            padding: 5px 0;
+        }
+        
+        .score-buttons .score-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+        }
+        
+        .score-buttons .score-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-success {
+            background-color: #198754;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-primary {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-info {
+            background-color: #0dcaf0;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="School Logo" style="width: 80px; height: auto;">
+                <h2>EduBadge</h2>
+                <p>Teacher Portal</p>
+            </div>
+            
+            <a href="#" class="sidebar-link active" data-tab="dashboard">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="/ProgrammingTest/Index" class="sidebar-link">
+                <i class="fas fa-code"></i> Programming Tests
+            </a>
+            
+            <a href="/Challenge/Index" class="sidebar-link">
+                <i class="fas fa-trophy"></i> Challenges
+            </a>
+            
+            <a href="/PendingCertificates" class="sidebar-link">
+                <i class="fas fa-certificate"></i> Verify Certificates
+            </a>
+            
+            <a href="#" class="sidebar-link" onclick="window.location.href='/Home/Login'; return false;">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Teacher Portal</h1>
+            </div>
+            
+            <!-- Teacher Info Section -->
+            <div class="teacher-info">
+                <div class="teacher-details">
+                    <h2>@teacherName</h2>
+                    <span class="teacher-id">Teacher ID: @teacherId</span>
+                    <div class="department-info">
+                        <div class="department-box">
+                            <i class="fas fa-building"></i> Department: @department
+                        </div>
+                        <div class="position-box">
+                            <i class="fas fa-user-tie"></i> Position: @position
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>@totalStudentCount</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, ID, or course...">
+            </div>
+            
+            <!-- Student List -->
+            <div class="student-list">
+                <h2>Student Management</h2>
+                <p>Click on a student to manage their achievements, comments, and grades.</p>
+                
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var student in Model)
+                    {
+                        <div class="student-item" data-badge="@student.BadgeColor">
+                            <div class="student-header">
+                                <h3 class="student-name">@student.FullName</h3>
+                                <span class="student-id-number">@student.IdNumber</span>
+                            </div>
+                            
+                            <div class="student-info-row">
+                                <span class="info-badge">
+                                    <i class="fas fa-graduation-cap"></i> @student.Course
+                                </span>
+                                <span class="info-badge">
+                                    <i class="fas fa-users"></i> @student.Section
+                                </span>
+                                <span class="info-badge badge-@student.BadgeColor">
+                                    <i class="fas fa-medal"></i> @student.BadgeName
+                                </span>
+                                <span class="info-badge">
+                                    <i class="fas fa-user-graduate"></i> Year: @(student.GradeLevel == 5 ? "Graduated" : student.GradeLevel?.ToString())
+                                </span>
+                            </div>
+                            
+                            <!-- Achievements Form (Hidden by default) -->
+                            <div class="student-achievements-form" id="form-@student.IdNumber">
+                                <ul class="nav nav-tabs mb-3" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="grades-tab-@student.IdNumber" data-bs-toggle="tab" data-bs-target="#grades-@student.IdNumber" type="button" role="tab" aria-selected="true">Grades & Achievements</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="extracurricular-tab-@student.IdNumber" data-bs-toggle="tab" data-bs-target="#extracurricular-@student.IdNumber" type="button" role="tab" aria-selected="false">Extra-Curricular</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="attendance-tab-@student.IdNumber" data-bs-toggle="tab" data-bs-target="#attendance-@student.IdNumber" type="button" role="tab" aria-selected="false">Attendance</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="repeater-tab-@student.IdNumber" data-bs-toggle="tab" data-bs-target="#repeater-@student.IdNumber" type="button" role="tab" aria-selected="false">Repeater Student</button>
+                                    </li>
+                                    @if (student.IsTransferee)
+                                    {
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="transferee-tab-@student.IdNumber" data-bs-toggle="tab" data-bs-target="#transferee-@student.IdNumber" type="button" role="tab" aria-selected="false">Transferee Status</button>
+                                    </li>
+                                    }
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="grades-@student.IdNumber" role="tabpanel">
+                                        <div class="form-row">
+                                            <div class="form-group form-group-grade">
+                                                <label for="first-year-@student.IdNumber">1st Year Grade</label>
+                                                <input type="number" class="form-control" id="first-year-@student.IdNumber" min="0" max="100" step="0.01" value="@student.FirstYearGrade">
+                                            </div>
+                                            
+                                            <div class="form-group form-group-grade">
+                                                <label for="second-year-@student.IdNumber">2nd Year Grade</label>
+                                                <input type="number" class="form-control" id="second-year-@student.IdNumber" min="0" max="100" step="0.01" value="@student.SecondYearGrade">
+                                            </div>
+                                            
+                                            <div class="form-group form-group-grade">
+                                                <label for="third-year-@student.IdNumber">3rd Year Grade</label>
+                                                <input type="number" class="form-control" id="third-year-@student.IdNumber" min="0" max="100" step="0.01" value="@student.ThirdYearGrade">
+                                            </div>
+                                            
+                                            <div class="form-group form-group-grade">
+                                                <label for="fourth-year-@student.IdNumber">4th Year Grade</label>
+                                                <input type="number" class="form-control" id="fourth-year-@student.IdNumber" min="0" max="100" step="0.01" value="@student.FourthYearGrade">
+                                            </div>
+                                        </div>
+                                        
+ 
+                                    
+                                        <!-- Multiple Achievements Section -->
+                                        <div class="form-group">
+                                            <label>Achievements</label>
+                                            <div class="achievements-container" id="achievements-container-@student.IdNumber">
+                                                @if (!string.IsNullOrEmpty(student.Achievements))
+                                                {
+                                                    var achievementEntries = student.Achievements.Split('|').Where(a => !string.IsNullOrEmpty(a));
+                                                    foreach (var entry in achievementEntries)
+                                                    {
+                                                        var achievementTitle = entry.Trim();
+                                                        
+                                                        <div class="achievement-entry">
+                                                            <input type="text" class="form-control achievement-title" placeholder="Achievement title" value="@achievementTitle">
+                                                            <button type="button" class="btn btn-danger remove-achievement">✕</button>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="achievement-entry">
+                                                    <input type="text" class="form-control achievement-title" placeholder="Achievement title">
+                                                    <button type="button" class="btn btn-danger remove-achievement">✕</button>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-info add-achievement" data-student-id="@student.IdNumber">
+                                                <i class="fas fa-plus"></i> Add Achievement
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>Comments</label>
+                                            <div class="comments-container" id="comments-container-@student.IdNumber">
+                                                @if (!string.IsNullOrEmpty(student.Comments))
+                                                {
+                                                    var commentEntries = student.Comments.Split('|').Where(c => !string.IsNullOrEmpty(c));
+                                                    foreach (var comment in commentEntries)
+                                                    {
+                                                        var commentText = comment.Trim();
+                                                        
+                                                        <div class="comment-entry">
+                                                            <textarea class="form-control comment-text" placeholder="Add comment">@commentText</textarea>
+                                                            <button type="button" class="btn btn-danger remove-comment">✕</button>
+                                                        </div>
+                                                    }
+                                                }
+                                                <div class="comment-entry">
+                                                    <textarea class="form-control comment-text" placeholder="Add comment"></textarea>
+                                                    <button type="button" class="btn btn-danger remove-comment">✕</button>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-info add-comment" data-student-id="@student.IdNumber">
+                                                <i class="fas fa-plus"></i> Add Comment
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="button-group">
+                                            <button class="btn btn-primary save-grades-btn" data-student-id="@student.IdNumber">Save Grades</button>
+                                            <button class="btn btn-secondary save-notes-btn" data-student-id="@student.IdNumber">Save Notes</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tab-pane fade" id="extracurricular-@student.IdNumber" role="tabpanel">
+                                        <div class="extracurricular-recording-form">
+                                            <h5>Record Extra-Curricular Involvement</h5>
+                                            <form asp-action="RecordExtraCurricular" asp-controller="Teacher" method="post" enctype="multipart/form-data" class="extracurricular-form" id="extracurricular-form-@student.IdNumber">
+                                                <input type="hidden" name="TeacherId" value="@teacherId" />
+                                                <input type="hidden" name="StudentId" value="@student.IdNumber" />
+                                                
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Activity Name</label>
+                                                            <input type="text" name="ActivityName" class="form-control" placeholder="Enter activity name" required />
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Activity Date</label>
+                                                            <input type="date" name="ActivityDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Activity Description</label>
+                                                            <textarea name="ActivityDescription" class="form-control" rows="3" placeholder="Briefly describe the activity"></textarea>
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Score</label>
+                                                            <div class="d-flex score-buttons justify-content-between">
+                                                                <button type="button" class="btn btn-outline-success score-btn" data-score="100">5</button>
+                                                                <button type="button" class="btn btn-outline-primary score-btn" data-score="90">4</button>
+                                                                <button type="button" class="btn btn-outline-info score-btn" data-score="75">3</button>
+                                                                <button type="button" class="btn btn-outline-warning score-btn" data-score="60">2</button>
+                                                                <button type="button" class="btn btn-outline-danger score-btn" data-score="50">1</button>
+                                                            </div>
+                                                            <input type="hidden" name="Score" id="score-value-@student.IdNumber" value="0" required />
+                                                            <small class="text-muted">5 = 100, 4 = 90, 3 = 75, 2 = 60, 1 = 50</small>
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Student Rank/Achievement</label>
+                                                            <input type="text" name="Rank" class="form-control" placeholder="Enter rank or achievement (e.g. Champion, Runner-up, N/A)" />
+                                                            <small class="text-muted">Enter the student's rank, position, or achievement in this activity</small>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Activity Category</label>
+                                                            <select name="ActivityCategory" class="form-control" required>
+                                                                <option value="">-- Select Category --</option>
+                                                                <option value="Programming">Programming</option>
+                                                                <option value="Software">Software</option>
+                                                                <option value="Hardware">Hardware</option>
+                                                                <option value="AI">AI</option>
+                                                                <option value="Networking">Networking</option>
+                                                                <option value="Web Development">Web Development</option>
+                                                                <option value="Mobile Development">Mobile Development</option>
+                                                                <option value="Game Development">Game Development</option>
+                                                                <option value="Data Science">Data Science</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Proof of Participation (Image)</label>
+                                                            <input type="file" name="ProofImage" class="form-control" accept="image/*" required />
+                                                            <small class="text-muted">Upload certificate, photo, or other proof</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary extracurricular-submit-btn">
+                                                        <i class="fas fa-save"></i> Record Activity
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="extracurricular-form-status mt-3" style="display: none;">
+                                                    <div class="alert alert-info">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="spinner-border spinner-border-sm me-2" role="status">
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                            <div>Saving activity record...</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                        <div class="extracurricular-records-container mt-4">
+                                            <h5><i class="fas fa-trophy"></i> Extra-Curricular Activities</h5>
+                                            <p class="text-muted small mb-3">View and manage all recorded extra-curricular activities for this student.</p>
+                                            <div class="extracurricular-records-list" id="extracurricular-records-@student.IdNumber">
+                                                <div class="text-center py-3 extracurricular-loading">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <p class="mt-2">Loading extra-curricular records...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tab-pane fade" id="attendance-@student.IdNumber" role="tabpanel">
+                                        <div class="attendance-recording-form">
+                                            <h5>Record Seminar/Webinar Attendance</h5>
+                                            <form asp-action="RecordAttendance" asp-controller="Teacher" method="post" enctype="multipart/form-data" class="attendance-form" id="attendance-form-@student.IdNumber">
+                                                <input type="hidden" name="TeacherId" value="@teacherId" />
+                                                <input type="hidden" name="StudentId" value="@student.IdNumber" />
+                                                
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Event Name</label>
+                                                            <input type="text" name="EventName" class="form-control" placeholder="Enter seminar or webinar name" required />
+                                                        </div>
+                                                        
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Event Date</label>
+                                                            <input type="date" name="EventDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-label">Event Description</label>
+                                                            <textarea name="EventDescription" class="form-control" rows="3" placeholder="Briefly describe the event"></textarea>
+                                                        </div>
+                                                        
+                                                        <!-- Score field removed - scoring now based on entry count -->
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12 mb-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Proof of Attendance (Image)</label>
+                                                            <input type="file" name="ProofImage" class="form-control" accept="image/*" required />
+                                                            <small class="text-muted">Upload certificate, screenshot, or other proof</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn btn-primary attendance-submit-btn">
+                                                        <i class="fas fa-save"></i> Record Attendance
+                                                    </button>
+                                                </div>
+                                                
+                                                <div class="attendance-form-status mt-3" style="display: none;">
+                                                    <div class="alert alert-info">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="spinner-border spinner-border-sm me-2" role="status">
+                                                                <span class="visually-hidden">Loading...</span>
+                                                            </div>
+                                                            <div>Saving attendance record...</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                        <div class="attendance-records-container mt-4">
+                                            <h5><i class="fas fa-history"></i> Attendance History</h5>
+                                            <p class="text-muted small mb-3">View and manage all recorded attendance events for this student.</p>
+                                            <div class="attendance-records-list" id="attendance-records-@student.IdNumber">
+                                                <div class="text-center py-3 attendance-loading">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    <p class="mt-2">Loading attendance records...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Repeater Student Section -->
+                                    <div class="tab-pane fade" id="repeater-@student.IdNumber" role="tabpanel">
+                                        <div class="card mb-4">
+                                            <div class="card-header bg-danger text-white">
+                                                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Delete Challenge Records</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="alert alert-warning">
+                                                    <strong>Warning!</strong> This action will <u>permanently delete</u> all challenge records for this student for the selected school year. This cannot be undone.
+                                                </div>
+                                                
+                                                <p class="mb-3">Select the school year for which you want to delete challenge records:</p>
+                                                
+                                                <div class="form-group mb-4">
+                                                    <label class="form-label">School Year:</label>
+                                                    <select class="form-select" id="school-year-select-@student.IdNumber">
+                                                        <option value="">-- Select School Year --</option>
+                                                        <!-- School years will be loaded dynamically -->
+                                                    </select>
+                                                </div>
+                                                
+                                                <button type="button" class="btn btn-danger delete-challenges-btn" 
+                                                        data-student-id="@student.IdNumber"
+                                                        data-student-name="@student.FullName">
+                                                    <i class="fas fa-trash me-2"></i>Delete Challenge Records
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card">
+                                            <div class="card-header bg-info text-white">
+                                                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Information</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Use this feature when a student is repeating a school year and needs to have their previous challenge records cleared.</p>
+                                                <p>Common reasons for using this feature:</p>
+                                                <ul>
+                                                    <li>Student failed and is repeating the year</li>
+                                                    <li>Student was on leave and is rejoining the same year level</li>
+                                                    <li>Error correction for challenge records</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Transferee Settings Section -->
+                                    <div class="tab-pane fade" id="transferee-@student.IdNumber" role="tabpanel">
+                                        <div class="card mb-3">
+                                            <div class="card-header bg-light">
+                                                <h5 class="mb-0">Transferee Settings</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                @if (student.IsTransferee)
+                                                {
+                                                    <div class="alert alert-info mb-3">
+                                                        <i class="fas fa-info-circle me-2"></i>
+                                                        This student is a transferee. You can configure which school-year challenges they can access.
+                                                    </div>
+                                                    
+                                                    <div class="form-group mb-3">
+                                                        <label for="previousSchool-@student.IdNumber">Previous School</label>
+                                                        <input type="text" class="form-control" id="previousSchool-@student.IdNumber" value="@student.PreviousSchool" placeholder="Enter previous school name">
+                                                    </div>
+                                                    
+                                                    <div class="form-group mb-4">
+                                                        <label class="fw-bold mb-2">School Year Access</label>
+                                                        <p class="text-muted small mb-3">Select which school years the student can access. This will give them access to all challenges within those years, even if expired.</p>
+                                                        
+                                                        <div class="challenge-years-selector p-3 border rounded bg-light" id="challengeAccess-@student.IdNumber">
+                                                            <!-- Checkboxes will be loaded dynamically via JavaScript -->
+                                                            <div class="text-center p-2">
+                                                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                                    <span class="visually-hidden">Loading...</span>
+                                                                </div>
+                                                                <span class="ms-2">Loading available school years...</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <button class="btn btn-primary save-transferee-settings" data-student-id="@student.IdNumber">
+                                                            <i class="fas fa-save me-1"></i> Save Transferee Settings
+                                                        </button>
+                                                        <button class="btn btn-outline-secondary ms-2 select-all-challenges" data-student-id="@student.IdNumber">
+                                                            <i class="fas fa-check-square me-1"></i> Select All
+                                                        </button>
+                                                        <button class="btn btn-outline-secondary ms-2 deselect-all-challenges" data-student-id="@student.IdNumber">
+                                                            <i class="fas fa-square me-1"></i> Deselect All
+                                                        </button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-secondary">
+                                                        <i class="fas fa-user-graduate me-2"></i>
+                                                        This student is not a transferee. Transferee settings are only available for transferee students.
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message" id="success-@student.IdNumber">Changes saved successfully!</div>
+                                <div class="error-message" id="error-@student.IdNumber"></div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No students found.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle score button clicks for extracurricular activities
+            $(document).on('click', '.score-btn', function() {
+                // Remove active class from all buttons in this group
+                $(this).closest('.score-buttons').find('.score-btn').removeClass('active');
+                
+                // Add active class to clicked button
+                $(this).addClass('active');
+                
+                // Set the hidden score value
+                const score = $(this).data('score');
+                const hiddenInput = $(this).closest('.form-group').find('input[name="Score"]');
+                hiddenInput.val(score);
+            });
+            // Initialize Bootstrap tabs
+            var triggerTabList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tab"]'))
+            triggerTabList.forEach(function (triggerEl) {
+                var tabTrigger = new bootstrap.Tab(triggerEl)
+                
+                triggerEl.addEventListener('click', function (event) {
+                    event.preventDefault()
+                    tabTrigger.show()
+                })
+            })
+            
+            // First, stop event propagation on tab nav items to prevent collapse
+            $(document).on('click', '.nav-tabs .nav-item, .nav-tabs .nav-link', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Toggle student achievement form
+            $('.student-item').click(function(e) {
+                // Don't toggle if clicking on a tab or inside a form
+                if ($(e.target).closest('.nav-tabs').length || 
+                    $(e.target).closest('.tab-content').length ||
+                    $(e.target).closest('button').length) {
+                    return;
+                }
+                
+                // Close all other forms
+                $('.student-achievements-form').not($(this).find('.student-achievements-form')).slideUp();
+                
+                // Toggle this form
+                $(this).find('.student-achievements-form').slideToggle();
+                
+                // Load attendance records when a student is clicked
+                const studentId = $(this).find('.student-achievements-form').attr('id').replace('form-', '');
+                loadAttendanceRecords(studentId);
+                
+                // Load extra-curricular records when a student is clicked
+                loadExtraCurricularRecords(studentId);
+            });
+            
+            // Function to load attendance records for a student
+            function loadAttendanceRecords(studentId) {
+                // Target container
+                const container = $(`#attendance-records-${studentId}`);
+                
+                // Add loading indicator
+                container.html(`
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading attendance records...</p>
+                    </div>
+                `);
+                
+                // Make AJAX request
+                $.ajax({
+                    url: '@Url.Action("GetStudentAttendanceRecords", "Teacher")',
+                    type: 'GET',
+                    data: { studentId: studentId },
+                    success: function(response) {
+                        if (response && response.length > 0) {
+                            // Build enhanced table with records
+                            let tableHtml = `
+                                <div class="mb-3">
+                                    <input type="text" class="form-control attendance-search" 
+                                        placeholder="Search attendance records..." id="attendance-search-${studentId}">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover attendance-records-table" id="attendance-table-${studentId}">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="cursor:pointer" onclick="sortAttendanceTable(${studentId}, 0)">
+                                                    Event <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th style="cursor:pointer" onclick="sortAttendanceTable(${studentId}, 1)">
+                                                    Date <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th style="cursor:pointer" onclick="sortAttendanceTable(${studentId}, 2)">
+                                                    Score <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th>Description</th>
+                                                <th>Proof</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                            `;
+                            
+                            // Add each record with enhanced display
+                            response.forEach(function(record) {
+                                const eventDate = new Date(record.eventDate);
+                                const formattedDate = eventDate.toLocaleDateString();
+                                const description = record.eventDescription || '-';
+                                
+                                tableHtml += `
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-dark">${record.eventName}</span>
+                                        </td>
+                                        <td data-sort="${eventDate.getTime()}">
+                                            ${formattedDate}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-${getScoreBadgeColor(record.score)}">${record.score}</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="${description}">
+                                                ${description}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            ${record.hasProofImage ? 
+                                                `<a href="@Url.Action("ViewAttendanceProof", "Teacher")?id=${record.attendanceId}" 
+                                                    class="btn btn-sm btn-outline-primary" target="_blank" 
+                                                    data-bs-toggle="tooltip" title="View proof of attendance">
+                                                    <i class="fas fa-image"></i> View
+                                                </a>` : 
+                                                `<span class="text-muted"><i class="fas fa-times-circle"></i> No proof</span>`
+                                            }
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger delete-attendance" 
+                                                data-attendance-id="${record.attendanceId}" 
+                                                data-event-name="${record.eventName}"
+                                                data-bs-toggle="tooltip" 
+                                                title="Delete this attendance record">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            tableHtml += `
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-end text-muted small mt-2">
+                                    Showing ${response.length} attendance record(s)
+                                </div>
+                            `;
+                            
+                            container.html(tableHtml);
+                            
+                            // Initialize tooltips
+                            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                                new bootstrap.Tooltip(tooltipTriggerEl)
+                            });
+                            
+                            // Add search functionality
+                            $(`#attendance-search-${studentId}`).on('keyup', function() {
+                                const value = $(this).val().toLowerCase();
+                                $(`#attendance-table-${studentId} tbody tr`).filter(function() {
+                                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                                });
+                            });
+                        } else {
+                            // No records found - enhanced empty state
+                            container.html(`
+                                <div class="text-center p-4 bg-light rounded">
+                                    <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+                                    <p class="mt-3 text-muted">No attendance records found for this student.</p>
+                                </div>
+                            `);
+                        }
+                    },
+                    error: function() {
+                        container.html(`
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Error loading attendance records. Please try again.
+                            </div>
+                        `);
+                    }
+                });
+            }
+            
+            // Helper function to get badge color based on score
+            function getScoreBadgeColor(score) {
+                if (score >= 90) return "success";
+                else if (score >= 80) return "primary";
+                else if (score >= 70) return "info";
+                else if (score >= 60) return "warning";
+                else return "danger";
+            }
+            
+            // Function to sort attendance table
+            function sortAttendanceTable(studentId, columnIndex) {
+                const table = document.getElementById(`attendance-table-${studentId}`);
+                if (!table) return;
+                
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // Determine sort direction
+                const currentSortOrder = tbody.getAttribute('data-sort-order') || 'asc';
+                const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+                tbody.setAttribute('data-sort-order', newSortOrder);
+                
+                // Sort the rows
+                rows.sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    // Date column has data-sort attribute
+                    if (columnIndex === 1) {
+                        aValue = parseInt(a.cells[columnIndex].getAttribute('data-sort'));
+                        bValue = parseInt(b.cells[columnIndex].getAttribute('data-sort'));
+                    } 
+                    // Score column (2) or Rank column (3) contains a number inside a span
+                    else if (columnIndex === 2 || columnIndex === 3) {
+                        aValue = parseFloat(a.cells[columnIndex].textContent) || 0;
+                        bValue = parseFloat(b.cells[columnIndex].textContent) || 0;
+                    }
+                    // Text columns
+                    else {
+                        aValue = a.cells[columnIndex].textContent.trim().toLowerCase();
+                        bValue = b.cells[columnIndex].textContent.trim().toLowerCase();
+                    }
+                    
+                    // Compare based on sort order
+                    if (newSortOrder === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+                
+                // Re-append rows in new order
+                rows.forEach(row => tbody.appendChild(row));
+                
+                // Update sort icons
+                const headers = table.querySelectorAll('th');
+                headers.forEach((header, index) => {
+                    const icon = header.querySelector('i');
+                    if (icon) {
+                        if (index === columnIndex) {
+                            icon.className = newSortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+                        } else {
+                            icon.className = 'fas fa-sort';
+                        }
+                    }
+                });
+            }
+            
+            // Save grades button click
+            $('.save-grades-btn').click(function(e) {
+                e.stopPropagation();
+                
+                const studentId = $(this).data('student-id');
+                if (!studentId) {
+                    console.error('Missing student ID');
+                    return;
+                }
+                
+                // Get values from the form
+                const firstYearInput = $(`#first-year-${studentId}`).val();
+                const secondYearInput = $(`#second-year-${studentId}`).val();
+                const thirdYearInput = $(`#third-year-${studentId}`).val();
+                const fourthYearInput = $(`#fourth-year-${studentId}`).val();
+                
+                // Parse values, treating 0, 0.0, etc. as empty/null when considering grade progress
+                const firstYearGrade = firstYearInput && parseFloat(firstYearInput) > 0 ? parseFloat(firstYearInput) : null;
+                const secondYearGrade = secondYearInput && parseFloat(secondYearInput) > 0 ? parseFloat(secondYearInput) : null;
+                const thirdYearGrade = thirdYearInput && parseFloat(thirdYearInput) > 0 ? parseFloat(thirdYearInput) : null;
+                const fourthYearGrade = fourthYearInput && parseFloat(fourthYearInput) > 0 ? parseFloat(fourthYearInput) : null;
+                
+                // Validate sequential grade entry
+                if (secondYearGrade !== null && firstYearGrade === null) {
+                    $(`#error-${studentId}`).text('You must enter 1st Year Grade before entering 2nd Year Grade.').show();
+                    $(`#success-${studentId}`).hide();
+                    return;
+                }
+                
+                if (thirdYearGrade !== null && secondYearGrade === null) {
+                    $(`#error-${studentId}`).text('You must enter 2nd Year Grade before entering 3rd Year Grade.').show();
+                    $(`#success-${studentId}`).hide();
+                    return;
+                }
+                
+                if (fourthYearGrade !== null && thirdYearGrade === null) {
+                    $(`#error-${studentId}`).text('You must enter 3rd Year Grade before entering 4th Year Grade.').show();
+                    $(`#success-${studentId}`).hide();
+                    return;
+                }
+                
+                // Collect achievements - only titles now
+                const achievementEntries = [];
+                
+                $(`#achievements-container-${studentId}`).find('.achievement-entry').each(function() {
+                    const title = $(this).find('.achievement-title').val().trim();
+                    
+                    if (title) {
+                        achievementEntries.push(title);
+                    }
+                });
+                
+                // Store achievements as pipe-separated values
+                const achievements = achievementEntries.join('|');
+                
+                // Collect comments
+                const commentEntries = [];
+                
+                $(`#comments-container-${studentId}`).find('.comment-entry').each(function() {
+                    const commentText = $(this).find('.comment-text').val().trim();
+                    
+                    if (commentText) {
+                        commentEntries.push(commentText);
+                    }
+                });
+                
+                // Store comments as pipe-separated values
+                const comments = commentEntries.join('|');
+                
+                // Validate all inputs are within range
+                const grades = [
+                    { value: firstYearGrade, name: "1st Year Grade" },
+                    { value: secondYearGrade, name: "2nd Year Grade" },
+                    { value: thirdYearGrade, name: "3rd Year Grade" },
+                    { value: fourthYearGrade, name: "4th Year Grade" }
+                ];
+                
+                let hasError = false;
+                
+                for (const grade of grades) {
+                    if (grade.value !== null && (isNaN(grade.value) || grade.value < 0 || grade.value > 100)) {
+                        $(`#error-${studentId}`).text(`${grade.name} must be between 0 and 100.`).show();
+                        $(`#success-${studentId}`).hide();
+                        hasError = true;
+                        break;
+                    }
+                }
+                
+                if (hasError) return;
+                
+                // Show loading state
+                const $button = $(this);
+                const originalText = $button.text();
+                $button.prop('disabled', true).text('Saving...');
+                $(`#error-${studentId}`).hide();
+                
+                // Send AJAX request
+                $.ajax({
+                    url: '/Dashboard/UpdateStudentGrades',
+                    type: 'POST',
+                    data: {
+                        studentId: studentId,
+                        firstYearGrade: firstYearGrade,
+                        secondYearGrade: secondYearGrade,
+                        thirdYearGrade: thirdYearGrade,
+                        fourthYearGrade: fourthYearGrade,
+                        achievements: achievements,
+                        comments: comments
+                    },
+                    success: function(response) {
+                        $button.prop('disabled', false).text(originalText);
+                        console.log('Response:', response);
+                        
+                        if (response.success) {
+                            $(`#success-${studentId}`).text(response.message).show().delay(3000).fadeOut();
+                            $(`#error-${studentId}`).hide();
+                            
+                            // Update score display in the score calculation section
+                            $(`#form-${studentId}`).find('.overall-score p').html(`Current Overall Score: <strong>${response.newScore}</strong>`);
+                            
+                            // Update badge color and name in UI
+                            const studentItem = $(`#form-${studentId}`).closest('.student-item');
+                            
+                            // Update the badge in the UI
+                            studentItem.find('.badge-platinum, .badge-gold, .badge-silver, .badge-bronze, .badge-rising-star, .badge-warning')
+                                .removeClass('badge-platinum badge-gold badge-silver badge-bronze badge-rising-star badge-warning')
+                                .addClass(`badge-${response.badgeColor}`)
+                                .html(`<i class="fas fa-medal"></i> ${response.badgeName}`);
+                            
+                            // Update score display in info badge
+                            studentItem.find('.info-badge:contains("Score")').html(`<i class="fas fa-star"></i> Score: ${response.newScore}`);
+                            
+                            // Update grade level/year display
+                            const yearText = response.gradeLevel === 5 ? "Graduated" : response.gradeLevel;
+                            studentItem.find('.info-badge:contains("Year")').html(`<i class="fas fa-user-graduate"></i> Year: ${yearText}`);
+                            
+                            // Update data attribute for filtering
+                            studentItem.attr('data-badge', response.badgeColor);
+                        } else {
+                            $(`#error-${studentId}`).text(response.message || 'An error occurred').show();
+                            $(`#success-${studentId}`).hide();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $button.prop('disabled', false).text(originalText);
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response:', xhr.responseText);
+                        
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            $(`#error-${studentId}`).text(response.message || 'Server error. Please try again.').show();
+                        } catch (e) {
+                            $(`#error-${studentId}`).text('Server error. Please try again.').show();
+                        }
+                        
+                        $(`#success-${studentId}`).hide();
+                    }
+                });
+            });
+            
+            // Save notes button click (achievements and comments)
+            $('.save-notes-btn').click(function(e) {
+                e.stopPropagation();
+                
+                const studentId = $(this).data('student-id');
+                if (!studentId) {
+                    console.error('Missing student ID');
+                    return;
+                }
+                
+                // Get values from the form
+                const achievements = $(`#achievements-${studentId}`).val();
+                const comments = $(`#comments-${studentId}`).val();
+                const score = parseInt($(`#form-${studentId}`).find('.overall-score p strong').text());
+                
+                // Show loading state
+                const $button = $(this);
+                const originalText = $button.text();
+                $button.prop('disabled', true).text('Saving...');
+                $(`#error-${studentId}`).hide();
+                
+                // Send AJAX request
+                $.ajax({
+                    url: '/Dashboard/UpdateStudentScore',
+                    type: 'POST',
+                    data: {
+                        studentId: studentId,
+                        score: score,
+                        achievements: achievements,
+                        comments: comments
+                    },
+                    success: function(response) {
+                        $button.prop('disabled', false).text(originalText);
+                        
+                        if (response.success) {
+                            $(`#success-${studentId}`).text('Notes saved successfully!').show().delay(3000).fadeOut();
+                            $(`#error-${studentId}`).hide();
+                        } else {
+                            $(`#error-${studentId}`).text(response.message || 'An error occurred').show();
+                            $(`#success-${studentId}`).hide();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $button.prop('disabled', false).text(originalText);
+                        $(`#error-${studentId}`).text('Server error. Please try again.').show();
+                        $(`#success-${studentId}`).hide();
+                    }
+                });
+            });
+            
+            // Search functionality
+            $('#studentSearch').on('keyup', function() {
+                const value = $(this).val().toLowerCase();
+                $('.student-item').filter(function() {
+                    const text = $(this).text().toLowerCase();
+                    $(this).toggle(text.indexOf(value) > -1);
+                });
+            });
+            
+            // Filter buttons
+            $('.filter-btn').click(function() {
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+                
+                const filter = $(this).data('filter');
+                if (filter === 'all') {
+                    $('.student-item').show();
+                } else {
+                    $('.student-item').hide();
+                    $(`.student-item[data-badge="${filter}"]`).show();
+                }
+            });
+            
+            // Achievement entries functionality
+            $('.add-achievement').click(function() {
+                const studentId = $(this).data('student-id');
+                const container = $(`#achievements-container-${studentId}`);
+                
+                const newEntry = $(`
+                    <div class="achievement-entry">
+                        <input type="text" class="form-control achievement-title" placeholder="Achievement title">
+                        <button type="button" class="btn btn-danger remove-achievement">✕</button>
+                    </div>
+                `);
+                
+                container.append(newEntry);
+            });
+            
+            // Use event delegation for dynamically added elements
+            $(document).on('click', '.remove-achievement', function() {
+                // Don't remove if it's the only entry
+                const container = $(this).closest('.achievements-container');
+                if (container.find('.achievement-entry').length > 1) {
+                    $(this).closest('.achievement-entry').remove();
+                } else {
+                    // Clear the fields instead
+                    $(this).closest('.achievement-entry').find('input').val('');
+                }
+            });
+
+            // Comments functionality
+            $('.add-comment').click(function() {
+                const studentId = $(this).data('student-id');
+                const container = $(`#comments-container-${studentId}`);
+                
+                const newEntry = $(`
+                    <div class="comment-entry">
+                        <textarea class="form-control comment-text" placeholder="Add comment"></textarea>
+                        <button type="button" class="btn btn-danger remove-comment">✕</button>
+                    </div>
+                `);
+                
+                container.append(newEntry);
+            });
+            
+            // Use event delegation for dynamically added elements
+            $(document).on('click', '.remove-comment', function() {
+                // Don't remove if it's the only entry
+                const container = $(this).closest('.comments-container');
+                if (container.find('.comment-entry').length > 1) {
+                    $(this).closest('.comment-entry').remove();
+                } else {
+                    // Clear the fields instead
+                    $(this).closest('.comment-entry').find('textarea').val('');
+                }
+            });
+
+            // Tab switching logic - FIXED to only apply to tabs with data-tab attributes
+            $('.sidebar-link[data-tab]').click(function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all sidebar links
+                $('.sidebar-link').removeClass('active');
+                
+                // Add active class to clicked link
+                $(this).addClass('active');
+                
+                // Get the tab to show
+                var tabToShow = $(this).data('tab');
+                
+                // Hide all tab content
+                $('.tab-pane').hide();
+                
+                // Show the selected tab content
+                if (tabToShow === 'dashboard') {
+                    $('#dashboard-content').show();
+                } else if (tabToShow === 'students') {
+                    $('#students-content').show();
+                } else if (tabToShow === 'settings') {
+                    $('#settings-content').show();
+                }
+            });
+            
+            // Student detail tabs (grades and attendance)
+            $(document).on('click', '[data-bs-toggle="tab"]', function(e) {
+                // Just stop propagation to prevent student item collapse
+                e.stopPropagation();
+                
+                // Let Bootstrap handle the tab functionality
+                // This will work because we've properly set up data-bs-toggle="tab" and data-bs-target
+            });
+            
+            // Handle delete attendance record button
+            $(document).on('click', '.delete-attendance', function() {
+                const attendanceId = $(this).data('attendance-id');
+                const eventName = $(this).data('event-name');
+                
+                if (confirm(`Are you sure you want to delete the attendance record for "${eventName}"?`)) {
+                    // Show loading state on button
+                    const $button = $(this);
+                    const originalHtml = $button.html();
+                    $button.html('<i class="fas fa-spinner fa-spin"></i>');
+                    $button.prop('disabled', true);
+                    
+                    // Send DELETE request
+                    $.ajax({
+                        url: '@Url.Action("DeleteAttendance", "Teacher")',
+                        type: 'POST',
+                        data: { id: attendanceId },
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove the row from UI
+                                $button.closest('tr').fadeOut(300, function() {
+                                    $(this).remove();
+                                    
+                                    // If no more rows, show empty state
+                                    const $table = $button.closest('table');
+                                    if ($table.find('tbody tr').length === 0) {
+                                        const $container = $table.closest('.attendance-records-list');
+                                        $container.html(`
+                                            <div class="text-center p-4 bg-light rounded">
+                                                <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+                                                <p class="mt-3 text-muted">No attendance records found for this student.</p>
+                                            </div>
+                                        `);
+                                    }
+                                });
+                                
+                                // Get student ID from the parent container
+                                const studentId = $button.closest('[id^="attendance-records-"]').attr('id').replace('attendance-records-', '');
+                                
+                                // After successful deletion, update the seminars score
+                                updateSeminarsScore(studentId);
+                                
+                                // Show floating success message
+                                showFloatingMessage('Record deleted successfully', 'success');
+                            } else {
+                                // Restore button
+                                $button.html(originalHtml);
+                                $button.prop('disabled', false);
+                                
+                                // Show error
+                                showFloatingMessage(response.message || 'Error deleting record', 'danger');
+                            }
+                        },
+                        error: function() {
+                            // Restore button
+                            $button.html(originalHtml);
+                            $button.prop('disabled', false);
+                            
+                            // Show error
+                            showFloatingMessage('Server error deleting record', 'danger');
+                        }
+                    });
+                }
+            });
+            
+            // Handle attendance form submit
+            $('.attendance-form').submit(function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const formData = new FormData(this);
+                const studentId = form.find('input[name="StudentId"]').val();
+                const statusArea = form.find('.attendance-form-status');
+                
+                statusArea.show();
+                form.find('.attendance-submit-btn').prop('disabled', true);
+                
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        // After successful attendance recording, update the seminars score
+                        updateSeminarsScore(studentId);
+                        
+                        statusArea.hide();
+                        loadAttendanceRecords(studentId);
+                        form[0].reset();
+                        form.find('input[name="EventDate"]').val('@DateTime.Now.ToString("yyyy-MM-dd")');
+                        
+                        const alertHtml = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Success!</strong> Attendance record saved successfully.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                        form.append(alertHtml);
+                        
+                        // Remove the alert after 5 seconds
+                        setTimeout(function() {
+                            form.find('.alert').alert('close');
+                        }, 5000);
+                    },
+                    error: function(xhr, status, error) {
+                        statusArea.hide();
+                        form.find('.attendance-submit-btn').prop('disabled', false);
+                        
+                        const errorMsg = xhr.responseJSON?.message || 'Unknown error occurred.';
+                        const alertHtml = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error!</strong> ${errorMsg}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                        form.append(alertHtml);
+                        
+                        // Remove the alert after 5 seconds
+                        setTimeout(function() {
+                            form.find('.alert').alert('close');
+                        }, 5000);
+                    }
+                });
+            });
+            
+            // Function to show a floating message
+            function showFloatingMessage(message, type) {
+                // Create a container for the message if it doesn't exist
+                if ($('#floating-message-container').length === 0) {
+                    $('body').append('<div id="floating-message-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>');
+                }
+                
+                // Create a unique ID for this message
+                const messageId = 'msg-' + Date.now();
+                
+                // Create the alert
+                const alertHtml = `
+                    <div id="${messageId}" class="alert alert-${type} alert-dismissible fade show" role="alert" style="min-width: 250px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                
+                // Add the alert to the container
+                $('#floating-message-container').append(alertHtml);
+                
+                // Remove the alert after 5 seconds
+                setTimeout(function() {
+                    $(`#${messageId}`).alert('close');
+                }, 5000);
+            }
+            
+            // Function to update seminars score after recording attendance
+            function updateSeminarsScore(studentId) {
+                $.ajax({
+                    url: '@Url.Action("UpdateSeminarsScore", "Score")',
+                    type: 'POST',
+                    data: { studentId: studentId },
+                    success: function(response) {
+                        console.log('Seminars score updated:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating seminars score:', error);
+                    }
+                });
+            }
+            
+            // Check for success/error messages on page load
+            $(document).ready(function() {
+                // Handle temp data messages
+                if ('@TempData["Success"]') {
+                    const successMsg = '@TempData["Success"]';
+                    if (successMsg.includes('attendance record saved')) {
+                        // Find open attendance tabs and reload their data
+                        $('.tab-pane.active[id^="attendance-"]').each(function() {
+                            const studentId = $(this).attr('id').replace('attendance-', '');
+                            loadAttendanceRecords(studentId);
+                            
+                            // Reset the form for this student
+                            $(`#attendance-form-${studentId}`)[0].reset();
+                            $(`#attendance-form-${studentId} input[name="EventDate"]`).val('@DateTime.Now.ToString("yyyy-MM-dd")');
+                            $(`#attendance-form-${studentId} .attendance-submit-btn`).prop('disabled', false);
+                            $(`#attendance-form-${studentId} .attendance-form-status`).hide();
+                            
+                            // Show success alert
+                            const alertHtml = `
+                                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                    ${successMsg}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            `;
+                            $(`#attendance-form-${studentId}`).append(alertHtml);
+                            
+                            // Auto-dismiss after 5 seconds
+                            setTimeout(function() {
+                                $(`#attendance-form-${studentId} .alert`).alert('close');
+                            }, 5000);
+                        });
+                    }
+                }
+                
+                if ('@TempData["Error"]') {
+                    const errorMsg = '@TempData["Error"]';
+                    if (errorMsg.includes('attendance') || errorMsg.includes('record')) {
+                        // Find open attendance tabs and show error
+                        $('.tab-pane.active[id^="attendance-"]').each(function() {
+                            const studentId = $(this).attr('id').replace('attendance-', '');
+                            
+                            // Enable the submit button
+                            $(`#attendance-form-${studentId} .attendance-submit-btn`).prop('disabled', false);
+                            $(`#attendance-form-${studentId} .attendance-form-status`).hide();
+                            
+                            // Show error alert
+                            const alertHtml = `
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    ${errorMsg}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            `;
+                            $(`#attendance-form-${studentId}`).append(alertHtml);
+                            
+                            // Auto-dismiss after 5 seconds
+                            setTimeout(function() {
+                                $(`#attendance-form-${studentId} .alert`).alert('close');
+                            }, 5000);
+                        });
+                    }
+                }
+            });
+            
+            // Function to load extra-curricular records for a student
+            function loadExtraCurricularRecords(studentId) {
+                // Target container
+                const container = $(`#extracurricular-records-${studentId}`);
+                
+                // Add loading indicator
+                container.html(`
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading extra-curricular records...</p>
+                    </div>
+                `);
+                
+                // Make AJAX request
+                $.ajax({
+                    url: '@Url.Action("GetStudentExtraCurricularRecords", "Teacher")',
+                    type: 'GET',
+                    data: { studentId: studentId },
+                    success: function(response) {
+                        if (response && response.length > 0) {
+                            // Build enhanced table with records
+                            let tableHtml = `
+                                <div class="mb-3">
+                                    <input type="text" class="form-control extracurricular-search" 
+                                        placeholder="Search extra-curricular records..." id="extracurricular-search-${studentId}">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover extracurricular-records-table" id="extracurricular-table-${studentId}">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="cursor:pointer" onclick="sortExtraCurricularTable('${studentId}', 0)">
+                                                    Activity <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th style="cursor:pointer" onclick="sortExtraCurricularTable('${studentId}', 1)">
+                                                    Date <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th style="cursor:pointer" onclick="sortExtraCurricularTable('${studentId}', 2)">
+                                                    Score <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th style="cursor:pointer" onclick="sortExtraCurricularTable('${studentId}', 3)">
+                                                    Rank <i class="fas fa-sort"></i>
+                                                </th>
+                                                <th>Category</th>
+                                                <th>Description</th>
+                                                <th>Proof</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                            `;
+                            
+                            // Add each record with enhanced display
+                            response.forEach(function(record) {
+                                const activityDate = new Date(record.activityDate);
+                                const formattedDate = activityDate.toLocaleDateString();
+                                const description = record.activityDescription || '-';
+                                
+                                tableHtml += `
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-dark">${record.activityName}</span>
+                                        </td>
+                                        <td data-sort="${activityDate.getTime()}">
+                                            ${formattedDate}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-${getScoreBadgeColor(record.score)}">${record.score}</span>
+                                        </td>
+                                        <td>
+                                            ${record.rank ? `<span class="badge bg-primary">${record.rank}</span>` : '-'}
+                                        </td>
+                                        <td>
+                                            ${record.activityCategory || '-'}
+                                        </td>
+                                        <td>
+                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="${description}">
+                                                ${description}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            ${record.hasProofImage ? 
+                                                `<a href="@Url.Action("ViewExtraCurricularProofImage", "Teacher")?activityId=${record.activityId}" 
+                                                    class="btn btn-sm btn-outline-primary" target="_blank" 
+                                                    data-bs-toggle="tooltip" title="View proof image">
+                                                    <i class="fas fa-image"></i> View
+                                                </a>` : 
+                                                `<span class="text-muted">No proof</span>`
+                                            }
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger delete-extracurricular" 
+                                                data-id="${record.activityId}" 
+                                                data-bs-toggle="tooltip" title="Delete this record">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            tableHtml += `
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-end text-muted small mt-2">
+                                    Showing ${response.length} extra-curricular record(s)
+                                </div>
+                            `;
+                            
+                            container.html(tableHtml);
+                            
+                            // Initialize tooltips
+                            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                                new bootstrap.Tooltip(tooltipTriggerEl)
+                            });
+                            
+                            // Add search functionality
+                            $(`#extracurricular-search-${studentId}`).on('keyup', function() {
+                                const value = $(this).val().toLowerCase();
+                                $(`#extracurricular-table-${studentId} tbody tr`).filter(function() {
+                                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                                });
+                            });
+                        } else {
+                            // No records found - enhanced empty state
+                            container.html(`
+                                <div class="text-center p-4 bg-light rounded">
+                                    <i class="fas fa-trophy text-muted" style="font-size: 3rem;"></i>
+                                    <p class="mt-3 text-muted">No extra-curricular records found for this student.</p>
+                                </div>
+                            `);
+                        }
+                    },
+                    error: function() {
+                        container.html(`
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Error loading extra-curricular records. Please try again.
+                            </div>
+                        `);
+                    }
+                });
+            }
+            
+            // Window-level function declarations
+            window.sortExtraCurricularTable = function(studentId, columnIndex) {
+                const table = document.getElementById(`extracurricular-table-${studentId}`);
+                if (!table) return;
+                
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // Determine sort direction
+                const currentSortOrder = tbody.getAttribute('data-sort-order') || 'asc';
+                const newSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+                tbody.setAttribute('data-sort-order', newSortOrder);
+                
+                // Sort the rows
+                rows.sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    // Date column has data-sort attribute
+                    if (columnIndex === 1) {
+                        aValue = parseInt(a.cells[columnIndex].getAttribute('data-sort'));
+                        bValue = parseInt(b.cells[columnIndex].getAttribute('data-sort'));
+                    } 
+                    // Score column (2) or Rank column (3) has numbers inside badges
+                    else if (columnIndex === 2 || columnIndex === 3) {
+                        aValue = parseFloat(a.cells[columnIndex].textContent.trim()) || 0;
+                        bValue = parseFloat(b.cells[columnIndex].textContent.trim()) || 0;
+                    }
+                    // Text columns
+                    else {
+                        aValue = a.cells[columnIndex].textContent.trim().toLowerCase();
+                        bValue = b.cells[columnIndex].textContent.trim().toLowerCase();
+                    }
+                    
+                    // Compare based on sort order
+                    if (newSortOrder === 'asc') {
+                        return aValue > bValue ? 1 : -1;
+                    } else {
+                        return aValue < bValue ? 1 : -1;
+                    }
+                });
+                
+                // Reattach rows in new order
+                rows.forEach(row => tbody.appendChild(row));
+            };
+
+            // Delete extracurricular record when delete button is clicked
+            $(document).on('click', '.delete-extracurricular', function() {
+                const activityId = $(this).data('id');
+                const button = $(this);
+                
+                if (confirm('Are you sure you want to delete this extra-curricular activity record?')) {
+                    $.ajax({
+                        url: '@Url.Action("DeleteExtraCurricular", "Teacher")',
+                        type: 'POST',
+                        data: { id: activityId },
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove the row from the table
+                                button.closest('tr').fadeOut(400, function() {
+                                    $(this).remove();
+                                    
+                                    // If no more rows, show "no records" message
+                                    if (button.closest('tbody').children().length === 0) {
+                                        button.closest('.extracurricular-records-table').parent().html(
+                                            `<div class="text-center p-4 bg-light rounded">
+                                                <i class="fas fa-trophy text-muted" style="font-size: 3rem;"></i>
+                                                <p class="mt-3 text-muted">No extra-curricular records found for this student.</p>
+                                            </div>`
+                                        );
+                                    }
+                                });
+                            } else {
+                                alert('Error deleting record: ' + response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Error deleting extra-curricular record. Please try again.');
+                        }
+                    });
+                }
+            });
+            
+            // Repeater Student functionality
+            $(document).on('click', '[id^="repeater-tab-"]', function() {
+                const studentId = $(this).attr('id').replace('repeater-tab-', '');
+                loadAvailableSchoolYearsForRepeater(studentId);
+            });
+            
+            // Load available school years for repeater students
+            function loadAvailableSchoolYearsForRepeater(studentId) {
+                const selectElement = $(`#school-year-select-${studentId}`);
+                
+                // Show loading state
+                selectElement.html('<option value="">Loading school years...</option>');
+                
+                $.ajax({
+                    url: '/Teacher/GetAvailableSchoolYears',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.success) {
+                            // Reset the select element
+                            selectElement.html('<option value="">-- Select School Year --</option>');
+                            
+                            if (response.years && response.years.length > 0) {
+                                // Add options for each school year
+                                response.years.forEach(function(year) {
+                                    // Display the year as is without filtering
+                                    selectElement.append(`<option value="${year}">${year}</option>`);
+                                });
+                            } else {
+                                selectElement.html('<option value="">No school years available</option>');
+                            }
+                        } else {
+                            selectElement.html('<option value="">Error loading school years</option>');
+                            showFloatingMessage('Error loading school years: ' + response.message, 'danger');
+                        }
+                    },
+                    error: function() {
+                        selectElement.html('<option value="">Error loading school years</option>');
+                        showFloatingMessage('Server error loading school years', 'danger');
+                    }
+                });
+            }
+            
+            // Handle the delete challenges button click
+            $(document).on('click', '.delete-challenges-btn', function() {
+                const studentId = $(this).data('student-id');
+                const studentName = $(this).data('student-name');
+                const yearLevel = $(`#school-year-select-${studentId}`).val();
+                
+                if (!yearLevel) {
+                    showFloatingMessage('Please select a school year first.', 'warning');
+                    return;
+                }
+                
+                // Academic year format validation is handled by the server
+                
+                if (confirm(`WARNING: You are about to delete ALL challenge records for ${studentName} from ${yearLevel}. This action cannot be undone. Are you sure you want to proceed?`)) {
+                    // Show loading state
+                    const $button = $(this);
+                    const originalText = $button.html();
+                    $button.html('<i class="fas fa-spinner fa-spin me-2"></i>Deleting...');
+                    $button.prop('disabled', true);
+                    
+                    // Send the deletion request
+                    $.ajax({
+                        url: '/Teacher/DeleteChallengeRecords',
+                        type: 'POST',
+                        data: {
+                            studentId: studentId,
+                            yearLevel: yearLevel // Pass the year level as selected
+                        },
+                        success: function(response) {
+                            // Restore button
+                            $button.html(originalText);
+                            $button.prop('disabled', false);
+                            
+                            if (response.success) {
+                                showFloatingMessage(response.message, 'success');
+                                // Reset select after successful deletion
+                                $(`#school-year-select-${studentId}`).val('');
+                            } else {
+                                showFloatingMessage(response.message || 'Error deleting challenge records', 'danger');
+                            }
+                        },
+                        error: function() {
+                            // Restore button
+                            $button.html(originalText);
+                            $button.prop('disabled', false);
+                            
+                            showFloatingMessage('Server error deleting challenge records', 'danger');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Transferee Settings functionality
+$(document).ready(function() {
+    // Save transferee settings when button is clicked
+    $(document).on('click', '.save-transferee-settings', function() {
+        var studentId = $(this).data('student-id');
+        saveTransfereeSettings(studentId);
+    });
+    
+    // Load transferee settings when tab is clicked
+    $(document).on('click', '[id^="transferee-tab-"]', function() {
+        var studentId = $(this).attr('id').replace('transferee-tab-', '');
+        // The tab will only be shown for transferee students, so we can always load settings
+        loadAvailableSchoolYears(studentId).then(function() {
+            loadTransfereeAccessYears(studentId);
+        });
+    });
+    
+    // Select all school years
+    $(document).on('click', '.select-all-challenges', function() {
+        var studentId = $(this).data('student-id');
+        $(`.challenge-year-checkbox[data-student-id="${studentId}"]`).prop('checked', true);
+    });
+    
+    // Deselect all school years
+    $(document).on('click', '.deselect-all-challenges', function() {
+        var studentId = $(this).data('student-id');
+        $(`.challenge-year-checkbox[data-student-id="${studentId}"]`).prop('checked', false);
+    });
+});
+
+// Load available school years from the server
+function loadAvailableSchoolYears(studentId) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: '/Teacher/GetAvailableSchoolYears',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    // Clear existing checkboxes
+                    $(`#challengeAccess-${studentId}`).empty();
+                    
+                    if (response.years && response.years.length > 0) {
+                        // Create a grid layout for the checkboxes
+                        const container = $(`<div class="row g-3"></div>`);
+                        $(`#challengeAccess-${studentId}`).append(container);
+                        
+                        // Add a checkbox for each school year
+                        response.years.forEach(function(year) {
+                            const yearId = year.replace(/[\s\/]/g, '-');
+                            const checkboxCol = $(`
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="challenge-year-option form-check">
+                                        <input class="form-check-input challenge-year-checkbox" type="checkbox" 
+                                               id="year-${yearId}-${studentId}" 
+                                               data-year="${year}" 
+                                               data-student-id="${studentId}">
+                                        <label class="form-check-label" for="year-${yearId}-${studentId}">
+                                            <span class="badge bg-secondary">${year}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            `);
+                            container.append(checkboxCol);
+                        });
+                    } else {
+                        $(`#challengeAccess-${studentId}`).html(`
+                            <div class="alert alert-warning mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                No school years found. Please create challenges with year levels first.
+                            </div>
+                        `);
+                    }
+                    resolve();
+                } else {
+                    $(`#challengeAccess-${studentId}`).html(`
+                        <div class="alert alert-danger mb-0">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Error: ${response.message || 'Unknown error loading school years'}
+                        </div>
+                    `);
+                    showAlert('danger', response.message, true);
+                    reject();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $(`#challengeAccess-${studentId}`).html(`
+                    <div class="alert alert-danger mb-0">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Failed to load school years. Error: ${textStatus}
+                    </div>
+                `);
+                showAlert('danger', 'Failed to load available school years', true);
+                console.error("AJAX error loading school years:", textStatus, errorThrown);
+                reject();
+            }
+        });
+    });
+}
+
+// Load transferee accessible years from the server
+function loadTransfereeAccessYears(studentId) {
+    $.ajax({
+        url: `/Teacher/GetTransfereeAccessYears?studentId=${studentId}`,
+        type: 'GET',
+        success: function(response) {
+            if (response.success) {
+                // Clear all checkboxes first
+                $(`.challenge-year-checkbox[data-student-id="${studentId}"]`).prop('checked', false);
+                
+                // Check boxes for accessible years
+                response.accessYears.forEach(function(year) {
+                    $(`#year-${year.replace(/[\s\/]/g, '-')}-${studentId}`).prop('checked', true);
+                });
+            } else {
+                showAlert('danger', response.message, true);
+            }
+        },
+        error: function() {
+            showAlert('danger', 'Failed to load transferee access years', true);
+        }
+    });
+}
+
+// Save transferee settings to the server
+function saveTransfereeSettings(studentId) {
+    var previousSchool = $(`#previousSchool-${studentId}`).val();
+    var accessibleYears = [];
+    
+    // Collect all checked years
+    $(`.challenge-year-checkbox[data-student-id="${studentId}"]:checked`).each(function() {
+        accessibleYears.push($(this).data('year'));
+    });
+    
+    // Show loading state
+    const saveBtn = $(`.save-transferee-settings[data-student-id="${studentId}"]`);
+    const originalText = saveBtn.html();
+    saveBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
+    saveBtn.prop('disabled', true);
+    
+    $.ajax({
+        url: '/Teacher/UpdateTransfereeStatus',
+        type: 'POST',
+        data: {
+            studentId: studentId,
+            previousSchool: previousSchool,
+            accessibleYears: accessibleYears
+        },
+        success: function(response) {
+            if (response.success) {
+                showAlert('success', response.message, true);
+            } else {
+                showAlert('danger', response.message, true);
+            }
+            
+            // Restore button state
+            saveBtn.html(originalText);
+            saveBtn.prop('disabled', false);
+        },
+        error: function() {
+            showAlert('danger', 'Failed to save transferee settings', true);
+            
+            // Restore button state
+            saveBtn.html(originalText);
+            saveBtn.prop('disabled', false);
+        }
+    });
+} 
+    </script>
+</body>
+</html> 

@@ -1,0 +1,938 @@
+@model List<StudentBadge.Models.ScoreWeight>
+@{
+    ViewData["Title"] = "Manage Score Weights";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var adminName = Context.Session.GetString("FullName") ?? "Admin";
+}
+
+<div class="dashboard-container">
+   <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Admin Dashboard</p>
+            </div>
+            <nav>
+                <a href="/dashboard/admindashboard" class="sidebar-link" id="dashboard-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/dashboard/admindashboard" class="sidebar-link" id="import-link">
+                    <i class="fas fa-file-import"></i> Import User
+                </a>
+                <a href="/dashboard/admindashboard" class="sidebar-link" id="manage-link">
+                    <i class="fas fa-users-cog"></i> Manage Students
+                </a>
+                <a href="/dashboard/admindashboard" class="sidebar-link" id="teachers-link">
+                    <i class="fas fa-chalkboard-teacher"></i> Manage Teachers
+                </a>
+                <a href="/dashboard/admindashboard" class="sidebar-link" id="pins-link">
+                    <i class="fas fa-key"></i> Verification PINs
+                </a>
+                <a href="/admindashboard/scoreweights" class="sidebar-link active" id="pins-link">
+                    <i class="fas fa-key"></i> Score Weights
+                </a>
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+    
+    <div class="content">
+        <div class="admin-info">
+            <h2><i class="fas fa-user-shield"></i> Welcome, @adminName</h2>
+            <p class="m-0">Manage your student score weight settings below</p>
+        </div>
+
+        <div class="page-header">
+            <h1><i class="fas fa-balance-scale"></i> Score Category Weights</h1>
+            <div class="breadcrumb">
+                <a href="/Dashboard/AdminDashboard">Dashboard</a> / <span>Score Weights</span>
+            </div>
+        </div>
+
+        <div class="row stats-row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p>Total Categories</p>
+                        <div class="stat-value">@Model.Count</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p>Total Weight</p>
+                        <div class="stat-value @(Math.Abs(Model.Sum(w => w.Weight) - 100) <= 0.1m ? "text-success" : "text-danger")">
+                            @Model.Sum(w => w.Weight).ToString("F2")%
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="stat-content">
+                        <p>Last Updated</p>
+                        <div class="stat-value">@(Model.Any() && Model.First().ModifiedDate != null ? Model.First().ModifiedDate.ToString("MMM dd, yyyy") : "Not set")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="m-0 font-weight-bold">Manage Score Weights</h3>
+                <a href="/Dashboard/AdminDashboard" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+            <div class="card-body">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> @TempData["Success"]
+                    </div>
+                }
+                @if (TempData["Error"] != null || ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle"></i> @(TempData["Error"] ?? ViewBag.Error)
+                    </div>
+                }
+                
+                <div class="card-description">
+                    <i class="fas fa-info-circle text-primary"></i>
+                    <p>Set the weight percentage for each score category. <strong>The total weight must equal exactly 100%.</strong> These weights determine how each category contributes to a student's overall score.</p>
+                </div>
+                
+                <form method="post" action="@Url.Action("UpdateScoreWeights", "AdminDashboard")" id="scoreWeightsForm">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Category</th>
+                                    <th width="20%">Weight (%)</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    decimal totalWeight = 0;
+                                }
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    var weight = Model[i];
+                                    totalWeight += weight.Weight;
+                                    
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="weights[@i].Id" value="@weight.Id" />
+                                            <input type="hidden" name="weights[@i].CategoryName" value="@weight.CategoryName" />
+                                            <input type="hidden" name="weights[@i].Description" value="@weight.Description" />
+                                            <div class="category-name">
+                                                @{
+                                                    var displayName = weight.CategoryName;
+                                                    var iconClass = "fas fa-star";
+                                                    
+                                                    if (displayName == "AcademicGrades") { 
+                                                        displayName = "Academic Grades";
+                                                        iconClass = "fas fa-graduation-cap";
+                                                    }
+                                                    else if (displayName == "CompletedChallenges") { 
+                                                        displayName = "Completed Challenges";
+                                                        iconClass = "fas fa-trophy";
+                                                    }
+                                                    else if (displayName == "Mastery") { 
+                                                        iconClass = "fas fa-award";
+                                                    }
+                                                    else if (displayName == "SeminarsWebinars") { 
+                                                        displayName = "Seminars & Webinars";
+                                                        iconClass = "fas fa-chalkboard-teacher";
+                                                    }
+                                                    else if (displayName == "Extracurricular") { 
+                                                        iconClass = "fas fa-running";
+                                                    }
+                                                    
+                                                    displayName = displayName.Replace("Score", "");
+                                                }
+                                                <i class="@iconClass category-icon"></i>
+                                                <strong>@displayName</strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control weight-input" name="weights[@i].Weight" value="@weight.Weight" min="0" max="100" step="0.1" required />
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">%</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="description-text">@weight.Description</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-light">
+                                    <th>Total:</th>
+                                    <th id="totalWeightDisplay" class="@(Math.Abs(totalWeight - 100) <= 0.1m ? "text-success" : "text-danger")">
+                                        <span id="totalWeightValue">@totalWeight.ToString("F2")</span>%
+                                    </th>
+                                    <th>
+                                        <div id="totalStatus" class="@(Math.Abs(totalWeight - 100) <= 0.1m ? "text-success" : "text-danger")">
+                                            @if (Math.Abs(totalWeight - 100) <= 0.1m)
+                                            {
+                                                <span><i class="fas fa-check-circle"></i> Valid total</span>
+                                            }
+                                            else
+                                            {
+                                                <span><i class="fas fa-exclamation-circle"></i> Must equal 100%</span>
+                                            }
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg" id="saveChangesBtn">
+                            <i class="fas fa-save"></i> Save Changes
+                            <span class="spinner-border spinner-border-sm d-none" id="saveSpinner" role="status" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="m-0 font-weight-bold">How Score Weights Work</h3>
+            </div>
+            <div class="card-body">
+                <div class="info-section">
+                    <p>Student scores are calculated using a weighted average of the following categories:</p>
+                    <ul class="info-list">
+                        <li><i class="fas fa-graduation-cap"></i> <strong>Academic Grades</strong> - Performance in academic coursework</li>
+                        <li><i class="fas fa-trophy"></i> <strong>Completed Challenges</strong> - Programming challenges completed by students</li>
+                        <li><i class="fas fa-award"></i> <strong>Mastery</strong> - Demonstrated skill mastery in specific areas</li>
+                        <li><i class="fas fa-chalkboard-teacher"></i> <strong>Seminars & Webinars</strong> - Participation in educational events</li>
+                        <li><i class="fas fa-running"></i> <strong>Extracurricular</strong> - Participation in extracurricular activities</li>
+                    </ul>
+                    <p>Adjusting these weights will immediately affect how student scores are calculated throughout the system.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="progressModalLabel">
+                    <i class="fas fa-sync fa-spin text-primary"></i> Recalculating Scores
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p id="progressMessage">Processing student scores...</p>
+                <p id="progressDetail" class="text-muted">This may take a few moments. Please wait.</p>
+                <div class="progress">
+                    <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-info mt-2">
+                    <div class="progress-steps">
+                        <div class="step active" id="step-initialize">
+                            <i class="fas fa-circle"></i>
+                            <span>Initializing</span>
+                        </div>
+                        <div class="step" id="step-updating">
+                            <i class="fas fa-circle"></i>
+                            <span>Updating Scores</span>
+                        </div>
+                        <div class="step" id="step-complete">
+                            <i class="fas fa-circle"></i>
+                            <span>Finalizing</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-3 text-center" id="currentStudentInfo">
+                    <span id="currentStudentText">Student 0 of 0</span>
+                </p>
+                <div class="alert alert-success" id="progressSuccess" style="display: none;">
+                    <i class="fas fa-check-circle"></i> All student scores have been successfully recalculated!
+                </div>
+                <div class="alert alert-danger" id="progressError" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i> <span id="errorMessage"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeProgressBtn" style="display: none;">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Core Styles */
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+        background: #fff6f1;
+    }
+
+    .dashboard-container {
+        display: flex;
+        width: 100%;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+        width: 210px;
+        background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+        padding: 25px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        overflow-y: auto;
+        z-index: 100;
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .logo img {
+        width: 150px;
+        transition: transform 0.3s ease;
+    }
+    
+    .logo img:hover {
+        transform: scale(1.05);
+    }
+
+    .logo h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 10px 0 5px;
+        color: #fff;
+    }
+
+    .logo p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 16px;
+        font-weight: 600;
+        padding: 12px 20px;
+        margin: 8px 0;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-link i {
+        margin-right: 12px;
+        font-size: 18px;
+    }
+
+    .sidebar-link.active {
+        background: #fff6f1;
+        font-weight: bold;
+            color: #8a2be2;
+        box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.02);
+        color: #fff;
+    }
+
+    .mt-auto {
+        margin-top: auto !important;
+    }
+
+    /* Content area styles */
+    .content {
+        flex-grow: 1;
+        padding: 25px;
+        width: calc(100% - 240px);
+        margin-left: 240px;
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+            color: #8a2be2;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+        padding: 0;
+        margin: 0;
+        background: none;
+    }
+
+    .breadcrumb a {
+            color: #8a2be2;
+        text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .admin-info {
+        background: #fff;
+        padding: 15px 20px;
+        border-radius: 12px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    .admin-info h2 {
+        font-size: 18px;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    /* Cards */
+    .card {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+        position: relative;
+        border-top: 4px solid #8a2be2;
+    }
+
+    .card-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-description {
+        display: flex;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #8a2be2;
+    }
+
+    .card-description i {
+        font-size: 24px;
+        margin-right: 15px;
+            color: #8a2be2;
+    }
+
+    .card-description p {
+        margin: 0;
+        flex: 1;
+    }
+
+    /* Stats row */
+    .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px 20px -10px;
+    }
+
+    .col-md-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+        padding: 0 10px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: #ffece8;
+        color: #8a2be2;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 20px;
+    }
+
+    .stat-content p {
+        margin: 0 0 5px 0;
+        color: #777;
+        font-size: 14px;
+    }
+
+    .stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #8a2be2;
+    }
+
+    /* Table styles */
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+            border-bottom: 2px solid #8a2be2;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #e9ecef;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff6f1;
+    }
+
+    .category-name {
+        display: flex;
+        align-items: center;
+    }
+
+    .category-icon {
+        color: #8a2be2;
+        font-size: 16px;
+        margin-right: 10px;
+        width: 20px;
+    }
+
+    .description-text {
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Button styles */
+    .btn-primary {
+        background-color: #8a2be2;
+        border-color: #8a2be2;
+    }
+
+    .btn-primary:hover {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+    }
+
+    .btn-lg {
+        padding: 10px 30px;
+        font-size: 16px;
+    }
+
+    /* Info section */
+    .info-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .info-list {
+        padding-left: 20px;
+        list-style-type: none;
+    }
+
+    .info-list li {
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .info-list li i {
+                color: #8a2be2;
+        margin-right: 10px;
+    }
+
+    /* Progress Modal Styles */
+    #progressModal .modal-content {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        border: none;
+        border-radius: 6px;
+    }
+    
+    #progressModal .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 15px 20px;
+    }
+    
+    #progressModal .modal-title {
+        font-weight: 600;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    #progressModal .modal-body {
+        padding: 20px;
+    }
+    
+    #progressModal .progress {
+        height: 30px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: #f0f0f0;
+    }
+    
+    #progressModal .progress-bar {
+        background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, 
+            transparent 25%, transparent 50%, 
+            rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, 
+            transparent 75%, transparent);
+        background-color: #8a2be2;
+        background-size: 30px 30px;
+    }
+    
+    #progressMessage {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    #progressDetail {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+    }
+    
+    #currentStudentInfo {
+        color: #555;
+        font-size: 14px;
+    }
+    
+    /* Progress steps styling */
+    .progress-steps {
+        display: flex;
+        justify-content: space-between;
+        margin: 15px 0;
+    }
+    
+    .progress-steps .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 33%;
+        position: relative;
+        opacity: 0.5;
+        transition: opacity 0.3s;
+    }
+    
+    .progress-steps .step.active {
+        opacity: 1;
+    }
+    
+    .progress-steps .step.completed {
+        opacity: 1;
+    }
+    
+    .progress-steps .step i {
+        color: #ccc;
+        margin-bottom: 5px;
+        font-size: 12px;
+        transition: color 0.3s;
+    }
+    
+    .progress-steps .step.active i,
+    .progress-steps .step.completed i {
+                color: #8a2be2;
+    }
+    
+    .progress-steps .step.completed i:before {
+        content: "\f058"; /* fa-check-circle */
+    }
+    
+    .progress-steps .step span {
+        font-size: 12px;
+        color: #777;
+    }
+    
+    .progress-steps .step.active span {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    /* Pulse animation */
+    @@keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    #currentStudentInfo {
+        animation: pulse 1.5s infinite;
+    }
+    
+    /* Fade in/out animations for UI updates */
+    .fade-in {
+        animation: fadeIn 0.5s forwards;
+    }
+    
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .fade-out {
+        animation: fadeOut 0.5s forwards;
+    }
+    
+    @@keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Calculate total weight when any input changes
+            $(".weight-input").on("input", function() {
+                calculateTotalWeight();
+            });
+            
+            function calculateTotalWeight() {
+                let total = 0;
+                $(".weight-input").each(function() {
+                    let value = parseFloat($(this).val()) || 0;
+                    total += value;
+                });
+                
+                // Round to 2 decimal places
+                total = Math.round(total * 100) / 100;
+                
+                // Update the display
+                $("#totalWeightValue").text(total.toFixed(2));
+                
+                // Update status message and colors
+                if (Math.abs(total - 100) <= 0.1) {
+                    $("#totalWeightDisplay, #totalStatus").removeClass("text-danger").addClass("text-success");
+                    $("#totalStatus").html('<span><i class="fas fa-check-circle"></i> Valid total</span>');
+                } else {
+                    $("#totalWeightDisplay, #totalStatus").removeClass("text-success").addClass("text-danger");
+                    $("#totalStatus").html('<span><i class="fas fa-exclamation-circle"></i> Must equal 100%</span>');
+                }
+            }
+            
+            // Submit form via AJAX to show progress modal
+            $("#scoreWeightsForm").on("submit", function(e) {
+                // Check if weights sum to 100%
+                let total = parseFloat($("#totalWeightValue").text());
+                if (Math.abs(total - 100) > 0.1) {
+                    alert("Total weight must equal 100%. Please adjust your weights.");
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Prevent the default form submission
+                e.preventDefault();
+                
+                // Show spinner on button
+                $("#saveChangesBtn").attr("disabled", true);
+                $("#saveSpinner").removeClass("d-none");
+                
+                // Reset progress steps
+                $(".progress-steps .step").removeClass("active completed");
+                $("#step-initialize").addClass("active");
+                
+                // Show the progress modal
+                $("#progressModal").modal("show");
+                $("#progressBar").css("width", "0%").attr("aria-valuenow", 0).text("0%");
+                $("#progressSuccess, #progressError, #closeProgressBtn").hide();
+                $("#progressMessage").text("Initializing score updates...");
+                $("#progressDetail").text("Preparing to recalculate student scores with new weights.");
+                $("#currentStudentText").text("Student 0 of 0");
+                
+                // Submit the form via AJAX
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        // Start polling for progress updates after a short delay
+                        setTimeout(function() {
+                            startProgressPolling();
+                        }, 500);
+                    },
+                    error: function(xhr, status, error) {
+                        // Show error in the modal
+                        $("#progressError").show().find("#errorMessage").text("Error: " + error);
+                        $("#closeProgressBtn").show();
+                        $("#saveChangesBtn").attr("disabled", false);
+                        $("#saveSpinner").addClass("d-none");
+                    }
+                });
+            });
+            
+            let pollingInterval;
+            
+            function startProgressPolling() {
+                // Update progress steps
+                $("#step-initialize").removeClass("active").addClass("completed");
+                $("#step-updating").addClass("active");
+                $("#progressMessage").text("Recalculating student scores...");
+                $("#progressDetail").text("Applying new weights to calculate updated scores for all students.");
+                
+                // Poll every 500ms
+                pollingInterval = setInterval(checkProgress, 500);
+            }
+            
+            function checkProgress() {
+                $.ajax({
+                    url: "/AdminDashboard/GetProgressStatus",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            updateProgressUI(data.progress);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        clearInterval(pollingInterval);
+                        $("#progressError").show().find("#errorMessage").text("Error checking progress: " + error);
+                        $("#closeProgressBtn").show();
+                        $("#saveChangesBtn").attr("disabled", false);
+                        $("#saveSpinner").addClass("d-none");
+                    }
+                });
+            }
+            
+            function updateProgressUI(progress) {
+                let totalStudents = progress.TotalStudents || 0;
+                let currentStudent = progress.CurrentStudent || 0;
+                let currentStudentId = progress.CurrentStudentId || "";
+                let isComplete = progress.IsComplete || false;
+                let isError = progress.IsError || false;
+                let errorMessage = progress.ErrorMessage || "";
+                
+                // Calculate percentage
+                let percentage = (totalStudents > 0) ? Math.round((currentStudent / totalStudents) * 100) : 0;
+                
+                // Update progress bar with smooth animation
+                $("#progressBar").css({
+                    "width": percentage + "%",
+                    "transition": "width 0.5s ease-in-out"
+                }).attr("aria-valuenow", percentage).text(percentage + "%");
+                
+                // Update student info with fade effect
+                let studentText = `Student ${currentStudent} of ${totalStudents}`;
+                if ($("#currentStudentText").text() !== studentText) {
+                    $("#currentStudentInfo").addClass("fade-out");
+                    setTimeout(function() {
+                        $("#currentStudentText").text(studentText);
+                        $("#currentStudentInfo").removeClass("fade-out").addClass("fade-in");
+                        setTimeout(function() {
+                            $("#currentStudentInfo").removeClass("fade-in");
+                        }, 500);
+                    }, 200);
+                }
+                
+                // Check if the process is complete
+                if (isComplete) {
+                    clearInterval(pollingInterval);
+                    
+                    // Update the progress steps
+                    $("#step-updating").removeClass("active").addClass("completed");
+                    $("#step-complete").addClass("active completed");
+                    
+                    // Update UI
+                    $("#progressSuccess").show();
+                    $("#closeProgressBtn").show();
+                    $("#progressMessage").text("Calculation Complete");
+                    $("#progressDetail").text("All student scores have been updated with the new weights.");
+                    $("#progressBar").removeClass("progress-bar-animated");
+                    $("#saveChangesBtn").attr("disabled", false);
+                    $("#saveSpinner").addClass("d-none");
+                    
+                    // Celebrate completion with confetti effect
+                    setTimeout(function() {
+                        $("#step-complete").removeClass("active").addClass("completed");
+                    }, 1000);
+                }
+                
+                // Check if there was an error
+                if (isError) {
+                    clearInterval(pollingInterval);
+                    $("#progressError").show().find("#errorMessage").text(errorMessage);
+                    $("#closeProgressBtn").show();
+                    $("#progressBar").removeClass("progress-bar-animated");
+                    $("#saveChangesBtn").attr("disabled", false);
+                    $("#saveSpinner").addClass("d-none");
+                }
+            }
+            
+            // Close button in the modal
+            $("#closeProgressBtn").on("click", function() {
+                $("#progressModal").modal("hide");
+                // Redirect to refresh the page if the process completed successfully
+                if ($("#progressSuccess").is(":visible")) {
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
+} 

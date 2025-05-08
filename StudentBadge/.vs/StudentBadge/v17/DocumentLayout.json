@@ -1,0 +1,732 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\home\\signup.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\home\\signup.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\studentprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\studentprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\takechallenge.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\takechallenge.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\editquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\editquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\completedchallenges.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\completedchallenges.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\challengesuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\challengesuccess.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\challengesbyyear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\challengesbyyear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\availablechallenges.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\availablechallenges.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\challenge\\addquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\challenge\\addquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\home\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\home\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\taketest.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\taketest.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\studenttests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\studenttests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\languagetests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\languagetests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\editquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\editquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\certificates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\certificates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\availabletests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\availabletests.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\programmingtest\\addquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\programmingtest\\addquestion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\pendingcertificates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\pendingcertificates.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\teacherdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\teacherdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\markedstudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\markedstudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\employerprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\employerprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\wwwroot\\css\\employerdashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:wwwroot\\css\\employerdashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\admindashboard\\scoreweights.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\admindashboard\\scoreweights.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\account\\verifyresetcode.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\account\\verifyresetcode.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\account\\verifyaccount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\account\\verifyaccount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\account\\resetpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\account\\resetpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\account\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\account\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\views\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:views\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\controllers\\programmingtestcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:controllers\\programmingtestcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\data\\studentcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:data\\studentcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|c:\\users\\octop\\source\\repos\\test\\edubad - updatedredtheme - copy (4)\\studentbadge\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D439DBC7-3B4F-C798-D2AD-069E2C0114BC}|StudentBadge.csproj|solutionrelative:models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TakeChallenge.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\TakeChallenge.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\TakeChallenge.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\TakeChallenge.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\TakeChallenge.cshtml",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAAAPMAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:34:48.609Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\Index.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Index.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\Index.cshtml",
+              "ViewState": "AgIAANgAAAAAAAAAAAAAANoAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:34:09.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StudentDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\StudentDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\StudentDashboard.cshtml",
+              "ViewState": "AgIAAMsEAAAAAAAAAAAAALoEAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-01T10:27:10.52Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StudentProfile.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\StudentProfile.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\StudentProfile.cshtml",
+              "ViewState": "AgIAAOMDAAAAAAAAAAAEwPoDAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-01T14:41:42.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Login.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Login.cshtml",
+              "RelativeToolTip": "Views\\Home\\Login.cshtml",
+              "ViewState": "AgIAALgAAAAAAAAAAADwv9AAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:10:49.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Signup.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Signup.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Signup.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Signup.cshtml",
+              "RelativeToolTip": "Views\\Home\\Signup.cshtml",
+              "ViewState": "AgIAAF8BAAAAAAAAAADwv3QBAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:26:36.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EditQuestion.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\EditQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\EditQuestion.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\EditQuestion.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\EditQuestion.cshtml",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAAALgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:33:30.585Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Edit.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\Edit.cshtml",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAAFAAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:32:30.425Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\Create.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\Create.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\Create.cshtml",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAALoAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:31:51.05Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CompletedChallenges.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\CompletedChallenges.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\CompletedChallenges.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\CompletedChallenges.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\CompletedChallenges.cshtml",
+              "ViewState": "AgIAACMBAAAAAAAAAAAAAAUBAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:31:10.122Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ChallengeSuccess.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\ChallengeSuccess.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\ChallengeSuccess.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\ChallengeSuccess.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\ChallengeSuccess.cshtml",
+              "ViewState": "AgIAAMAAAAAAAAAAAAAAAK8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:29:15.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ChallengesByYear.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\ChallengesByYear.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\ChallengesByYear.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\ChallengesByYear.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\ChallengesByYear.cshtml",
+              "ViewState": "AgIAANIAAAAAAAAAAAAAANQAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:29:08.082Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AvailableChallenges.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\AvailableChallenges.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\AvailableChallenges.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\AvailableChallenges.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\AvailableChallenges.cshtml",
+              "ViewState": "AgIAAAsBAAAAAAAAAAAAABMBAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:28:55.125Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AddQuestion.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\AddQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\Challenge\\AddQuestion.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Challenge\\AddQuestion.cshtml",
+              "RelativeToolTip": "Views\\Challenge\\AddQuestion.cshtml",
+              "ViewState": "AgIAALcAAAAAAAAAAAAAALgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:28:07.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Error.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Error.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Home\\Error.cshtml",
+              "RelativeToolTip": "Views\\Home\\Error.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:26:42.971Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "TakeTest.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\TakeTest.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\TakeTest.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\TakeTest.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\TakeTest.cshtml",
+              "ViewState": "AgIAAN4AAAAAAAAAAAAAAOgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:23:51.71Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "StudentTests.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\StudentTests.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\StudentTests.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\StudentTests.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\StudentTests.cshtml",
+              "ViewState": "AgIAAAgBAAAAAAAAAAAAABcBAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:23:04.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "LanguageTests.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\LanguageTests.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\LanguageTests.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\LanguageTests.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\LanguageTests.cshtml",
+              "ViewState": "AgIAADsBAAAAAAAAAAAAAEwBAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:22:17.408Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\Index.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Index.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\Index.cshtml",
+              "ViewState": "AgIAAOcAAAAAAAAAAAAAANMAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:21:22.054Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "EditQuestion.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\EditQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\EditQuestion.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\EditQuestion.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\EditQuestion.cshtml",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAAMYAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:20:40.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Edit.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\Edit.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Edit.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\Edit.cshtml",
+              "ViewState": "AgIAACkBAAAAAAAAAAAAABUBAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:19:46.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Create.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\Create.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Create.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\Create.cshtml",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAAALkAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:19:04.937Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Certificates.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Certificates.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\Certificates.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\Certificates.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\Certificates.cshtml",
+              "ViewState": "AgIAAA4BAAAAAAAAAAAAACkBAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:18:05.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "AvailableTests.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\AvailableTests.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\AvailableTests.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\AvailableTests.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\AvailableTests.cshtml",
+              "ViewState": "AgIAADIBAAAAAAAAAAAAwCkBAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:17:05.874Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AddQuestion.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\AddQuestion.cshtml",
+              "RelativeDocumentMoniker": "Views\\ProgrammingTest\\AddQuestion.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\ProgrammingTest\\AddQuestion.cshtml",
+              "RelativeToolTip": "Views\\ProgrammingTest\\AddQuestion.cshtml",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAAAMYAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:16:17.992Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "MarkedStudents.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\MarkedStudents.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\MarkedStudents.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\MarkedStudents.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\MarkedStudents.cshtml",
+              "ViewState": "AgIAAEMCAAAAAAAAAAAAAIcBAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:08:18.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "EmployerProfile.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\EmployerProfile.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EmployerProfile.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\EmployerProfile.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EmployerProfile.cshtml",
+              "ViewState": "AgIAAGUBAAAAAAAAAAAAwAsBAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T13:06:08.301Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "employerDashboard.css",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\wwwroot\\css\\employerDashboard.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\employerDashboard.css",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\wwwroot\\css\\employerDashboard.css",
+              "RelativeToolTip": "wwwroot\\css\\employerDashboard.css",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAUwBwAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-05-08T12:55:51.556Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "TeacherDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\TeacherDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\TeacherDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\TeacherDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\TeacherDashboard.cshtml",
+              "ViewState": "AgIAAHIDAAAAAAAAAAAAwE0DAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-01T14:40:29.351Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "PendingCertificates.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\PendingCertificates.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\PendingCertificates.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\PendingCertificates.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\PendingCertificates.cshtml",
+              "ViewState": "AgIAAEMBAAAAAAAAAAAWwAQBAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-01T14:41:12.513Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-05-08T13:00:07.162Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ScoreWeights.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\AdminDashboard\\ScoreWeights.cshtml",
+              "RelativeDocumentMoniker": "Views\\AdminDashboard\\ScoreWeights.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\AdminDashboard\\ScoreWeights.cshtml",
+              "RelativeToolTip": "Views\\AdminDashboard\\ScoreWeights.cshtml",
+              "ViewState": "AgIAAM8CAAAAAAAAAAAEwEkDAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:42:56.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "VerifyResetCode.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\VerifyResetCode.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\VerifyResetCode.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\VerifyResetCode.cshtml",
+              "RelativeToolTip": "Views\\Account\\VerifyResetCode.cshtml",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAAAG4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:31:46.741Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AdminDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\AdminDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\AdminDashboard.cshtml",
+              "ViewState": "AgIAAEQAAAAAAAAAAADwv1QAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T10:14:13.163Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "VerifyAccount.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\VerifyAccount.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\VerifyAccount.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\VerifyAccount.cshtml",
+              "RelativeToolTip": "Views\\Account\\VerifyAccount.cshtml",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAAAJwAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:31:11.829Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "EmployerDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAIkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-01T10:40:25.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "ResetPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\ResetPassword.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeToolTip": "Views\\Account\\ResetPassword.cshtml",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAAAG4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:30:53.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "ForgotPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ForgotPassword.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\ForgotPassword.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ForgotPassword.cshtml",
+              "RelativeToolTip": "Views\\Account\\ForgotPassword.cshtml",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAAG4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:30:27.645Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "ChangePassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ChangePassword.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\ChangePassword.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Views\\Account\\ChangePassword.cshtml",
+              "RelativeToolTip": "Views\\Account\\ChangePassword.cshtml",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAEwIMAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-08T12:29:33.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "ProgrammingTestController.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Controllers\\ProgrammingTestController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProgrammingTestController.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Controllers\\ProgrammingTestController.cs",
+              "RelativeToolTip": "Controllers\\ProgrammingTestController.cs",
+              "ViewState": "AgIAAJMJAAAAAAAAAAAEwJ8JAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T11:05:57.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "StudentContext.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Data\\StudentContext.cs",
+              "RelativeDocumentMoniker": "Data\\StudentContext.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Data\\StudentContext.cs",
+              "RelativeToolTip": "Data\\StudentContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-01T12:36:18.686Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "Student.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Models\\Student.cs",
+              "RelativeDocumentMoniker": "Models\\Student.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\test\\edubad - updatedredtheme - Copy (4)\\StudentBadge\\Models\\Student.cs",
+              "RelativeToolTip": "Models\\Student.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA7wBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-01T10:32:47.346Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

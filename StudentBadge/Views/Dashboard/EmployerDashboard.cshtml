@@ -1,0 +1,393 @@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var employerName = ViewBag.EmployerName;
+    var companyName = ViewBag.CompanyName;
+    var allStudents = ViewBag.AllStudents as List<Student>;
+    
+    // For JavaScript safety
+    var jsEmployerId = ViewBag.EmployerId;
+    
+    // Set the layout
+    Layout = "_Layout";
+    ViewData["Title"] = "Employer Dashboard";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/employerDashboard.css" />
+}
+
+<!-- Add hidden input with the employer ID for JavaScript to access -->
+<input type="hidden" id="employerId" value="@ViewBag.EmployerId" />
+
+<!-- Also add data attribute to body tag -->
+@section HeadContent {
+    <script>
+        // Make sure employer ID is properly set when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const employerId = '@ViewBag.EmployerId';
+            console.log('Employer ID from server:', employerId);
+            
+            // Double check that the ID is valid
+            if (!employerId || employerId.trim() === '') {
+                console.error('Warning: No employer ID provided by the server');
+            }
+            
+            // Set employer ID in multiple places for redundancy
+            document.body.setAttribute('data-employer-id', employerId);
+            
+            // Also set as a global variable for the JavaScript file
+            window.employerId = employerId;
+            
+            // Verify the hidden input has the correct value
+            const hiddenInput = document.getElementById('employerId');
+            if (hiddenInput) {
+                // Make sure it's not empty
+                if (!hiddenInput.value || hiddenInput.value.trim() === '') {
+                    hiddenInput.value = employerId;
+                }
+                console.log('Hidden input employer ID:', hiddenInput.value);
+            } else {
+                console.error('Warning: Hidden input #employerId not found');
+            }
+        });
+    </script>
+}
+
+<button class="mobile-menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+<button class="mobile-exit-btn" id="mobileExitBtn" style="display: none;" onclick="exitCurrentView()">
+    &times;
+</button>
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="~/images/student1.png" alt="EduBadge Logo">
+            <h2>EduBadge</h2>
+            <p>Employer Dashboard</p>
+        </div>
+        <nav>
+            <a href="#" class="sidebar-link active">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+             <a href="/Dashboard/MarkedStudents" class="sidebar-link">
+            <i class="fas fa-bookmark"></i> Marked Students
+        </a>
+            <a href="/Dashboard/EmployerProfile" class="sidebar-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            <a href="/Home/Login" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <h1>Welcome, @employerName!</h1>
+        
+        <div class="employer-info">
+            <p><strong>Company Name:</strong> @companyName</p>
+        </div>
+
+        <div class="student-list">
+            <h2>Top Students</h2>
+            <div class="search-box">
+                <input type="text" id="studentSearch" class="search-input" placeholder="Search by name, achievements, or comments...">
+                <button id="searchButton" class="search-btn"><i class="fas fa-search"></i> Search</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Students</button>
+                <button class="filter-btn" data-filter="top" title="Show highest scoring students across all categories">Top Performers</button>
+                <button class="filter-btn" data-filter="grades" title="Students with highest academic grades">Top by Grades</button>
+                <button class="filter-btn" data-filter="mastery" title="Students who excel in technical skills and certifications">Mastery</button>
+                <button class="filter-btn" data-filter="webinars" title="Students with high seminar and webinar attendance">Webinars/Seminars</button>
+                <button class="filter-btn" data-filter="extracurricular" title="Students with notable extracurricular achievements">Extracurricular Activities</button>
+                
+                <div class="toggle-container">
+                    <span class="toggle-label">4th Year & Graduated Only</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="seniorToggle" onchange="seniorToggleChanged(this)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="studentContainer">
+                <!-- Loading placeholder that will be replaced by actual student data -->
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <p>Loading student data...</p>
+                </div>
+            </div>
+
+            <!-- Store student data in a hidden element to be processed by JavaScript -->
+            <script type="application/json" id="studentsData" style="display:none;">
+                @Html.Raw(Json.Serialize(allStudents ?? new List<Student>()))
+            </script>
+        </div>
+    </main>
+</div>
+
+<!-- Messages Panel -->
+<div class="messages-panel">
+    <div class="messages-icon" onclick="toggleMessagesDropdown()">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+    <div class="messages-dropdown" id="messagesDropdown">
+        <div class="messages-dropdown-header">Recent Conversations</div>
+        <div id="previousChats">
+            <!-- Previous chats will be loaded here -->
+            <div class="loading-chats" style="padding: 20px; text-align: center; color: #666;">
+                Loading previous chats...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student Profile Modal with Enhanced Information -->
+<div id="studentProfileModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeStudentProfile()">&times;</span>
+        <div class="student-profile-container">
+            <div class="profile-header">
+                <div class="profile-picture">
+                    <img id="studentProfilePic" src="/images/blank.jpg" alt="Profile Picture" onerror="this.src='/images/blank.jpg';">
+                </div>
+                <div class="profile-info">
+                    <h2 id="studentName"></h2>
+                    <p id="studentDetails"></p>
+                    <div class="score-badge" id="studentScore"></div>
+                </div>
+            </div>
+            
+            <div class="profile-body">
+                <!-- Left Column - Academic Information -->
+                <div class="academic-column">
+                    <!-- Academic Performance -->
+                    <div class="stats-section">
+                        <h3>Academic Performance</h3>
+                        <div class="score-panel">
+                            <div class="badge-color" id="studentBadge"></div>
+                            <p>This student's performance is ranked in the <span id="studentRanking"></span> category.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Score Breakdown -->
+                    <div class="scoring-breakdown-section">
+                        <h3>Score Breakdown</h3>
+                        <div class="score-breakdown-table">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Score</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Academic Grades</td>
+                                        <td id="academicGradesScore">-</td>
+                                        <td id="academicGradesWeight">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Coding Challenges/Projects</td>
+                                        <td id="challengesScore">-</td>
+                                        <td id="challengesWeight">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Skill Mastery</td>
+                                        <td id="masteryScore">-</td>
+                                        <td id="masteryWeight">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Seminars & Webinars</td>
+                                        <td id="seminarsScore">-</td>
+                                        <td id="seminarsWeight">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Extra-Curricular Involvement</td>
+                                        <td id="extracurricularScore">-</td>
+                                        <td id="extracurricularWeight">-</td>
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td><strong>Total Score</strong></td>
+                                        <td id="totalScore" colspan="2"><strong>-</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="challengeStatsContainer" class="challenge-stats" style="margin-top: 15px; display: none;">
+                            <p>Completed <span id="completedChallenges">0</span> out of <span id="totalChallenges">0</span> available challenges</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Grades Section -->
+                    <div class="grades-section">
+                        <h3>Academic Grades</h3>
+                        <div id="studentGrades" class="grade-details">
+                            <div class="grade-table">
+                                <div class="grade-row">
+                                    <div class="grade-label">First Year:</div>
+                                    <div class="grade-value" id="FirstYearGrade">-</div>
+                                </div>
+                                <div class="grade-row">
+                                    <div class="grade-label">Second Year:</div>
+                                    <div class="grade-value" id="SecondYearGrade">-</div>
+                                </div>
+                                <div class="grade-row">
+                                    <div class="grade-label">Third Year:</div>
+                                    <div class="grade-value" id="ThirdYearGrade">-</div>
+                                </div>
+                                <div class="grade-row">
+                                    <div class="grade-label">Fourth Year:</div>
+                                    <div class="grade-value" id="FourthYearGrade">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Achievements and Activities -->
+                <div class="achievements-column">
+                    <!-- Achievements Section -->
+                    <div class="achievements-section">
+                        <h3>Achievements</h3>
+                        <div id="studentAchievements" class="achievements-list"></div>
+                    </div>
+                    
+                    <!-- Teacher Comments Section -->
+                    <div class="comments-section">
+                        <h3>Teacher Comments</h3>
+                        <div id="studentComments" class="comments-list"></div>
+                    </div>
+                    
+                    <!-- Completed Challenges Section -->
+                    <div class="challenges-section">
+                        <h3>Completed Challenges</h3>
+                        <div id="studentChallenges" class="challenges-list">
+                            <!-- Challenges will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Mastery Section -->
+                    <div class="mastery-section">
+                        <h3>Mastery (Tests and Certificates)</h3>
+                        <div id="studentCertificates">
+                            <p>Loading certificate data...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Section - Extra Activities and Resume -->
+            <div class="additional-info">
+                <!-- Seminar/Webinar Section -->
+                <div class="seminar-section">
+                    <h3>Seminars & Webinars</h3>
+                    <div id="studentSeminars" class="seminar-details">
+                        <div class="loading-seminars">Loading...</div>
+                    </div>
+                </div>
+                
+                <!-- Extracurricular Section -->
+                <div class="extracurricular-section">
+                    <h3>Extracurricular Activities</h3>
+                    <div id="studentExtracurricular">
+                        <p>Loading extracurricular activities...</p>
+                    </div>
+                </div>
+                
+                <!-- Resume Section -->
+                <div class="resume-section">
+                    <h3>Resume</h3>
+                    <div id="studentResume"></div>
+                    <div class="action-buttons">
+                        <button id="viewResumeBtn" class="view-resume-btn" style="background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; display: none;">
+                            <i class="fas fa-file"></i> View Resume
+                                </button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Modal -->
+<div id="chatModal" class="chat-modal">
+    <div class="chat-header">
+        <img id="chatStudentAvatar" class="chat-header-avatar" src="/images/blank.jpg" alt="Student Avatar">
+        <div class="chat-header-info">
+            <h3 id="chatStudentName" class="chat-header-name">Student Name</h3>
+            <p class="chat-header-status" id="chatStudentCourse">Student Course</p>
+        </div>
+        <div class="chat-header-actions">
+            <button class="chat-header-action" onclick="closeChat()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be loaded here -->
+        <div class="loading-messages" style="text-align: center; padding: 20px;">Loading messages...</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+        <button onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Video Call Modal -->
+<div id="videoCallModal" class="modal">
+    <div class="modal-content video-call-modal-content">
+        <span class="close-modal" onclick="closeVideoCallModal()">&times;</span>
+        <h2>Video Call</h2>
+        <div class="video-call-student-info">
+            <img id="videoCallStudentImg" src="/images/blank.jpg" alt="Student" class="video-call-student-img">
+            <h3 id="videoCallStudentName">Student Name</h3>
+        </div>
+        <p id="videoCallStatus">Initiating call...</p>
+        <div class="video-call-buttons">
+            <button id="startCallBtn" class="btn-primary">Start Call</button>
+            <button id="cancelCallBtn" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal">
+    <div class="modal-content">
+        <span class="close-image-modal">&times;</span>
+        <h2 id="imageModalTitle">Image</h2>
+        <img id="modalImage" style="max-width:100%; max-height:80vh;" alt="Modal Image">
+    </div>
+</div>
+
+<!-- Resume View Modal -->
+<div id="resumeViewModal" class="modal">
+    <div class="modal-content resume-modal-content">
+        <div class="modal-header">
+            <h2>Student Resume</h2>
+            <span class="close" onclick="closeResumeView()">&times;</span>
+        </div>
+        <div class="modal-body resume-modal-body">
+            <iframe id="resumeViewFrame" style="width:100%; height:100%; border:none;"></iframe>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Load the progressive loader first -->
+    <script src="~/js/progressiveLoader.js"></script>
+    <!-- Then load the main script -->
+    <script src="~/js/employerDashboard.js"></script>
+}

@@ -1,0 +1,652 @@
+@{
+    ViewData["Title"] = "Video Call";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    // Store values in JavaScript-safe variables
+    var jsCallId = ViewBag.CallId;
+    var jsStudentId = ViewBag.StudentId;
+}
+
+<div class="video-call-container">
+    <div class="call-header">
+        <div class="employer-info">
+            <img id="employerProfilePic" src="/images/blank.jpg" alt="Employer" class="profile-pic" />
+            <div>
+                <h3 id="employerName">Loading...</h3>
+                <p id="employerCompany">Loading...</p>
+            </div>
+        </div>
+        <div class="call-controls">
+            <button id="endCallBtn" class="btn-end-call" title="End Call">
+                <i class="fas fa-phone-slash"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="video-container">
+        <div class="remote-video-wrapper">
+            <video id="remoteVideo" autoplay playsinline></video>
+            <div id="waitingMessage" class="waiting-message">
+                <div class="spinner"></div>
+                <p>Waiting for the employer to join...</p>
+            </div>
+        </div>
+        <div class="local-video-wrapper">
+            <video id="localVideo" autoplay playsinline muted></video>
+            <div class="video-controls">
+                <button id="toggleVideoBtn" class="control-btn" title="Toggle Video">
+                    <i class="fas fa-video"></i>
+                </button>
+                <button id="toggleAudioBtn" class="control-btn" title="Toggle Audio">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button id="toggleFullscreenBtn" class="control-btn" title="Toggle Fullscreen">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="callEndedModal" class="modal">
+    <div class="modal-content">
+        <h2>Call Ended</h2>
+        <p>The video call has ended.</p>
+        <button id="returnToDashboardBtn" class="btn-primary">Return to Dashboard</button>
+    </div>
+</div>
+
+<div id="incomingCallModal" class="modal">
+    <div class="modal-content">
+        <h2>Incoming Call</h2>
+        <div class="incoming-call-info">
+            <img id="incomingCallerPic" src="/images/blank.jpg" class="profile-pic" />
+            <div>
+                <h3 id="incomingCallerName">Loading...</h3>
+                <p id="incomingCallerCompany">Loading...</p>
+            </div>
+        </div>
+        <div class="modal-buttons">
+            <button id="acceptCallBtn" class="btn-accept">Accept</button>
+            <button id="declineCallBtn" class="btn-decline">Decline</button>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        .video-call-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            background-color: #1a1a1a;
+        }
+
+        .call-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #2d2d2d;
+            color: white;
+            border-bottom: 1px solid #444;
+        }
+
+        .employer-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+            border: 2px solid #4CAF50;
+        }
+
+        .employer-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: white;
+        }
+
+        .employer-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .video-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+            flex-direction: column;
+            height: 100vh;
+            background: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .remote-video-wrapper {
+            flex: 1;
+            position: relative;
+            background-color: #000;
+        }
+
+        #remoteVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .local-video-wrapper {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #localVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: #333;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .control-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            margin: 0 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .control-btn.muted {
+            background-color: #e74c3c;
+        }
+
+        .btn-end-call {
+            background-color: #e74c3c;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-end-call:hover {
+            background-color: #c0392b;
+        }
+
+        .waiting-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #2d2d2d;
+            color: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .incoming-call-info {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-accept, .btn-decline, .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-accept {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-decline {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-decline:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.11.1/simplepeer.min.js"></script>
+    <script>
+        // Variables
+        const callId = @jsCallId;
+        const studentId = "@jsStudentId";
+        const userType = "student";
+        
+        let connection;
+        let peer;
+        let localStream;
+        let remoteStream;
+        let isAudioMuted = false;
+        let isVideoOff = false;
+        
+        // DOM elements
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const waitingMessage = document.getElementById('waitingMessage');
+        const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+        const toggleVideoBtn = document.getElementById('toggleVideoBtn');
+        const toggleFullscreenBtn = document.getElementById('toggleFullscreenBtn');
+        const endCallBtn = document.getElementById('endCallBtn');
+        const callEndedModal = document.getElementById('callEndedModal');
+        const returnToDashboardBtn = document.getElementById('returnToDashboardBtn');
+        const employerName = document.getElementById('employerName');
+        const employerCompany = document.getElementById('employerCompany');
+        const employerProfilePic = document.getElementById('employerProfilePic');
+        
+        // Initialize call
+        async function initializeCall() {
+            // Get call details
+            try {
+                const response = await fetch(`/VideoCall/GetCallDetails?callId=${callId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const call = data.call;
+                    
+                    // Update UI with employer details
+                    employerName.textContent = call.employerName;
+                    employerCompany.textContent = call.company;
+                    if (call.employerProfilePic) {
+                        employerProfilePic.src = call.employerProfilePic;
+                    }
+                    
+                    // Setup WebRTC
+                    await setupWebRTC();
+                    
+                    // Setup SignalR
+                    await setupSignalR();
+                } else {
+                    console.error("Failed to get call details:", data.message);
+                    alert("Failed to load call details. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error initializing call:", error);
+                alert("Error initializing call. Please try again.");
+            }
+        }
+        
+        // Setup WebRTC
+        async function setupWebRTC() {
+            try {
+                // Request user media
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: true
+                });
+                
+                // Display local video
+                localVideo.srcObject = localStream;
+                
+                // Create peer connection when needed
+                // This will be initialized when employer connects
+            } catch (error) {
+                console.error("Error accessing media devices:", error);
+                alert("Unable to access camera or microphone. Please check your permissions.");
+            }
+        }
+        
+        // Setup SignalR
+        async function setupSignalR() {
+            try {
+                // Create SignalR connection
+                connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/videoCallHub")
+                    .withAutomaticReconnect()
+                    .build();
+                
+                // Handle connection events
+                connection.on("ConnectionRegistered", (id) => {
+                    console.log("Connection registered for:", id);
+                });
+                
+                // Handle incoming call response from employer
+                connection.on("ReceiveSignal", (receivedCallId, signal, senderId, senderType) => {
+                    if (receivedCallId.toString() === callId.toString()) {
+                        handleSignal(signal, senderId, senderType);
+                    }
+                });
+                
+                // Handle call ended
+                connection.on("CallEnded", (receivedCallId) => {
+                    if (receivedCallId.toString() === callId.toString()) {
+                        handleCallEnded();
+                    }
+                });
+                
+                // Handle errors
+                connection.on("Error", (error) => {
+                    console.error("SignalR error:", error);
+                });
+                
+                // Start the connection
+                await connection.start();
+                console.log("SignalR connection established");
+                
+                // Register the connection
+                await connection.invoke("RegisterConnection", studentId, userType);
+            } catch (error) {
+                console.error("Error setting up SignalR:", error);
+                alert("Error connecting to the call service. Please refresh the page.");
+            }
+        }
+        
+        // Handle WebRTC signaling
+        function handleSignal(signal, senderId, senderType) {
+            try {
+                const signalData = JSON.parse(signal);
+                
+                // If this is an offer, create a peer connection
+                if (signalData.type === 'offer') {
+                    // Hide waiting message
+                    waitingMessage.style.display = 'none';
+                    
+                    // Create and configure peer
+                    createPeer(false);
+                    
+                    // Set the remote description
+                    peer.signal(signal);
+                } else if (peer && (signalData.type === 'answer' || signalData.candidate)) {
+                    // For answers or ICE candidates, pass them to the peer
+                    peer.signal(signal);
+                }
+            } catch (error) {
+                console.error("Error handling signal:", error);
+            }
+        }
+        
+        // Create WebRTC peer
+        function createPeer(isInitiator) {
+            try {
+                // Create new peer
+                peer = new SimplePeer({
+                    initiator: isInitiator,
+                    stream: localStream,
+                    trickle: true
+                });
+                
+                // When peer generates signal data
+                peer.on('signal', (data) => {
+                    // Send signal to the employer via SignalR
+                    const signal = JSON.stringify(data);
+                    connection.invoke("SendSignal", callId, signal, studentId, userType);
+                });
+                
+                // When peer receives a stream
+                peer.on('stream', (stream) => {
+                    remoteStream = stream;
+                    remoteVideo.srcObject = stream;
+                    waitingMessage.style.display = 'none';
+                });
+                
+                // When peer connection closes
+                peer.on('close', () => {
+                    handleCallEnded();
+                });
+                
+                // Handle errors
+                peer.on('error', (err) => {
+                    console.error("Peer connection error:", err);
+                });
+                
+                return peer;
+            } catch (error) {
+                console.error("Error creating peer:", error);
+                return null;
+            }
+        }
+        
+        // Handle call ended
+        function handleCallEnded() {
+            // Show call ended modal
+            callEndedModal.style.display = 'flex';
+            
+            // Clean up resources
+            cleanupCall();
+        }
+        
+        // Clean up call resources
+        function cleanupCall() {
+            // Stop streams
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            
+            // Close peer connection
+            if (peer) {
+                peer.destroy();
+                peer = null;
+            }
+        }
+        
+        // Toggle audio
+        toggleAudioBtn.addEventListener('click', () => {
+            isAudioMuted = !isAudioMuted;
+            localStream.getAudioTracks().forEach(track => {
+                track.enabled = !isAudioMuted;
+            });
+            
+            if (isAudioMuted) {
+                toggleAudioBtn.classList.add('muted');
+                toggleAudioBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            } else {
+                toggleAudioBtn.classList.remove('muted');
+                toggleAudioBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        });
+        
+        // Toggle video
+        toggleVideoBtn.addEventListener('click', () => {
+            isVideoOff = !isVideoOff;
+            localStream.getVideoTracks().forEach(track => {
+                track.enabled = !isVideoOff;
+            });
+            
+            if (isVideoOff) {
+                toggleVideoBtn.classList.add('muted');
+                toggleVideoBtn.innerHTML = '<i class="fas fa-video-slash"></i>';
+            } else {
+                toggleVideoBtn.classList.remove('muted');
+                toggleVideoBtn.innerHTML = '<i class="fas fa-video"></i>';
+            }
+        });
+        
+        // Toggle fullscreen
+        toggleFullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                if (remoteVideo.requestFullscreen) {
+                    remoteVideo.requestFullscreen();
+                } else if (remoteVideo.webkitRequestFullscreen) {
+                    remoteVideo.webkitRequestFullscreen();
+                } else if (remoteVideo.msRequestFullscreen) {
+                    remoteVideo.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        });
+        
+        // End call
+        endCallBtn.addEventListener('click', async () => {
+            try {
+                // Notify other participant
+                if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                    await connection.invoke("EndCall", callId, studentId, userType);
+                }
+                
+                handleCallEnded();
+            } catch (error) {
+                console.error("Error ending call:", error);
+                handleCallEnded();
+            }
+        });
+        
+        // Return to dashboard
+        returnToDashboardBtn.addEventListener('click', () => {
+            window.location.href = '/Dashboard/StudentDashboard';
+        });
+        
+        // Handle window unload
+        window.addEventListener('beforeunload', async () => {
+            try {
+                // End call when user leaves the page
+                if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                    await connection.invoke("EndCall", callId, studentId, userType);
+                }
+                
+                cleanupCall();
+            } catch (error) {
+                console.error("Error during cleanup:", error);
+            }
+        });
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeCall);
+        
+        // Answer the call
+        function answerCall() {
+            // ... existing code ...
+            
+            // Respond to the call
+            connection.invoke("RespondToCall", callId, studentId, "accept")
+                .then(() => {
+                    // Redirect to the video call page
+                    window.location.href = `/VideoCall/StudentVideoCall?callId=${callId}`;
+                })
+                .catch((error) => {
+                    console.error("Error accepting call:", error);
+                });
+        }
+        
+        // Decline the call
+        function declineCall() {
+            // ... existing code ...
+            
+            // Respond to the call
+            connection.invoke("RespondToCall", callId, studentId, "decline")
+                .catch((error) => {
+                    console.error("Error declining call:", error);
+                });
+        }
+    </script>
+} 

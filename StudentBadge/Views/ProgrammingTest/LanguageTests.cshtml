@@ -1,0 +1,489 @@
+@model List<StudentBadge.Models.ProgrammingTest>
+@{
+    Layout = null;
+    int yearLevel = ViewBag.StudentYearLevel;
+    string studentId = ViewBag.StudentId;
+    string programmingLanguage = ViewBag.ProgrammingLanguage;
+    int testsTaken = ViewBag.TestsTaken;
+    var testsByYearLevel = ViewBag.TestsByYearLevel as Dictionary<int, List<StudentBadge.Models.ProgrammingTest>>;
+    
+    decimal multiplier = testsTaken switch
+    {
+        1 => 0.25m,
+        2 => 0.50m,
+        3 => 0.75m,
+        _ => testsTaken >= 4 ? 1.00m : 0.25m
+    };
+    
+    string yearName = "";
+    
+    switch (yearLevel)
+    {
+        case 1: yearName = "1st Year"; break;
+        case 2: yearName = "2nd Year"; break;
+        case 3: yearName = "3rd Year"; break;
+        case 4: yearName = "4th Year"; break;
+        case 5: yearName = "Graduate"; break;
+        default: yearName = "Unknown"; break;
+    }
+    
+    string GetYearLevelName(int level)
+    {
+        return level switch
+        {
+            1 => "1st Year",
+            2 => "2nd Year",
+            3 => "3rd Year",
+            4 => "4th Year",
+            _ => $"Year {level}"
+        };
+    }
+    
+    string GetYearLevelBadgeClass(int level)
+    {
+        return level switch
+        {
+            1 => "bg-success",
+            2 => "bg-info",
+            3 => "bg-warning",
+            4 => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@programmingLanguage Tests - Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px !important;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+        }
+
+        .btn-primary:hover {
+                background-color: #8a2be2;
+                border-color: #8a2be2;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .badge-info {
+            background-color: #3498db;
+        }
+
+        .badge-success {
+            background-color: #2ecc71;
+        }
+
+        .badge-warning {
+            background-color: #f1c40f;
+            color: #000;
+        }
+
+        .badge-danger {
+            background-color: #e74c3c;
+        }
+
+        .badge-secondary {
+            background-color: #7f8c8d;
+        }
+
+        .year-level-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .language-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .test-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #8a2be2;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .test-info {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .test-info-item {
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .test-info-item i {
+            margin-right: 5px;
+                color: #8a2be2;
+        }
+
+        .test-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .text-muted-light {
+            color: #aaa;
+        }
+
+        .progress-container {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background-color: #8a2be2;
+        }
+        
+        .section-heading {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #8a2be2;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Portal</p>
+            </div>
+            <nav>
+                <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+                <a href="/Dashboard/StudentProfile" class="sidebar-link">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="/ProgrammingTest/AvailableTests" class="sidebar-link">
+                    <i class="fas fa-tasks"></i> Available Tests
+                </a>
+                <a href="/ProgrammingTest/StudentTests" class="sidebar-link active">
+                    <i class="fas fa-code"></i> Completed Tests
+                </a>
+                <a href="/Challenge/AvailableChallenges" class="sidebar-link">
+                    <i class="fas fa-trophy"></i> Challenges
+                </a>
+                <a href="/Challenge/CompletedChallenges" class="sidebar-link">
+                    <i class="fas fa-check-circle"></i> Completed Challenges
+                </a>
+                <a href="/ProgrammingTest/Certificates" class="sidebar-link">
+                    <i class="fas fa-award"></i> My Certificates
+                </a>
+                <a href="/Home/Login" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i> Log Out
+                </a>
+            </nav>
+        </aside>
+        
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-code"></i> @programmingLanguage Mastery Tests
+                    <span class="year-level-badge bg-primary">@yearName</span>
+                </h1>
+                <a href="/ProgrammingTest/AvailableTests" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Languages
+                </a>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5>Your Mastery Progress</h5>
+                    <p>You've taken @testsTaken test(s) for @programmingLanguage. Complete more tests to increase your mastery multiplier.</p>
+                    <div class="progress-container">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small>Progress</small>
+                            <small>@Math.Min(testsTaken * 25, 100)%</small>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: @Math.Min(testsTaken * 25, 100)%" aria-valuenow="@Math.Min(testsTaken * 25, 100)" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <small class="text-muted">Current multiplier: @multiplier.ToString("P0")</small>
+                        </div>
+                        <div>
+                            <small class="text-muted">Next level: @(testsTaken >= 4 ? "Max level reached" : ((testsTaken + 1) * 0.25m).ToString("P0"))</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4 bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle text-primary me-3" style="font-size: 24px;"></i>
+                        <div>
+                            <h5 class="mb-1">Challenge Yourself!</h5>
+                            <p class="mb-0">You can now take tests from <strong>any year level</strong>, regardless of your current academic year. This allows you to challenge yourself with more advanced material if you feel ready.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            @if (testsByYearLevel != null && testsByYearLevel.Count > 0)
+            {
+                // Sort by year level
+                var orderedYearLevels = testsByYearLevel.Keys.OrderBy(y => y).ToList();
+                
+                foreach (var yearLevelKey in orderedYearLevels)
+                {
+                    var testsForYear = testsByYearLevel[yearLevelKey];
+                    
+                    <h3 class="section-heading">
+                        <i class="fas fa-graduation-cap"></i> @GetYearLevelName(yearLevelKey) Level Tests
+                    </h3>
+                    
+                    <div class="row">
+                        @foreach (var test in testsForYear)
+                        {
+                            <div class="col-md-6 mb-4">
+                                <div class="card test-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            @test.TestName
+                                            <span class="year-level-badge @GetYearLevelBadgeClass(yearLevelKey)">
+                                                <i class="fas fa-graduation-cap"></i> @GetYearLevelName(yearLevelKey)
+                                            </span>
+                                        </h5>
+                                        <p class="card-text mt-2">
+                                            @(string.IsNullOrEmpty(test.Description) ? "No description available." : test.Description)
+                                        </p>
+                                        
+                                        <div class="test-info">
+                                            <div class="test-info-item">
+                                                <i class="fas fa-question-circle"></i> @(test.Questions?.Count ?? 0) Questions
+                                            </div>
+                                            <div class="test-info-item">
+                                                <i class="fas fa-calendar-alt"></i> @test.CreatedDate.ToString("MMM dd, yyyy")
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="test-actions">
+                                            <a href="@Url.Action("TakeTest", "ProgrammingTest", new { id = test.TestId })" class="btn btn-primary">
+                                                <i class="fas fa-play-circle"></i> Take Test
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>No Available Tests</h2>
+                    <p>You have completed all available @programmingLanguage tests for your year level.</p>
+                    <a href="/ProgrammingTest/AvailableTests" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> Back to Languages
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

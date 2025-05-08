@@ -1,0 +1,277 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\dashboard\\studentdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\dashboard\\studentprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\dashboard\\studentprofile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\dashboard\\employerdashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\dashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\dashboard\\admindashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\home\\signup.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\home\\signup.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\models\\errorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|c:\\users\\octop\\source\\repos\\webapplication1\\studentbadge\\studentbadge\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{80C607DC-4A56-4097-83B7-1BCF3A1C8E66}|StudentBadge\\StudentBadge.csproj|solutionrelative:studentbadge\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StudentDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Dashboard\\StudentDashboard.cshtml",
+              "ViewState": "AgIAAG0GAAAAAAAAAAAAAGgAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-09T10:04:38.922Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StudentProfile.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Dashboard\\StudentProfile.cshtml",
+              "ViewState": "AgIAANgAAAAAAAAAAAAIwPIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-10T06:56:33.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "StudentBadge\\Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAKoBAAAAAAAAAAA3wGwAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T12:16:35.12Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Startup.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Startup.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Startup.cs",
+              "RelativeToolTip": "StudentBadge\\Startup.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAIwFsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T12:53:07.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Home\\Login.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Home\\Login.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Home\\Login.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Home\\Login.cshtml",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAGkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-10T13:40:50.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Student.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Models\\Student.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Models\\Student.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Models\\Student.cs",
+              "RelativeToolTip": "StudentBadge\\Models\\Student.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAA1wA0AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T09:30:47.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EmployerDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Dashboard\\EmployerDashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-09T10:39:17.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AdminDashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Dashboard\\AdminDashboard.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-09T11:50:14.656Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "StudentBadge\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAL4AAAAAAAAAAAAAANAAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T08:27:24.465Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\appsettings.json",
+              "RelativeDocumentMoniker": "StudentBadge\\appsettings.json",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\appsettings.json",
+              "RelativeToolTip": "StudentBadge\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-09T08:42:48.435Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Signup.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Home\\Signup.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\Home\\Signup.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\Home\\Signup.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\Home\\Signup.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAnwDYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-09T16:39:22.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "StudentBadge\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAwwCEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T08:59:54.175Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "StudentBadge\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T10:05:11.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Program.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Program.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Program.cs",
+              "RelativeToolTip": "StudentBadge\\Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T08:41:49.536Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "ErrorViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Models\\ErrorViewModel.cs",
+              "RelativeDocumentMoniker": "StudentBadge\\Models\\ErrorViewModel.cs",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Models\\ErrorViewModel.cs",
+              "RelativeToolTip": "StudentBadge\\Models\\ErrorViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-09T13:14:52.77Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "StudentBadge\\Views\\_ViewImports.cshtml",
+              "ToolTip": "C:\\Users\\octop\\source\\repos\\WebApplication1\\StudentBadge\\StudentBadge\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "StudentBadge\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-09T08:21:49.947Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

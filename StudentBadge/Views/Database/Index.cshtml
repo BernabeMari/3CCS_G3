@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Database Migration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Database Migration Tool</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> This will migrate data from the old database structure to the new one. 
+                        Please make sure you have a backup of your database before proceeding.
+                    </div>
+                    
+                    <p>This migration will:</p>
+                    <ul>
+                        <li>Create new tables if they don't exist (Users, StudentDetails, EmployerDetails, EmployerStudentMessages)</li>
+                        <li>Migrate data from old tables (Students, Employers, Messages) to the new structure</li>
+                        <li>Preserve all existing data</li>
+                    </ul>
+                    
+                    <p>After migration, the application will use the new database structure for all operations.</p>
+                    
+                    <form asp-action="Migrate" method="post">
+                        <button type="submit" class="btn btn-danger btn-lg">Run Database Migration</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

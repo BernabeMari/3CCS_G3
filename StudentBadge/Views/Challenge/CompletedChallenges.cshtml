@@ -1,0 +1,479 @@
+@model List<StudentBadge.Models.ChallengeSubmission>
+@{
+    Layout = null;
+    string studentId = ViewBag.StudentId;
+    
+    // Get year level information - default to 0 if not available
+    var yearLevel = ViewBag.StudentYearLevel ?? 0;
+    var isGraduate = yearLevel == 5;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Challenges - Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px !important;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+        }
+
+        .btn-primary:hover {
+                background-color: #8a2be2;
+                border-color: #8a2be2;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .badge {
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .submission-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #8a2be2;
+        }
+
+        .submission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .submission-info {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .submission-info-item {
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+        }
+
+        .submission-info-item i {
+            margin-right: 5px;
+                color: #8a2be2;
+        }
+
+        .submission-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fff6f1;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .points-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffeee9;
+            color: #8a2be2;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .score-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8a2be2;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-circle {
+            fill: transparent;
+            stroke: #8a2be2;
+            stroke-width: 8;
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="EduBadge Logo">
+                <h2>EduBadge</h2>
+                <p>Student Portal</p>
+            </div>
+            
+            <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            
+            <a href="/Dashboard/StudentProfile" class="sidebar-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            
+            @if (!isGraduate)
+            {
+                <a href="/ProgrammingTest/AvailableTests" class="sidebar-link">
+                    <i class="fas fa-tasks"></i> Available Tests
+                </a>
+            }
+            else
+            {
+                <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                    <i class="fas fa-tasks"></i> Available Tests (Graduate)
+                </span>
+            }
+            
+            <a href="/ProgrammingTest/StudentTests" class="sidebar-link">
+                <i class="fas fa-code"></i> Completed Tests
+            </a>
+            
+            @if (!isGraduate)
+            {
+                <a href="/Challenge/AvailableChallenges" class="sidebar-link">
+                    <i class="fas fa-trophy"></i> Challenges
+                </a>
+            }
+            else
+            {
+                <span class="sidebar-link disabled" style="opacity: 0.5; cursor: not-allowed;">
+                    <i class="fas fa-trophy"></i> Challenges (Graduate)
+                </span>
+            }
+
+            <a href="/Challenge/CompletedChallenges" class="sidebar-link active">
+                <i class="fas fa-check-circle"></i> Completed Challenges
+            </a>
+            
+            <a href="/ProgrammingTest/Certificates" class="sidebar-link">
+                <i class="fas fa-award"></i> My Certificates
+            </a>
+            
+            <a href="/Home/Login" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-trophy me-2"></i> Completed Challenges
+                </h1>
+                <a href="/Challenge/AvailableChallenges" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-2"></i> Find New Challenges
+                </a>
+            </div>
+            
+            @if (TempData["Success"] != null)
+            {
+                <div class="card mb-4 border-success">
+                    <div class="card-body bg-success-subtle d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success me-3 fs-4"></i>
+                        <div class="flex-grow-1">
+                            <h5 class="card-title text-success mb-0">Success</h5>
+                            <p class="card-text mb-0">@TempData["Success"]</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            }
+            
+            @if (TempData["Error"] != null)
+            {
+                <div class="card mb-4 border-danger">
+                    <div class="card-body bg-danger-subtle d-flex align-items-center">
+                        <i class="fas fa-exclamation-circle text-danger me-3 fs-4"></i>
+                        <div class="flex-grow-1">
+                            <h5 class="card-title text-danger mb-0">Error</h5>
+                            <p class="card-text mb-0">@TempData["Error"]</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            }
+            
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (var submission in Model)
+                    {
+                        <div class="col-md-6 col-xl-4 mb-4">
+                            <div class="card submission-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        @submission.ChallengeName
+                                    </h5>
+                                    <div class="d-flex mt-3">
+                                        <div class="score-circle">
+                                            <div class="score-value">@submission.PercentageScore%</div>
+                                            <svg class="progress-ring" width="80" height="80">
+                                                <circle class="progress-ring-circle" 
+                                                        stroke-dasharray="200.96" 
+                                                        stroke-dashoffset="@(200.96 - (submission.PercentageScore / 100.0 * 200.96))" 
+                                                        r="32" cx="40" cy="40"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <span class="badge bg-@GetScoreBadgeColor(submission.PercentageScore)">
+                                                <i class="fas fa-star"></i> @submission.PointsEarned / @submission.TotalPoints Points
+                                            </span>
+                                            <p class="mt-2 mb-0">
+                                                <i class="fas fa-@GetScoreIcon(submission.PercentageScore) text-@GetScoreBadgeColor(submission.PercentageScore)"></i>
+                                                @GetScoreMessage(submission.PercentageScore)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="submission-info mt-3">
+                                        <div class="submission-info-item">
+                                            <i class="fas fa-code"></i> @submission.ProgrammingLanguage
+                                        </div>
+                                        <div class="submission-info-item">
+                                            <i class="fas fa-calendar-alt"></i> @submission.SubmissionDate.ToString("MMM dd, yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-trophy"></i>
+                    <h3>No Completed Challenges</h3>
+                    <p>You haven't completed any challenges yet. Start taking challenges to see your results here!</p>
+                    <a href="/Challenge/AvailableChallenges" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i> Find Challenges
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Make card-style alerts dismissible
+            $('.btn-close').on('click', function() {
+                $(this).closest('.card').fadeOut();
+            });
+            
+            // Auto-dismiss card alerts after 5 seconds
+            setTimeout(function() {
+                $('.card.border-success, .card.border-danger').fadeOut();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
+
+@functions {
+    private string GetScoreBadgeColor(int score)
+    {
+        if (score >= 90) return "success";
+        if (score >= 75) return "primary";
+        if (score >= 60) return "info";
+        if (score >= 50) return "warning";
+        return "danger";
+    }
+    
+    private string GetScoreIcon(int score)
+    {
+        if (score >= 90) return "crown";
+        if (score >= 75) return "award";
+        if (score >= 60) return "thumbs-up";
+        if (score >= 50) return "check";
+        return "exclamation-triangle";
+    }
+    
+    private string GetScoreMessage(int score)
+    {
+        if (score >= 90) return "Excellent!";
+        if (score >= 75) return "Great job!";
+        if (score >= 60) return "Good work!";
+        if (score >= 50) return "Passed";
+        return "Needs improvement";
+    }
+} 

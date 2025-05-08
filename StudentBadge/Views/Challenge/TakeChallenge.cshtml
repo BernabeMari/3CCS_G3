@@ -1,0 +1,439 @@
+@model StudentBadge.Models.SubmitChallengeViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.ChallengeName - Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px !important;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+       .logo img {
+            width: 150px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            font-weight: 700;
+                color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+        }
+
+        .btn-primary:hover {
+                background-color: #8a2be2;
+                border-color: #8a2be2;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 15px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .challenge-info {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #8a2be2;
+        }
+
+        .challenge-info h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .challenge-info p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .challenge-info-tag {
+            display: inline-block;
+            background: #ffeee9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8a2be2;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #8a2be2;
+        }
+
+        .question-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #8a2be2;
+            margin-bottom: 10px;
+        }
+
+        .question-points {
+            float: right;
+            background: #ffeee9;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8a2be2;
+        }
+
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .code-snippet {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+                border-color: #8a2be2;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+        }
+
+        .submission-actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="School Logo" style="width: 80px; height: auto;">
+                <h2>EduBadge</h2>
+                <p>Student Portal</p>
+            </div>
+            
+            <a href="/Dashboard/StudentDashboard" class="sidebar-link">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            
+            <a href="/Dashboard/StudentProfile" class="sidebar-link">
+                <i class="fas fa-user"></i> Profile
+            </a>
+            
+            <a href="/ProgrammingTest/AvailableTests" class="sidebar-link">
+                <i class="fas fa-tasks"></i> Available Tests
+            </a>
+            
+            <a href="/ProgrammingTest/StudentTests" class="sidebar-link">
+                <i class="fas fa-code"></i> Completed Tests
+            </a>
+            
+            <a href="/Challenge/AvailableChallenges" class="sidebar-link active">
+                <i class="fas fa-trophy"></i> Challenges
+            </a>
+
+            <a href="/Challenge/CompletedChallenges" class="sidebar-link">
+                <i class="fas fa-check-circle"></i> Completed Challenges
+            </a>
+            
+            <a href="/ProgrammingTest/Certificates" class="sidebar-link">
+                <i class="fas fa-award"></i> My Certificates
+            </a>
+            
+            <a href="/Home/Login" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>
+                    <i class="fas fa-trophy me-2"></i> Challenge: @Model.ChallengeName
+                </h1>
+                <a href="/Challenge/AvailableChallenges" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Challenges
+                </a>
+            </div>
+            
+            <!-- Challenge Info -->
+            <div class="challenge-info">
+                <h2>About this Challenge</h2>
+                <p>@(ViewBag.Description ?? "No description provided.")</p>
+                <div>
+                    <span class="challenge-info-tag">
+                        <i class="@GetLanguageIcon(ViewBag.ProgrammingLanguage)"></i> @ViewBag.ProgrammingLanguage
+                    </span>
+                    <span class="challenge-info-tag">
+                        <i class="fas fa-question-circle"></i> @(ViewBag.QuestionCount ?? 0) Question(s)
+                    </span>
+                    <span class="challenge-info-tag">
+                        <i class="fas fa-star"></i> @(ViewBag.TotalPoints ?? 0) Total Points
+                    </span>
+                </div>
+            </div>
+            
+            <form method="post" action="/Challenge/SubmitChallenge" id="challengeForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ChallengeId" id="ChallengeId" value="@Model.ChallengeId">
+                <input type="hidden" name="StudentId" id="StudentId" value="@Model.StudentId">
+                <input type="hidden" name="ChallengeName" id="ChallengeName" value="@Model.ChallengeName">
+                
+                <!-- Questions -->
+                @if (ViewBag.Questions != null && ViewBag.Questions.Count > 0)
+                {
+                    for (int i = 0; i < ViewBag.Questions.Count; i++)
+                    {
+                        var question = ViewBag.Questions[i];
+                        <div class="question-card">
+                            <div class="question-number">
+                                Question @(i + 1)
+                                <span class="question-points">
+                                    <i class="fas fa-star"></i> @question.Points Points
+                                </span>
+                            </div>
+                            <div class="question-text">
+                                @question.QuestionText
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(question.CodeSnippet))
+                            {
+                                <div class="code-snippet">@question.CodeSnippet</div>
+                            }
+                            
+                            <div class="form-group mt-3">
+                                <label for="Answers_@question.QuestionId" class="form-label">Your Answer:</label>
+                                <textarea name="Answers[@question.QuestionId]" id="Answers_@question.QuestionId" class="form-control" rows="4" placeholder="Enter your answer here..."></textarea>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i> No questions are available for this challenge.
+                    </div>
+                }
+                
+                <div class="challenge-actions">
+                    <button type="button" id="submitChallenge" class="btn btn-primary btn-lg">
+                        <i class="fas fa-check-circle"></i> Submit Challenge
+                    </button>
+                    <div id="loadingIndicator" class="mt-3 text-center" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Submitting challenge, please wait...</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Confirm before leaving page
+            window.addEventListener('beforeunload', function(e) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+            });
+            
+            // Remove confirmation when submitting form
+            $('form').on('submit', function() {
+                window.removeEventListener('beforeunload', function() {});
+            });
+
+            // Handle form submission
+            $('#submitChallenge').click(function() {
+                // Show confirmation
+                if (confirm('Are you sure you want to submit this challenge? You cannot change your answers after submission.')) {
+                    // Show loading indicator
+                    $('#loadingIndicator').show();
+                    $('#submitChallenge').prop('disabled', true);
+                    
+                    // Submit the form
+                    $('#challengeForm').submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+@functions {
+    private string GetLanguageIcon(string language)
+    {
+        switch (language?.ToLower())
+        {
+            case "visual basic":
+                return "fab fa-microsoft";
+            case "html/css":
+                return "fab fa-html5";
+            case "python":
+                return "fab fa-python";
+            case "javascript":
+                return "fab fa-js";
+            case "php":
+                return "fab fa-php";
+            case "c":
+                return "fas fa-code";
+            case "c#":
+                return "fab fa-microsoft";
+            default:
+                return "fas fa-code";
+        }
+    }
+} 

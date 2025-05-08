@@ -1,0 +1,799 @@
+@model List<StudentBadge.Models.StudentCertificateViewModel>
+
+@{
+    ViewData["Title"] = "Certificate Verification";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification</title>
+
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Add DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            width: 210px;
+            background: linear-gradient(180deg, #8A2BE2, #7B1FA2);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo img {
+            width: 80px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 10px 0 5px;
+            color: #fff;
+        }
+
+        .logo p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .sidebar-link.active {
+            background: #fff6f1;
+            font-weight: bold;
+                color: #8a2be2;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+            color: #fff;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 25px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #8a2be2;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .summary-box {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .summary-details h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #8a2be2;
+        }
+
+        .summary-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffeee9;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+        .summary-icon i {
+            font-size: 24px;
+                color: #8a2be2;
+        }
+
+        .certificate-list {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            border-top: 4px solid #8a2be2;
+        }
+
+        .card-header {
+            background-color: transparent;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #8a2be2;
+        }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #8a2be2;
+            font-weight: 600;
+        }
+
+        .table-bordered th, .table-bordered td {
+            border-color: #e0e0e0;
+        }
+
+        .badge.bg-info {
+            background-color: #3498db !important;
+        }
+
+        .badge.bg-success {
+            background-color: #2ecc71 !important;
+        }
+
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+
+        /* Modal styles */
+        .modal-content {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .modal-header {
+            background-color: #ffeee9;
+            color: #8a2be2;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom: none;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: #8a2be2;
+        }
+
+        .modal-footer {
+            border-top: none;
+        }
+
+        /* Certificate preview styles */
+        .certificate-preview-container {
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            margin-bottom: 15px;
+        }
+
+        .certificate-preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .certificate-preview-container object, 
+        .certificate-preview-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Styling for score buttons */
+        .score-buttons {
+            width: 100%;
+            padding: 5px 0;
+            margin-bottom: 10px;
+        }
+        
+        .score-buttons .score-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+        }
+        
+        .score-buttons .score-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-success {
+            background-color: #198754;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-primary {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-info {
+            background-color: #0dcaf0;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-warning {
+            background-color: #ffc107;
+            color: white;
+        }
+        
+        .score-buttons .score-btn.active.btn-outline-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="~/images/student1.png" alt="School Logo">
+                <h2>EduBadge</h2>
+                <p>Teacher Portal</p>
+            </div>
+            
+            <a href="/Teacher/Dashboard" class="sidebar-link">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a>
+            <a href="/ProgrammingTest/Index" class="sidebar-link">
+                <i class="fas fa-code"></i> Programming Tests
+            </a>
+
+            <a href="/Challenge/Index" class="sidebar-link">
+                <i class="fas fa-trophy"></i> Challenges
+            </a>
+            <a href="/Dashboard/PendingCertificates" class="sidebar-link active">
+                <i class="fas fa-certificate"></i> Verify Certificates
+            </a>
+            
+            <a href="#" class="sidebar-link" onclick="window.location.href='/Home/Login'; return false;">
+                <i class="fas fa-sign-out-alt"></i> Log Out
+            </a>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h1 class="mt-4 mb-4"><i class="fas fa-certificate text-primary"></i> Certificate Verification</h1>
+
+            <div class="summary-box mb-4">
+                <div class="summary-icon">
+                    <i class="fas fa-file-certificate"></i>
+                </div>
+                <div class="summary-details">
+                    <h2>Pending Certificates</h2>
+                    <p>You have @Model.Count pending certificate(s) awaiting verification.</p>
+                </div>
+            </div>
+
+            <div class="certificate-list">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Pending Certificates
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.Count == 0)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> No pending certificates to verify at this time.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="certificatesTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>ID Number</th>
+                                        <th>Type</th>
+                                        <th>Title</th>
+                                        <th>Issue Date</th>
+                                        <th>Upload Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var cert in Model)
+                                    {
+                                        <tr data-id="@cert.CertificateId" data-type="@cert.CertificateType">
+                                            <td>@cert.StudentName</td>
+                                            <td>@cert.StudentId</td>
+                                            <td>
+                                                @if (cert.CertificateType == "seminar")
+                                                {
+                                                    <span class="badge bg-info">Seminar/Webinar</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">Extracurricular</span>
+                                                }
+                                            </td>
+                                            <td>@cert.Title</td>
+                                            <td>@cert.IssueDate.ToShortDateString()</td>
+                                            <td>@cert.UploadDate.ToShortDateString()</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" class="btn btn-sm btn-primary" onclick="viewCertificate(@cert.CertificateId, '@cert.Title', '@cert.FileName')">
+                                                        <i class="fas fa-eye"></i> View
+                                                    </button>
+                                                    @if (cert.CertificateType == "extracurricular")
+                                                    {
+                                                        <button type="button" class="btn btn-sm btn-success" onclick="showScoreModal(@cert.CertificateId, '@cert.Title', '@cert.StudentName')">
+                                                            <i class="fas fa-check"></i> Approve
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-sm btn-success" onclick="verifyCertificate(@cert.CertificateId, true)">
+                                                            <i class="fas fa-check"></i> Approve
+                                                        </button>
+                                                    }
+                                                    <button type="button" class="btn btn-sm btn-danger" onclick="verifyCertificate(@cert.CertificateId, false)">
+                                                        <i class="fas fa-times"></i> Reject
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Preview Modal -->
+    <div class="modal fade" id="certificatePreviewModal" tabindex="-1" aria-labelledby="certificatePreviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="certificatePreviewModalLabel">Certificate Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="certificate-preview-container" id="certificatePreviewContainer">
+                        <!-- Content will be loaded dynamically -->
+                    </div>
+                    <div class="certificate-info">
+                        <h6 class="certificate-title mb-2"></h6>
+                        <p class="certificate-filename text-muted"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Score Entry Modal for Extracurricular Certificates -->
+    <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scoreModalLabel">Assign Score for Certificate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scoreForm">
+                        <input type="hidden" id="certificateId" name="certificateId">
+                        <div id="certificateInfo" class="alert alert-info mb-3">
+                            <strong>Student:</strong> <span id="studentNameDisplay"></span><br>
+                            <strong>Certificate:</strong> <span id="certificateTitleDisplay"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Activity Category</label>
+                            <select id="activityCategory" name="activityCategory" class="form-control" required>
+                                <option value="">-- Select Category --</option>
+                                <option value="Programming">Programming</option>
+                                <option value="Software">Software</option>
+                                <option value="Hardware">Hardware</option>
+                                <option value="AI">AI</option>
+                                <option value="Networking">Networking</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Game Development">Game Development</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Student Rank/Achievement</label>
+                            <input type="text" id="rank" name="rank" class="form-control" placeholder="Enter rank or achievement (e.g. Champion, Runner-up, N/A)" />
+                            <small class="text-muted">Enter the student's rank, position, or achievement in this activity</small>
+                        </div>
+                        <label for="score" class="form-label">Score</label>
+                        <div class="d-flex score-buttons justify-content-between">
+                            <button type="button" class="btn btn-outline-success score-btn" data-score="100">5</button>
+                            <button type="button" class="btn btn-outline-primary score-btn" data-score="90">4</button>
+                            <button type="button" class="btn btn-outline-info score-btn" data-score="75">3</button>
+                            <button type="button" class="btn btn-outline-warning score-btn" data-score="60">2</button>
+                            <button type="button" class="btn btn-outline-danger score-btn" data-score="50">1</button>
+                        </div>
+                        <input type="hidden" id="score" name="score" value="0" required>
+                        <div class="form-text">5 = 100, 4 = 90, 3 = 75, 2 = 60, 1 = 50</div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="submitScore">Approve Certificate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Required JS Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#certificatesTable').DataTable({
+                responsive: true,
+                order: [[5, 'desc']], // Sort by upload date desc
+                language: {
+                    emptyTable: "No pending certificates found"
+                }
+            });
+            
+            // Handle score button clicks
+            $(document).on('click', '.score-btn', function() {
+                // Remove active class from all buttons in this group
+                $(this).closest('.score-buttons').find('.score-btn').removeClass('active');
+                
+                // Add active class to clicked button
+                $(this).addClass('active');
+                
+                // Set the hidden score value
+                const score = $(this).data('score');
+                $('#score').val(score);
+            });
+            
+            // Handle score form submission
+            $('#submitScore').click(function() {
+                const certificateId = $('#certificateId').val();
+                const score = $('#score').val();
+                const category = $('#activityCategory').val();
+                const rank = $('#rank').val();
+                
+                if (!score || score < 1 || score > 100) {
+                    alert('Please select a score by clicking one of the buttons');
+                    return;
+                }
+                
+                if (!category) {
+                    alert('Please select a category');
+                    return;
+                }
+                
+                verifyCertificate(certificateId, true, score, category, rank);
+                $('#scoreModal').modal('hide');
+            });
+        });
+
+        function viewCertificate(certificateId, title, fileName) {
+            // Set modal title and file info
+            $('#certificatePreviewModalLabel').text('Certificate: ' + title);
+            $('.certificate-title').text(title);
+            $('.certificate-filename').text(fileName);
+            
+            // Clear previous content
+            $('#certificatePreviewContainer').empty();
+            
+            // Get file extension
+            const fileExt = fileName.split('.').pop().toLowerCase();
+            
+            // Fetch certificate data
+            fetch(`/Dashboard/ViewCertificate/${certificateId}`)
+                .then(response => {
+                    // Check if the response is OK
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    
+                    // Clone the response for different processing based on file type
+                    const responseClone = response.clone();
+                    
+                    // Get content type from response
+                    const contentType = response.headers.get('content-type');
+                    
+                    if (contentType.includes('image')) {
+                        // Handle image
+                        return responseClone.blob().then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = title;
+                            $('#certificatePreviewContainer').append(img);
+                        });
+                    } else if (contentType.includes('pdf')) {
+                        // Handle PDF
+                        return responseClone.blob().then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const obj = document.createElement('object');
+                            obj.data = url;
+                            obj.type = 'application/pdf';
+                            obj.width = '100%';
+                            obj.height = '100%';
+                            $('#certificatePreviewContainer').append(obj);
+                        });
+                    } else {
+                        // For other file types, use iframe as fallback
+                        const iframe = document.createElement('iframe');
+                        iframe.src = `/Dashboard/ViewCertificate/${certificateId}`;
+                        $('#certificatePreviewContainer').append(iframe);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching certificate:', error);
+                    $('#certificatePreviewContainer').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> Error loading certificate.
+                        </div>
+                    `);
+                });
+            
+            // Show modal
+            var modal = new bootstrap.Modal(document.getElementById('certificatePreviewModal'));
+            modal.show();
+        }
+        
+        function showScoreModal(certificateId, title, studentName) {
+            // Set certificate ID in the hidden field
+            $('#certificateId').val(certificateId);
+            
+            // Set student and certificate info
+            $('#studentNameDisplay').text(studentName);
+            $('#certificateTitleDisplay').text(title);
+            
+            // Update modal title
+            $('#scoreModalLabel').text('Assign Score for ' + title);
+            
+            // Reset buttons and select the middle (3) button by default
+            $('.score-buttons .score-btn').removeClass('active');
+            $('.score-buttons .score-btn[data-score="75"]').addClass('active');
+            $('#score').val(75);
+            
+            // Show the modal
+            var modal = new bootstrap.Modal(document.getElementById('scoreModal'));
+            modal.show();
+        }
+
+        function verifyCertificate(certificateId, isApproved, score = null, category = null, rank = null) {
+            // Confirm action (only if rejecting)
+            if (!isApproved) {
+                if (!confirm('Are you sure you want to reject this certificate?')) {
+                    return;
+                }
+            }
+            
+            // Show processing message
+            showAlert('info', isApproved ? 'Approving certificate...' : 'Rejecting certificate...', false);
+            
+            // Prepare data for the request
+            const data = {
+                certificateId: certificateId,
+                isApproved: isApproved
+            };
+            
+            // Add score if provided
+            if (score !== null) {
+                data.score = score;
+            }
+
+            // Add category if provided
+            if (category) {
+                data.category = category;
+            }
+
+            // Add rank if provided
+            if (rank) {
+                data.rank = rank;
+            }
+
+            // Send verification request
+            $.ajax({
+                url: '/Dashboard/VerifyCertificate',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    if (response.success) {
+                        // Show success message
+                        showAlert('success', response.message);
+                        
+                        // Remove the row from the table
+                        $(`tr[data-id="${certificateId}"]`).fadeOut(500, function() {
+                            $(this).remove();
+                            
+                            // Check if table is now empty
+                            if ($('#certificatesTable tbody tr').length === 0) {
+                                $('#certificatesTable').parent().html('<div class="alert alert-info"><i class="fas fa-info-circle"></i> No pending certificates to verify at this time.</div>');
+                            }
+                        });
+                    } else {
+                        // Show error message from server
+                        showAlert('error', response.message || 'Error processing certificate');
+                    }
+                },
+                error: function(xhr) {
+                    // Try to extract error message from server response
+                    let errorMessage = 'Error processing certificate. Please try again.';
+                    
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    } else if (xhr.responseText) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.message) {
+                                errorMessage = response.message;
+                            }
+                        } catch (e) {
+                            // If parsing fails, use the default message
+                            console.error('Error parsing server response:', e);
+                        }
+                    }
+                    
+                    showAlert('error', errorMessage);
+                    console.error('Error:', xhr.responseText);
+                }
+            });
+        }
+
+        function showAlert(type, message, autoClose = true) {
+            // First remove any existing alerts
+            $('.alert').alert('close');
+            
+            const alertClass = type === 'success' ? 'alert-success' : 
+                              type === 'error' ? 'alert-danger' : 
+                              'alert-info';
+            const icon = type === 'success' ? 'check-circle' : 
+                        type === 'error' ? 'exclamation-circle' : 
+                        'info-circle';
+            
+            const alert = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${icon}"></i> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            // Insert alert at top of content
+            $('.content').prepend(alert);
+            
+            // Auto-dismiss after 5 seconds if autoClose is true
+            if (autoClose) {
+                setTimeout(function() {
+                    $('.alert').alert('close');
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,399 @@
+@model StudentBadge.Models.Challenge
+@{
+    Layout = null;
+    var studentId = ViewBag.StudentId;
+    var timeLimit = Model.TimeLimit;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Challenge - Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            background: #fff6f1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            width: calc(100% - 240px);
+            margin-left: 240px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #c0392b;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .challenge-header {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .challenge-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .challenge-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .challenge-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+
+        .info-item i {
+            color: #e74c3c;
+            margin-right: 8px;
+        }
+
+        .timer {
+            background: #e74c3c;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .timer i {
+            margin-right: 8px;
+        }
+
+        .editor-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .editor-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-run {
+            background: #2ecc71;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-run:hover {
+            background: #27ae60;
+        }
+
+        .btn-submit {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-submit:hover {
+            background: #c0392b;
+        }
+
+        .CodeMirror {
+            height: 400px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+
+        .output-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .output-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .output-content {
+            padding: 15px;
+            min-height: 100px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        .test-cases {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .test-case {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .test-case:last-child {
+            border-bottom: none;
+        }
+
+        .test-case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .test-case-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .test-case-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .test-case-status.passed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .test-case-status.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .test-case-content {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        @await Html.PartialAsync("_StudentSidebar")
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h1>Take Challenge</h1>
+            
+            <div class="challenge-header">
+                <h2 class="challenge-title">@Model.Title</h2>
+                <p class="challenge-description">@Model.Description</p>
+                <div class="challenge-info">
+                    <div class="info-item">
+                        <i class="fas fa-code"></i>
+                        <span>@Model.ProgrammingLanguage</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-star"></i>
+                        <span>@Model.Difficulty</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>@Model.Points points</span>
+                    </div>
+                </div>
+                <div class="timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="time-remaining">@timeLimit:00</span>
+                </div>
+            </div>
+
+            <div class="editor-container">
+                <div class="editor-header">
+                    <div class="editor-title">Your Solution</div>
+                    <div class="editor-actions">
+                        <button class="btn btn-action btn-run" onclick="runCode()">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                        <button class="btn btn-action btn-submit" onclick="submitChallenge()">
+                            <i class="fas fa-check"></i> Submit
+                        </button>
+                    </div>
+                </div>
+                <textarea id="code-editor">@Model.InitialCode</textarea>
+            </div>
+
+            <div class="output-container">
+                <div class="output-header">Output</div>
+                <div class="output-content" id="output-content"></div>
+            </div>
+
+            <div class="test-cases">
+                <div class="test-case">
+                    <div class="test-case-header">
+                        <div class="test-case-title">Test Case 1</div>
+                        <div class="test-case-status" id="test-case-1-status">Pending</div>
+                    </div>
+                    <div class="test-case-content" id="test-case-1-content">
+                        Input: @Model.TestCases[0].Input
+                        Expected Output: @Model.TestCases[0].ExpectedOutput
+                    </div>
+                </div>
+                <div class="test-case">
+                    <div class="test-case-header">
+                        <div class="test-case-title">Test Case 2</div>
+                        <div class="test-case-status" id="test-case-2-status">Pending</div>
+                    </div>
+                    <div class="test-case-content" id="test-case-2-content">
+                        Input: @Model.TestCases[1].Input
+                        Expected Output: @Model.TestCases[1].ExpectedOutput
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/vb/vb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/php/php.min.js"></script>
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+            mode: "@GetEditorMode(Model.ProgrammingLanguage)",
+            theme: "monokai",
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+            extraKeys: {
+                "Ctrl-Space": "autocomplete"
+            }
+        });
+
+        // Timer functionality
+        var timeLeft = @timeLimit * 60;
+        var timer = setInterval(function() {
+            timeLeft--;
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+            document.getElementById("time-remaining").textContent = 
+                minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                submitChallenge();
+            }
+        }, 1000);
+
+        function runCode() {
+            var code = editor.getValue();
+            // Add code execution logic here
+            document.getElementById("output-content").textContent = "Running code...";
+        }
+
+        function submitChallenge() {
+            var code = editor.getValue();
+            // Add challenge submission logic here
+            window.location.href = "/Challenge/ChallengeSuccess";
+        }
+    </script>
+</body>
+</html>
+
+@functions {
+    private string GetEditorMode(string language)
+    {
+        switch (language?.ToLower())
+        {
+            case "javascript":
+                return "javascript";
+            case "python":
+                return "python";
+            case "html/css":
+                return "xml";
+            case "visual basic":
+                return "vb";
+            case "c#":
+                return "clike";
+            case "php":
+                return "php";
+            default:
+                return "javascript";
+        }
+    }
+} 

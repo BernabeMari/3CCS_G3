@@ -1,0 +1,515 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EduBadge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            background-color: #fff6f1;
+        }
+
+        .carousel-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .carousel-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            z-index: 1;
+        }
+        
+        .carousel-item {
+            height: 100vh;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            margin: 0 auto;
+            border-top: 4px solid #8a2be2;
+            overflow: hidden;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Form elements */
+        .form-control {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .form-control:focus {
+                border-color: #8a2be2;
+            box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.25);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: #8a2be2;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+                background: #8A2BE2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+        }
+
+        /* Headers and text */
+        h2 {
+            color: #8a2be2;
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        h5 {
+            color: #555;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        p, a {
+            color: #555;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #8a2be2;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+                color: #8a2be2;
+            text-decoration: underline;
+        }
+
+        /* Decorative elements */
+        .ghibli-leaf {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.8), rgba(231, 76, 60, 0.2));
+            border-radius: 40% 70% 60% 30% / 40% 50% 60% 50%;
+            top: 20px;
+            right: 20px;
+            z-index: 0;
+            opacity: 0.7;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .ghibli-dust {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(231, 76, 60, 0.2));
+            border-radius: 50%;
+            bottom: 50px;
+            left: 30px;
+            z-index: 0;
+        }
+
+        .ghibli-dust:nth-child(2) {
+            width: 15px;
+            height: 15px;
+            bottom: 80px;
+            left: auto;
+            right: 40px;
+        }
+
+        .ghibli-dust:nth-child(3) {
+            width: 8px;
+            height: 8px;
+            bottom: 40px;
+            left: auto;
+            right: 80px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Carousel Background -->
+    <div class="carousel-container">
+        <div id="backgroundCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/images/tcu.jpg" class="d-block w-100" alt="TCU">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/tcu1.jpg" class="d-block w-100" alt="TCU 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/tcu2.jpg" class="d-block w-100" alt="TCU 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/tcu3.png" class="d-block w-100" alt="TCU 3">
+                </div>
+                <div class="carousel-item">
+                    <img src="/images/tcu4.jpg" class="d-block w-100" alt="TCU 4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ghibli-leaf"></div>
+        <div class="ghibli-dust"></div>
+        <div class="ghibli-dust"></div>
+        <div class="ghibli-dust"></div>
+        
+        <div class="login-form">
+            <div class="text-center mb-3">
+                <img src="/images/student1.png" alt="StudentBadge Logo" style="max-width: 150px; height: auto;" />
+            </div>
+            <h2 class="text-center my-4">Welcome Back!</h2>
+            <h5 class="text-center my-4">Login to EduBadge</h5>
+            <div class="text-center mb-4">
+                <p style="color: #666; margin-top: -10px; font-style: italic;">Tracking your educational achievements through interactive digital badges</p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Error))
+            {
+                <div class="alert alert-danger text-center">
+                    @ViewBag.Error
+                    @if (ViewBag.LockoutSeconds != null)
+                    {
+                        <div id="countdown-container">
+                            <span>Please wait </span>
+                            <span id="countdown-timer">@ViewBag.LockoutSeconds</span>
+                            <span> seconds before trying again.</span>
+                        </div>
+                    }
+                </div>
+            }
+
+            <form method="post" action="/Account/Login" id="loginForm">
+                <div class="card-body p-0">
+                    <div class="form-group mb-2">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" required placeholder="Enter your username" />
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="password">Password <small class="text-muted">(New accounts: leave password empty.)</small></label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" />
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary mt-2" id="loginButton">Login</button>
+                    </div>
+                    <div class="text-center mt-2">
+                        <p>Don't have an account? <a href="/Home/Signup" class="text-decoration-none">Sign Up here</a></p>
+                        <p class="mt-1">Forgot your password? <a href="/Account/ForgotPassword" class="text-decoration-none">Reset it here</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the saved carousel index from localStorage
+            const savedIndex = localStorage.getItem('carouselIndex') || 0;
+            
+            // Initialize the carousel
+            const carouselElement = document.getElementById('backgroundCarousel');
+            
+            // Set the active slide based on saved state
+            if (savedIndex > 0) {
+                carouselElement.querySelector('.carousel-item.active').classList.remove('active');
+                carouselElement.querySelectorAll('.carousel-item')[savedIndex].classList.add('active');
+            }
+            
+            var carousel = new bootstrap.Carousel(carouselElement, {
+                interval: 5000,
+                wrap: true,
+                ride: 'carousel',
+                keyboard: false,
+                pause: false,
+                touch: false
+            });
+            
+            // Save the current index when the carousel slides
+            carouselElement.addEventListener('slid.bs.carousel', function(event) {
+                localStorage.setItem('carouselIndex', event.to);
+            });
+            
+            // Check for failed login attempts on page load
+            const currentFailedAttempts = parseInt(localStorage.getItem('failedLoginAttempts') || '0');
+            if (currentFailedAttempts >= 3) {
+                // Reset counter
+                localStorage.setItem('failedLoginAttempts', '0');
+                // Start lockout
+                setTimeout(() => {
+                    startCountdown(30);
+                }, 500);
+            }
+        });
+    </script>
+    
+    <!-- Script to check lockout status on page load -->
+    <script>
+        // Track failed login attempts on client side as well
+        let failedAttempts = parseInt(localStorage.getItem('failedLoginAttempts') || '0');
+        
+        @if (TempData["LoginFailed"] != null && (bool)TempData["LoginFailed"] == true)
+        {
+            <text>
+            // Server indicated a failed login via TempData
+            failedAttempts++;
+            localStorage.setItem('failedLoginAttempts', failedAttempts.toString());
+            console.log("Failed login detected, attempt #" + failedAttempts);
+            </text>
+        }
+        
+        // Functions for handling form state
+        function disableForm() {
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+            const loginButton = document.getElementById('loginButton');
+            
+            if (usernameField && passwordField && loginButton) {
+                usernameField.disabled = true;
+                passwordField.disabled = true;
+                loginButton.disabled = true;
+                loginButton.classList.add('btn-secondary');
+                loginButton.classList.remove('btn-primary');
+            }
+        }
+        
+        function enableForm() {
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+            const loginButton = document.getElementById('loginButton');
+            
+            if (usernameField && passwordField && loginButton) {
+                usernameField.disabled = false;
+                passwordField.disabled = false;
+                loginButton.disabled = false;
+                loginButton.classList.add('btn-primary');
+                loginButton.classList.remove('btn-secondary');
+            }
+        }
+        
+        // Start countdown timer with given seconds
+        function startCountdown(seconds) {
+            // Create or update the alert box
+            let alertBox = document.querySelector('.alert');
+            if (!alertBox) {
+                alertBox = document.createElement('div');
+                alertBox.className = 'alert alert-danger text-center';
+                const formElement = document.getElementById('loginForm');
+                formElement.parentNode.insertBefore(alertBox, formElement);
+            }
+            
+            alertBox.classList.remove('alert-success');
+            alertBox.classList.add('alert-danger');
+            
+            // Set initial message and create countdown HTML
+            alertBox.innerHTML = 'Too many failed login attempts. Please wait before trying again.' +
+                '<div id="countdown-container">' +
+                '<br><span>Please wait </span><span id="countdown-timer">' + seconds + '</span><span> seconds before trying again.</span>' +
+                '</div>';
+            
+            const countdownElement = document.getElementById('countdown-timer');
+            let secondsRemaining = seconds;
+            
+            // Store lockout end time in localStorage
+            const lockoutEndTime = new Date(Date.now() + seconds * 1000).getTime();
+            localStorage.setItem('loginLockoutUntil', lockoutEndTime.toString());
+            
+            // Disable the form
+            disableForm();
+            
+            // Update countdown every second
+            const countdownInterval = setInterval(function() {
+                secondsRemaining--;
+                
+                // Update the display
+                if (countdownElement) {
+                    countdownElement.textContent = secondsRemaining;
+                }
+                
+                // If countdown reaches zero, enable the form
+                if (secondsRemaining <= 0) {
+                    clearInterval(countdownInterval);
+                    enableForm();
+                    
+                    // Show success message
+                    alertBox.classList.remove('alert-danger');
+                    alertBox.classList.add('alert-success');
+                    alertBox.innerHTML = "Lockout period has ended. You can now log in.";
+                    
+                    // Clear lockout data
+                    localStorage.removeItem('loginLockoutUntil');
+                    
+                    // Hide the success message after 3 seconds
+                    setTimeout(function() {
+                        alertBox.style.display = 'none';
+                    }, 3000);
+                }
+            }, 1000);
+        }
+        
+        // Check if user is currently in a lockout period
+        function checkExistingLockout() {
+            const lockoutEndTime = localStorage.getItem('loginLockoutUntil');
+            if (lockoutEndTime) {
+                const endTime = parseInt(lockoutEndTime);
+                const currentTime = Date.now();
+                
+                if (currentTime < endTime) {
+                    // Still in lockout period
+                    const remainingSeconds = Math.ceil((endTime - currentTime) / 1000);
+                    startCountdown(remainingSeconds);
+                    return true;
+                } else {
+                    // Lockout period has ended
+                    localStorage.removeItem('loginLockoutUntil');
+                }
+            }
+            return false;
+        }
+        
+        // Check lockout status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // First check localStorage for existing lockout
+            if (checkExistingLockout()) {
+                console.log("Lockout detected from localStorage");
+                return; // Already handled lockout
+            }
+            
+            // Then check server-side lockout status
+            fetch('/Account/CheckLockout')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isLocked && data.remainingSeconds > 0) {
+                        console.log("Lockout detected from server:", data);
+                        startCountdown(data.remainingSeconds);
+                    }
+                })
+                .catch(error => console.error('Error checking lockout status:', error));
+                
+            // Add event listener to the form to store username in cookie
+            const loginForm = document.getElementById('loginForm');
+            const usernameField = document.getElementById('username');
+            
+            if (loginForm && usernameField) {
+                loginForm.addEventListener('submit', function(e) {
+                    // Store username in cookie for lockout checks
+                    document.cookie = `lastUsername=${usernameField.value}; path=/; max-age=1800`; // 30 minutes
+                    
+                    // Check if there's an error message in the page - indicates failed login
+                    const errorElement = document.querySelector('.alert-danger');
+                    if (errorElement) {
+                        failedAttempts++;
+                        localStorage.setItem('failedLoginAttempts', failedAttempts.toString());
+                        
+                        // If this is the third failed attempt, prevent form submission and show lockout
+                        if (failedAttempts >= 3) {
+                            e.preventDefault(); // Stop form submission
+                            
+                            // Lock immediately for 30 seconds
+                            localStorage.setItem('failedLoginAttempts', '0'); // Reset counter
+                            startCountdown(30);
+                        }
+                    } else {
+                        // No error, reset counter
+                        localStorage.setItem('failedLoginAttempts', '0');
+                    }
+                });
+            }
+            
+            // Also check URL parameters for login failure
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('failed')) {
+                failedAttempts++;
+                localStorage.setItem('failedLoginAttempts', failedAttempts.toString());
+                
+                if (failedAttempts >= 3) {
+                    localStorage.setItem('failedLoginAttempts', '0'); // Reset counter
+                    startCountdown(30);
+                }
+            }
+            
+            // Check for failed login attempts on page load
+            const currentFailedAttempts = parseInt(localStorage.getItem('failedLoginAttempts') || '0');
+            if (currentFailedAttempts >= 3) {
+                // Reset counter
+                localStorage.setItem('failedLoginAttempts', '0');
+                // Start lockout
+                setTimeout(() => {
+                    startCountdown(30);
+                }, 500);
+            }
+        });
+    </script>
+    
+    @if (ViewBag.LockoutSeconds != null)
+    {
+        <script>
+            // Start the countdown with the server-provided value
+            startCountdown(@ViewBag.LockoutSeconds);
+        </script>
+    }
+</body>
+</html>
